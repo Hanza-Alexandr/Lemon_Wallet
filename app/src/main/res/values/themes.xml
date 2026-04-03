@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.LemonWallet" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.LemonWallet.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_lemon_wallet_gold_glass</item>
+        <item name="postSplashScreenTheme">@style/Theme.LemonWallet</item>
+    </style>
+</resources>

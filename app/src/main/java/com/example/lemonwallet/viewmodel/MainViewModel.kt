@@ -1,0 +1,111 @@
+package com.example.lemonwallet.viewmodel
+
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.lemonwallet.model.StateDomain
+import com.example.lemonwallet.model.StateDomainList
+import com.example.lemonwallet.model.repository.LocalDataStoreRepository
+import com.example.lemonwallet.model.domain.Storage
+import com.example.lemonwallet.model.repository.IStorageRepository
+import com.example.lemonwallet.model.service.IStorageService
+import com.example.lemonwallet.ui.state.StoragesUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlin.collections.listOf
+
+sealed class AuthState{
+    object Loading: AuthState()
+    data class Auth(val id: Int): AuthState()
+    object Guest: AuthState()
+    object NoAuth: AuthState()
+}
+class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository, private val storageService: IStorageService): ViewModel() {
+
+    private val _storageList = MutableStateFlow(
+        when (val a = storageService.getStorageList()){
+            is StateDomainList.Empty -> listOf<Storage>()
+            is StateDomainList.Success -> a.domainList
+        }
+    )
+    val storageList =_storageList.asStateFlow()
+
+    private val _uiState = MutableStateFlow(
+        StoragesUiState(
+            storages = storageService.getStorageList().let { result ->
+                when (result) {
+                    is StateDomainList.Empty -> emptyList()
+                    is StateDomainList.Success -> result.domainList
+                }
+            },
+        )
+    )
+    val uiState = _uiState.asStateFlow()
+
+    fun switchSelect(id: Long) {
+        _uiState.update { state ->
+            val newSelected = state.selectedIds.toMutableSet().apply {
+                if (contains(id)) {
+                    if(size >1) {
+                        remove(id)
+                    }
+                } else {
+                    add(id)
+                }
+            }
+            state.copy(selectedIds = newSelected)
+        }
+    }
+
+    val stateAuth = dataStoreRepo.userIdFlow
+        .map {
+            when (it) {
+                null -> AuthState.NoAuth
+                -1 -> AuthState.Guest
+                else -> AuthState.Auth(it)
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AuthState.Loading
+        )
+
+    val isFirstOpeningApp = dataStoreRepo.isFirstOpeningApp
+        .stateIn(scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
+
+    fun markFirstAppOpeningCompleted(){
+        viewModelScope.launch {
+            dataStoreRepo.markFirstAppOpeningCompleted()
+        }
+    }
+
+    fun logIn(id: Int){
+        viewModelScope.launch {
+            dataStoreRepo.logIn(id)
+        }
+    }
+
+    fun logOut(){
+        viewModelScope.launch {
+            dataStoreRepo.logOut()
+        }
+    }
+
+    fun getStorageBalance(storage: Storage): Double{
+        return when(val a = storageService.getStorageBalance(storage)){
+            is StateDomain.Success -> a.domain
+            is StateDomain.Error -> 0.0
+        }
+    }
+
+}
