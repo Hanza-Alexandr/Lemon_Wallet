@@ -3,6 +3,7 @@ package com.example.lemonwallet.viewmodel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.StateDomain
 import com.example.lemonwallet.model.StateDomainList
@@ -10,9 +11,11 @@ import com.example.lemonwallet.model.repository.LocalDataStoreRepository
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.repository.IStorageRepository
 import com.example.lemonwallet.model.service.IStorageService
+import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.ui.state.StoragesUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -26,8 +29,16 @@ sealed class AuthState{
     object Guest: AuthState()
     object NoAuth: AuthState()
 }
-class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository, private val storageService: IStorageService): ViewModel() {
+class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository,private val storageService: StorageService): ViewModel() {
 
+
+    val storageList: StateFlow<List<Storage>> = storageService.getFlowStorageList()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000), // Экономит ресурсы при сворачивании
+            initialValue = emptyList()
+        )
+    /**
     private val _storageList = MutableStateFlow(
         when (val a = storageService.getStorageList()){
             is StateDomainList.Empty -> listOf<Storage>()
@@ -35,15 +46,11 @@ class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository, private
         }
     )
     val storageList =_storageList.asStateFlow()
+    */
 
     private val _uiState = MutableStateFlow(
         StoragesUiState(
-            storages = storageService.getStorageList().let { result ->
-                when (result) {
-                    is StateDomainList.Empty -> emptyList()
-                    is StateDomainList.Success -> result.domainList
-                }
-            },
+            storages = storageList.value
         )
     )
     val uiState = _uiState.asStateFlow()

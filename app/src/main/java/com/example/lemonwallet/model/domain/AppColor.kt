@@ -10,7 +10,7 @@ abstract class AppColor{
     companion object{
         fun isValidHex(hexCode: String): Boolean{
             val code = hexCode.lowercase()
-            return if (code.length != 9) false
+            return if (code.length == 0) false
             else true
         }
     }

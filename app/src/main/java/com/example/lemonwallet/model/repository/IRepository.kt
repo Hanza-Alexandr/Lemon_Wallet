@@ -2,13 +2,14 @@ package com.example.lemonwallet.model.repository
 
 import com.example.lemonwallet.model.domain.NewStorage
 import com.example.lemonwallet.model.domain.Storage
+import kotlinx.coroutines.flow.Flow
 
 interface IStorageRepository{
-    fun getAll(): List<Storage>
-    fun getById(id: Long): Storage?
-    fun save(storage: Storage): Storage?
-    fun save(storage: NewStorage): Storage?
-    fun delete(storage: Storage): Storage?
+    fun getAll(): Flow<List<Storage>>
+    suspend fun getById(id: Long): Storage?
+    suspend fun save(storage: Storage): Storage?
+    suspend fun save(storage: NewStorage): Storage?
+    suspend fun delete(storage: Storage): Storage?
 }
 /**
 interface IOperationRepository{

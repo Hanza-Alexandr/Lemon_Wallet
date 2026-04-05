@@ -7,19 +7,19 @@ import com.example.lemonwallet.model.StateDomainList
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
+import kotlinx.coroutines.flow.Flow
 
 class StorageService(private val storageRepo: IStorageRepository): IStorageService {
-    override fun getStorageList(): StateDomainList<Storage> {
-        val list =  storageRepo.getAll()
-        return if (list.isEmpty()) StateDomainList.Empty
-        else StateDomainList.Success(list)
+
+    override fun getFlowStorageList(): Flow<List<Storage>> {
+        return storageRepo.getAll()
     }
 
-    override fun getStorage(storageId: Int): StateDomain<Storage> {
+    override suspend fun getStorage(storageId: Int): StateDomain<Storage> {
         TODO("Not yet implemented")
     }
 
-    override fun createStorage(
+    override suspend fun createStorage(
         name: String,
         currency: Currency,
         typeStorage: TypeStorage,
@@ -29,7 +29,7 @@ class StorageService(private val storageRepo: IStorageRepository): IStorageServi
         TODO("Not yet implemented")
     }
 
-    override fun updateStorage(
+    override suspend fun updateStorage(
         changingStorage: Storage,
         name: String?,
         typeStorage: TypeStorage?,
@@ -41,12 +41,11 @@ class StorageService(private val storageRepo: IStorageRepository): IStorageServi
         TODO("Not yet implemented")
     }
 
-    override fun deleteStorage(storage: Storage): StateDomain<Storage> {
+    override suspend fun deleteStorage(storage: Storage): StateDomain<Storage> {
         TODO("Not yet implemented")
     }
 
     override fun getStorageBalance(storage: Storage): StateDomain<Double> {
-        //Тестовая хуйня
         return when(storage.id){
             1L -> StateDomain.Success(2000.0)
             2L -> StateDomain.Success(5000.0)

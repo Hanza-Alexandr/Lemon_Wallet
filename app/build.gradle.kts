@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
+    id("com.google.devtools.ksp") // Инструмент для кодогенирации вместо kapt
 
 }
 
@@ -42,14 +43,13 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.androidx.core.splashscreen)
-
-    implementation(libs.androidx.datastore.preferences)
-
+    implementation(libs.androidx.navigation.compose) // JetPack Navigation, навигация
+    implementation(libs.kotlinx.serialization.json) // Сериализация
+    implementation(libs.androidx.core.splashscreen) // Встроенный сплешскрин
+    implementation(libs.androidx.datastore.preferences) // DataStore, вариант Preferences
+    implementation(libs.androidx.room.runtime) // Библиотека Room
+    ksp(libs.androidx.room.compiler) // Room Кодогенератор
+    implementation(libs.androidx.room.ktx) // Доп для корутин и потоков
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

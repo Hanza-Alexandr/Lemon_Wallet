@@ -1,12 +1,11 @@
 package com.example.lemonwallet.model.repository
 
-import androidx.compose.ui.graphics.Color
 import com.example.lemonwallet.model.domain.Currency
-import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.NewStorage
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
+import kotlinx.coroutines.flow.Flow
 
 class StorageLocalRepository(): IStorageRepository{
 
@@ -50,23 +49,24 @@ class StorageLocalRepository(): IStorageRepository{
         )
     )
 
-    override fun getAll(): List<Storage> {
-        return storages
+    override fun getAll(): Flow<List<Storage>> {
+        TODO()
+        //return storages
     }
 
-    override fun getById(id: Long): Storage? {
+    override suspend fun getById(id: Long): Storage? {
         TODO("Not yet implemented")
     }
 
-    override fun save(storage: Storage): Storage? {
+    override suspend fun save(storage: Storage): Storage? {
         TODO("Not yet implemented")
     }
 
-    override fun save(storage: NewStorage): Storage? {
+    override suspend fun save(storage: NewStorage): Storage? {
         TODO("Not yet implemented")
     }
 
-    override fun delete(storage: Storage): Storage? {
+    override suspend fun delete(storage: Storage): Storage? {
         TODO("Not yet implemented")
     }
 
