@@ -8,8 +8,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.example.lemonwallet.ui.view.PagerIndicators
+import com.example.lemonwallet.ui.view.otherelement.PagerIndicators
 @Preview
 @Composable
 fun Test3(){

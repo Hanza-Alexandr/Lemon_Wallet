@@ -1,18 +1,12 @@
 package com.example.lemonwallet.viewmodel
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.StateDomain
-import com.example.lemonwallet.model.StateDomainList
 import com.example.lemonwallet.model.repository.LocalDataStoreRepository
 import com.example.lemonwallet.model.domain.Storage
-import com.example.lemonwallet.model.repository.IStorageRepository
-import com.example.lemonwallet.model.service.IStorageService
 import com.example.lemonwallet.model.service.StorageService
-import com.example.lemonwallet.ui.state.StoragesUiState
+import com.example.lemonwallet.ui.state.StorageBlockUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +15,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.collections.listOf
 
 sealed class AuthState{
     object Loading: AuthState()
@@ -40,7 +33,7 @@ class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository,private 
         )
 
     private val _uiState = MutableStateFlow(
-        StoragesUiState(
+        StorageBlockUiState(
             storages = storageList.value ?: emptyList()
         )
     )

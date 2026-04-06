@@ -2,7 +2,7 @@ package com.example.lemonwallet.ui.state
 
 import com.example.lemonwallet.model.domain.Storage
 
-data class StoragesUiState(
+data class StorageBlockUiState(
     val storages: List<Storage> = emptyList(),
     val selectedIds: Set<Long> = emptySet(),
     //val isLoading: Boolean = false

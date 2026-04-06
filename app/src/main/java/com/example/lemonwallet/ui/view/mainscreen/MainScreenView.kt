@@ -52,36 +52,6 @@ fun MainScreenView(
     val roundedCornerShapeBlock = 22.dp //Скругление блоков интерфейса
     val storages by vm.storageList.collectAsStateWithLifecycle()
 
-    Scaffold(
-        floatingActionButton = {
-            MainButton(
-                onSizeGanged = {newSize -> },
-                onClick = { /* ... */ }
-            )
-        },
-        content = { innerPadding -> // Этот объект содержит высоту кнопки и баров
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding) // Автоматический отступ снизу
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 6.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                StorageBlock(
-                    vm= vm,
-                    storages = storages ?: emptyList(),
-                    roundedCornerShapeBlock = roundedCornerShapeBlock,
-                    onAccountClick = { newSelected, itemIndex -> },
-                    onAddAccountClick = {}
-                )
-                LastOperations()
-                CashFlowGraffias()
-            }
-        }
-    )
-
-    /**
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -126,5 +96,4 @@ fun MainScreenView(
             )
         }
     }
-    */
 }
