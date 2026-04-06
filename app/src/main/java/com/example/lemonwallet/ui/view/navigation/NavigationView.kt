@@ -59,11 +59,11 @@ fun AppNavigation(vm: MainViewModel){
 
                 },
                 onContinueAsGuest = {
-                vm.logIn(-1)
-                navController.navigate(Screen.MainScreen) {
-                    popUpTo(Screen.AuthScreen) { inclusive = true }
-                }
-            })
+                    vm.logIn(-1)
+                    navController.navigate(Screen.MainScreen) {
+                        popUpTo(Screen.AuthScreen) { inclusive = true }
+                    }
+                })
         }
         composable<Screen.MainScreen> {
             MainScreenView(vm)

@@ -51,6 +51,10 @@ data class Storage(
             return Storage(id, name, userId, currency, typeStorage, note, color, isStatistics, isArchive)
         }
     }
+    val balance: Double = calculateBalance()
+    fun calculateBalance(): Double {
+       return 1234.12
+    }
     fun changeName(newName: String): Storage =
         copy(name = newName) //TODO()отсутсвует проверка на корректность. Т.к я хз как сделать так что бы было удобно использовать функцию и что бы я был уверен что имя соответсвует логикик и огранияениям
 

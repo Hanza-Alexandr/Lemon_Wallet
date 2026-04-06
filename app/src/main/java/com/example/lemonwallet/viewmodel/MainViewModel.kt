@@ -32,27 +32,28 @@ class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository,private 
             initialValue = null
         )
 
-    private val _uiState = MutableStateFlow(
+    private val _storageBlockState = MutableStateFlow(
         StorageBlockUiState(
-            storages = storageList.value ?: emptyList()
+            selectedStorages = setOf(0,1)
         )
     )
-    val uiState = _uiState.asStateFlow()
+    val storageBlockState = _storageBlockState.asStateFlow()
 
-    fun switchSelect(id: Long) {
-        _uiState.update { state ->
-            val newSelected = state.selectedIds.toMutableSet().apply {
-                if (contains(id)) {
+    fun switchSelect(index: Int) {
+        _storageBlockState.update { state ->
+            val newSelected = state.selectedStorages.toMutableSet().apply {
+                if (contains(index)) {
                     if(size >1) {
-                        remove(id)
+                        remove(index)
                     }
                 } else {
-                    add(id)
+                    add(index)
                 }
             }
-            state.copy(selectedIds = newSelected)
+            state.copy(selectedStorages = newSelected)
         }
     }
+
 
     val stateAuth = dataStoreRepo.userIdFlow
         .map {

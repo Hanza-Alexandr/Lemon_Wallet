@@ -9,30 +9,83 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.Storage
+import com.example.lemonwallet.model.domain.SystemColor
+import com.example.lemonwallet.model.domain.TypeStorage
+import com.example.lemonwallet.ui.state.StorageBlockUiState
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.AccountHorizontalAddCard
-import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.AccountHorizontalCard
+import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.StorageHorizontalCard
 import com.example.lemonwallet.viewmodel.MainViewModel
 
+@Preview
+@Composable
+fun Test7(){
+    PagesPartStorageBlock(
+        storageBlockUiState = StorageBlockUiState(
+            selectedStorages = setOf(0,1),
+        ),
+        pagerState = rememberPagerState(pageCount = { 2 }),
+        storages = listOf(
+            Storage.create(
+                id = 1,
+                name = "Sber",
+                userId = -1,
+                currency = Currency.RUB,
+                typeStorage = TypeStorage.BANK_ACCOUNT,
+                note = null,
+                color = SystemColor.create(1, "#FF5733"),
+                isStatistics = true,
+                isArchive = false
+            ),
+            Storage.create(
+                id = 2,
+                name = "Sber",
+                userId = -1,
+                currency = Currency.RUB,
+                typeStorage = TypeStorage.BANK_ACCOUNT,
+                note = null,
+                color = SystemColor.create(1, "#FF5733"),
+                isStatistics = true,
+                isArchive = false
+            ),
+            Storage.create(
+                id = 3,
+                name = "Sber",
+                userId = -1,
+                currency = Currency.RUB,
+                typeStorage = TypeStorage.BANK_ACCOUNT,
+                note = null,
+                color = SystemColor.create(1, "#FF5733"),
+                isStatistics = true,
+                isArchive = false
+            ),
+        ),
+        itemsPerPage = 3,
+        onEditStorageClick = {  },
+        onStorageClick = {  },
+        onAddStorageClick = {  }
+    )
+}
 
 @Composable
 fun PagesPartStorageBlock(
-    vm: MainViewModel,
+    storageBlockUiState: StorageBlockUiState,
     pagerState: PagerState,
     storages: List<Storage>,
     itemsPerPage: Int,
-    onAccountClick: () -> Unit,
-    onAddAccountClick: () -> Unit,
-    elementHeight: Int = 65 //Высота плиток, для того что бы плашка карты, плашка карты добавления и пустые элементы были одной высоты
+    elementHeight: Int = 65, //Высота плиток, для того что бы плашка карты, плашка карты добавления и пустые элементы были одной высоты
+    onEditStorageClick: (index: Int) -> Unit,
+    onStorageClick: (index: Int) -> Unit,
+    onAddStorageClick: () -> Unit,
     ){
-
-    val storageUiState by vm.uiState.collectAsState()
 
     HorizontalPager(
         state = pagerState,
@@ -50,21 +103,25 @@ fun PagesPartStorageBlock(
                     when {
                         itemIndex <storages.size -> {
                             val currentStorage = storages[itemIndex]
-                            val isSelected = storageUiState.isSelected(currentStorage.id)
-                            val balance = vm.getStorageBalance(currentStorage)
-                            AccountHorizontalCard(
+                            val isSelected = storageBlockUiState.isSelected(itemIndex)
+                            StorageHorizontalCard(
                                 isSelected = isSelected,
-                                balance = balance,
-                                elementHeight = elementHeight,
+                                isSelectedMode = storageBlockUiState.isSelectedMode,
+                                cardHeight = elementHeight,
                                 storage = storages[itemIndex],
-                                onClick =  {
-                                    vm.switchSelect(currentStorage.id)
-                                    onAddAccountClick()
+                                onEditStorageClick = {
+                                    onEditStorageClick(itemIndex)
+                                },
+                                onStorageClick = {
+                                    onStorageClick(itemIndex)
                                 }
                             )
                         }
                         itemIndex == storages.size -> {
-                            AccountHorizontalAddCard(elementHeight)
+                            AccountHorizontalAddCard(
+                                elementHeight,
+                                onAddStorageClick
+                            )
                         }
                         else -> {
                             Spacer(Modifier.heightIn(elementHeight.dp))

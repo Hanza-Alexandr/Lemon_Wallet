@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.Storage
+import com.example.lemonwallet.ui.state.StorageBlockUiState
+import com.example.lemonwallet.ui.theme.MainLight
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.BottomBarStorageBlock
-import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.TopBarStorageBlock
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.PagesPartStorageBlock
+import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.TopBarStorageBlock
 import com.example.lemonwallet.viewmodel.MainViewModel
 
 
@@ -23,17 +27,17 @@ import com.example.lemonwallet.viewmodel.MainViewModel
  */
 @Composable
 fun StorageBlock(
-    vm: MainViewModel,
     storages: List<Storage>,
+    storageBlockUIState: StorageBlockUiState,
     roundedCornerShapeBlock: Dp,
-    onAccountClick: (Boolean, Int) -> Unit,
-    onAddAccountClick: () -> Unit
+    onEditStorageClick: (index: Int) -> Unit,
+    onStorageClick: (index: Int) -> Unit,
+    onAddStorageClick: () -> Unit
 ) {
-    val itemsPerPage = 3
-    // Добавляем один виртуальный элемент для кнопки "Добавить"
-    val totalItemsCount = storages.size + 1
-    // Рассчитываем количество страниц
-    val pageCount = (totalItemsCount + itemsPerPage - 1) / itemsPerPage
+
+    val itemsPerPage = 3 // Количество элементов на одной странице
+    val totalItemsCount = storages.size + 1 // Добавляем один виртуальный элемент для кнопки "Добавить"
+    val pageCount = (totalItemsCount + itemsPerPage - 1) / itemsPerPage // Рассчитываем количество страниц
     val pagerState = rememberPagerState(pageCount = { pageCount })
 
     val contentHorizontalPadding = 8.dp
@@ -41,23 +45,20 @@ fun StorageBlock(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(roundedCornerShapeBlock))
-            .background(com.example.lemonwallet.ui.theme.MainLight) // Light Gray
+            .background(MainLight) // Light Gray
             .padding(vertical = 8.dp,)
     ) {
-
         TopBarStorageBlock(contentHorizontalPadding)
         PagesPartStorageBlock(
-            vm =vm,
+            storageBlockUiState = storageBlockUIState,
             pagerState = pagerState,
             storages = storages,
             itemsPerPage = itemsPerPage,
-            onAccountClick = { },
-            onAddAccountClick = onAddAccountClick
+            onStorageClick = onStorageClick,
+            onEditStorageClick = onEditStorageClick,
+            onAddStorageClick = onAddStorageClick
         )
-        //Spacer(modifier = Modifier.height(12.dp).fillMaxWidth())
-        //PageIndicatorStorageBlock(pageCount, pagerState)
         BottomBarStorageBlock(contentHorizontalPadding)
-
     }
 }
 
