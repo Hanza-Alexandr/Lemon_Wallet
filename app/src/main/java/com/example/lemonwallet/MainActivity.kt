@@ -27,10 +27,6 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-
-
         val repoDatastore = LocalDataStoreRepository(this)
         val storageRepo =storageRepo
         val storageSer = StorageService(storageRepo)
@@ -40,8 +36,9 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition {
             val isLoadingAuth = vm.stateAuth.value is AuthState.Loading
+            val isLoadingStorage = vm.storageList.value == null
             val isLoadingIsFirstOpeningApp = vm.isFirstOpeningApp.value == null
-            isLoadingAuth || isLoadingIsFirstOpeningApp
+            isLoadingAuth || isLoadingIsFirstOpeningApp || isLoadingStorage
         }
 
         enableEdgeToEdge()
