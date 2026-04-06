@@ -43,11 +43,14 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.material.icons.extended) // Если вы используете Material 3, также убедитесь, что есть это:
+    implementation(libs.material3)
     implementation(libs.androidx.navigation.compose) // JetPack Navigation, навигация
     implementation(libs.kotlinx.serialization.json) // Сериализация
     implementation(libs.androidx.core.splashscreen) // Встроенный сплешскрин
     implementation(libs.androidx.datastore.preferences) // DataStore, вариант Preferences
-    implementation(libs.androidx.room.runtime) // Библиотека Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.material3) // Библиотека Room
     ksp(libs.androidx.room.compiler) // Room Кодогенератор
     implementation(libs.androidx.room.ktx) // Доп для корутин и потоков
     implementation(libs.androidx.core.ktx)

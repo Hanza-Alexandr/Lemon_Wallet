@@ -32,25 +32,16 @@ sealed class AuthState{
 class MainViewModel(private val dataStoreRepo: LocalDataStoreRepository,private val storageService: StorageService): ViewModel() {
 
 
-    val storageList: StateFlow<List<Storage>> = storageService.getFlowStorageList()
+    val storageList: StateFlow<List<Storage>?> = storageService.getFlowStorageList()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000), // Экономит ресурсы при сворачивании
-            initialValue = emptyList()
+            initialValue = null
         )
-    /**
-    private val _storageList = MutableStateFlow(
-        when (val a = storageService.getStorageList()){
-            is StateDomainList.Empty -> listOf<Storage>()
-            is StateDomainList.Success -> a.domainList
-        }
-    )
-    val storageList =_storageList.asStateFlow()
-    */
 
     private val _uiState = MutableStateFlow(
         StoragesUiState(
-            storages = storageList.value
+            storages = storageList.value ?: emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()

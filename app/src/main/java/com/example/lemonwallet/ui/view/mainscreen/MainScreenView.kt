@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,18 +36,52 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lemonwallet.R
 import com.example.lemonwallet.model.domain.Storage
+import com.example.lemonwallet.ui.view.mainscreen.cashflowgrafficsblock.CashFlowGraffias
+import com.example.lemonwallet.ui.view.mainscreen.lastoperationsblock.LastOperations
+import com.example.lemonwallet.ui.view.mainscreen.mainbutton.MainButton
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.StorageBlock
+import com.example.lemonwallet.ui.view.mainscreen.topbar.TopBar
 import com.example.lemonwallet.viewmodel.MainViewModel
 
 @Composable
 fun MainScreenView(
     vm: MainViewModel
 ){
-    var sizeMainButton by remember { mutableStateOf(0.dp) }
+    var sizeMainButton by remember { mutableStateOf(0.dp) } //Размеры главной кнопки для нижнего отсупа
     val density = LocalDensity.current
-    val roundedCornerShapeBlock = 22.dp
+    val roundedCornerShapeBlock = 22.dp //Скругление блоков интерфейса
     val storages by vm.storageList.collectAsStateWithLifecycle()
 
+    Scaffold(
+        floatingActionButton = {
+            MainButton(
+                onSizeGanged = {newSize -> },
+                onClick = { /* ... */ }
+            )
+        },
+        content = { innerPadding -> // Этот объект содержит высоту кнопки и баров
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding) // Автоматический отступ снизу
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 6.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                StorageBlock(
+                    vm= vm,
+                    storages = storages ?: emptyList(),
+                    roundedCornerShapeBlock = roundedCornerShapeBlock,
+                    onAccountClick = { newSelected, itemIndex -> },
+                    onAddAccountClick = {}
+                )
+                LastOperations()
+                CashFlowGraffias()
+            }
+        }
+    )
+
+    /**
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,113 +98,33 @@ fun MainScreenView(
                     .padding(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                StorageBlock(vm= vm, storages = storages, roundedCornerShapeBlock,{ newSelected, itemIndex ->
-                    Log.i("My tag", "$storages")
-                }, {})
-                //LastOperations()
-                //CashFlowGraffias()
+                StorageBlock(
+                    vm= vm,
+                    storages = storages ?: emptyList(),
+                    roundedCornerShapeBlock = roundedCornerShapeBlock,
+                    onAccountClick = { newSelected, itemIndex -> },
+                    onAddAccountClick = {}
+                )
+                LastOperations()
+                CashFlowGraffias()
 
             }
             MainButton(
-                Modifier
-                    .align(Alignment.BottomEnd)
-            )
-            { newSize ->
-                sizeMainButton = with(density) { newSize.height.toDp() }
-            }
-        }
+                Modifier.align(Alignment.BottomEnd),
+                onSizeGanged = { newSize ->
+                    /**
+                     * Нужно для отступа после всех элементов на экране, что бы блоки экрана не перекрывались главной кнопкой
+                     * Система такая: при инициализации кнопки у нее вызывается метод onSizeChanged в параметры которого системой передается новый размер
+                     * мы же туда от сюда передаем коллбек что бы тут зафиксировать размеры кнопки.
+                     * эти размеры потом используются в padding выше
+                     */
+                    sizeMainButton = with(density) { newSize.height.toDp() }
+                },
+                onClick = {
 
-
-    }
-}
-
-@Composable
-fun TopBar(){
-    Row(
-        modifier = Modifier
-            .background(Color.White).fillMaxWidth().statusBarsPadding(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Text(
-            text = "Lemon Wallet",
-            modifier = Modifier
-                .padding(start = 16.dp)
-        )
-        IconButton(
-            modifier = Modifier,
-            onClick = {}
-        ) {
-            Icon(
-                modifier = Modifier.size(18.dp),
-                painter = painterResource(R.drawable.group_4),
-                contentDescription = null,
+                }
             )
         }
-
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@Composable
-fun CashFlowGraffias(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color.LightGray)
-            .heightIn(350.dp)
-    ) {
-
-    }
-}
-
-@Composable
-fun LastOperations(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color.LightGray)
-            .heightIn(500.dp)
-    ) {
-
-    }
-}
-
-@Composable
-fun MainButton(modifier: Modifier, onSizeGanged: (IntSize)-> Unit){
-    Box(
-        modifier = modifier
-            .onSizeChanged(onSizeGanged)
-            .padding(16.dp)
-
-    ){
-        androidx.compose.material3.Button(
-            modifier = Modifier.size(60.dp),
-            onClick = {}
-        ) { }
-    }
+    */
 }
