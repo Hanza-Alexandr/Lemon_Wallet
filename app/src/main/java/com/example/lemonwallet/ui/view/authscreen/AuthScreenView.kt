@@ -1,7 +1,7 @@
 package com.example.lemonwallet.ui.view.authscreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -77,7 +78,10 @@ fun AuthScreenView(
                 text = "Войти через Google",
                 containerColor = Color.White,
                 contentColor = Color(0xFF1F2937),
-                borderStroke = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.5f)),
+                borderStroke = com.example.lemonwallet.ui.view.authscreen.BorderStroke(
+                    1.dp,
+                    Color.LightGray.copy(alpha = 0.5f)
+                ),
                 onClick = onLoginSuccess
             )
             AuthButton(
@@ -128,7 +132,7 @@ fun AuthButton(
     text: String,
     containerColor: Color,
     contentColor: Color,
-    borderStroke: BorderStroke? = null,
+    borderStroke: com.example.lemonwallet.ui.view.authscreen.BorderStroke? = null,
     onClick: () -> Unit
 ) {
     Button(
@@ -142,7 +146,7 @@ fun AuthButton(
             containerColor = containerColor,
             contentColor = contentColor
         ),
-        border = borderStroke?.let { androidx.compose.foundation.BorderStroke(it.width, it.color) },
+        border = borderStroke?.let { BorderStroke(it.width, it.color) },
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
     ) {
         Text(
@@ -153,4 +157,4 @@ fun AuthButton(
     }
 }
 
-data class BorderStroke(val width: androidx.compose.ui.unit.Dp, val color: Color)
+data class BorderStroke(val width: Dp, val color: Color)

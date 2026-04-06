@@ -5,12 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.lemonwallet.model.repository.LocalDataStoreRepository
-import com.example.lemonwallet.model.repository.StorageLocalRepository
 import com.example.lemonwallet.model.repository.StorageRoomRepository
-import com.example.lemonwallet.model.roomdb.dao.StorageDao
 import com.example.lemonwallet.model.roomdb.database.AppDatabase
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.ui.view.navigation.AppNavigation
