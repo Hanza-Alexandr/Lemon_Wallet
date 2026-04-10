@@ -35,7 +35,7 @@ fun MainScreenView(
     val density = LocalDensity.current
     val roundedCornerShapeBlock = 22.dp //Скругление блоков интерфейса
     val storages by vm.storageList.collectAsStateWithLifecycle()
-    val storageBlocUIkState by vm.storageBlockState.collectAsState()
+    val selectedStorageList by vm.storageBlockSelectState.collectAsState()
 
 
     Column(
@@ -56,16 +56,19 @@ fun MainScreenView(
             ) {
                 StorageBlock(
                     storages = storages ?: listOf(),
-                    storageBlockUIState = storageBlocUIkState,
+                    selectedList = selectedStorageList,
                     roundedCornerShapeBlock = roundedCornerShapeBlock,
                     onStorageClick = { index ->
-                        vm.switchSelect(index)
+                        vm.onSelect(false,index)
                     },
                     onEditStorageClick = {
 
                     },
                     onAddStorageClick = {
 
+                    },
+                    onStorageLongClick = { index ->
+                        vm.onSelect(true,index)
                     }
                 )
                 LastOperations()

@@ -11,16 +11,17 @@ import androidx.navigation.compose.composable
 import com.example.lemonwallet.ui.view.authscreen.AuthScreenView
 import com.example.lemonwallet.ui.view.mainscreen.MainScreenView
 import com.example.lemonwallet.ui.view.startscreen.StartScreenView
-import com.example.lemonwallet.viewmodel.AuthState
+import com.example.lemonwallet.model.state.AuthState
 import com.example.lemonwallet.viewmodel.MainViewModel
+import com.example.lemonwallet.viewmodel.StartScreenViewModel
 
 
 @Composable
-fun AppNavigation(vm: MainViewModel){
+fun AppNavigation(startScreenVM: StartScreenViewModel, mainViewModel: MainViewModel){
     val navController = rememberNavController()
 
-    val isFirstOpen by vm.isFirstOpeningApp.collectAsState()
-    val authState by vm.stateAuth.collectAsState()
+    val isFirstOpen by startScreenVM.isFirstOpeningApp.collectAsState()
+    val authState by startScreenVM.stateAuth.collectAsState()
 
     // 1. Ждем, пока оба условия выйдут из состояния загрузки
     val isLoading = isFirstOpen == null || authState is AuthState.Loading
@@ -47,7 +48,7 @@ fun AppNavigation(vm: MainViewModel){
     ){
         composable<Screen.FirstOpened> {
             StartScreenView {
-                vm.markFirstAppOpeningCompleted() //Что бы больше стартоывый экран не открывался
+                startScreenVM.markFirstAppOpeningCompleted() //Что бы больше стартоывый экран не открывался
                 navController.navigate(Screen.AuthScreen) {
                     popUpTo(Screen.FirstOpened) { inclusive = true }
                 }
@@ -59,14 +60,14 @@ fun AppNavigation(vm: MainViewModel){
 
                 },
                 onContinueAsGuest = {
-                    vm.logIn(-1)
+                    startScreenVM.logIn(-1)
                     navController.navigate(Screen.MainScreen) {
                         popUpTo(Screen.AuthScreen) { inclusive = true }
                     }
                 })
         }
         composable<Screen.MainScreen> {
-            MainScreenView(vm)
+            MainScreenView(mainViewModel)
         }
     }
 

@@ -5,14 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.lemonwallet.model.repository.LocalDataStoreRepository
+import com.example.lemonwallet.model.repository.PreferencesDataStore
 import com.example.lemonwallet.model.repository.StorageRoomRepository
 import com.example.lemonwallet.model.roomdb.database.AppDatabase
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.ui.view.navigation.AppNavigation
 import com.example.lemonwallet.ui.theme.LemonWalletTheme
-import com.example.lemonwallet.viewmodel.AuthState
+import com.example.lemonwallet.model.state.AuthState
 import com.example.lemonwallet.viewmodel.MainViewModel
+import com.example.lemonwallet.model.service.StartScreenService
+import com.example.lemonwallet.viewmodel.StartScreenViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -23,24 +25,32 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val repoDatastore = LocalDataStoreRepository(this)
+
+
+        val repoDatastore = PreferencesDataStore(this)
+
         val storageRepo =storageRepo
-        val storageSer = StorageService(storageRepo)
-        val vm = MainViewModel(repoDatastore, storageSer )
+
+        val storageSer = StorageService(storageRepo, repoDatastore)
+        val startScreenServ = StartScreenService(repoDatastore)
+        val startVm = StartScreenViewModel(startScreenServ)
+        val vm = MainViewModel(storageSer )
+
         val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition {
-            val isLoadingAuth = vm.stateAuth.value is AuthState.Loading
+            val isLoadingAuth = startVm.stateAuth.value is AuthState.Loading
             val isLoadingStorage = vm.storageList.value == null
-            val isLoadingIsFirstOpeningApp = vm.isFirstOpeningApp.value == null
+            val isLoadingIsFirstOpeningApp = startVm.isFirstOpeningApp.value == null
             isLoadingAuth || isLoadingIsFirstOpeningApp || isLoadingStorage
         }
 
         enableEdgeToEdge()
         setContent {
             LemonWalletTheme {
-                AppNavigation(vm)
+                AppNavigation(startVm,vm)
             }
         }
     }

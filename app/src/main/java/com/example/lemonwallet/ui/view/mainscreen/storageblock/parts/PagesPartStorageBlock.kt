@@ -20,7 +20,6 @@ import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.ui.state.StorageBlockUiState
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.AccountHorizontalAddCard
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.StorageHorizontalCard
 import com.example.lemonwallet.viewmodel.MainViewModel
@@ -29,9 +28,7 @@ import com.example.lemonwallet.viewmodel.MainViewModel
 @Composable
 fun Test7(){
     PagesPartStorageBlock(
-        storageBlockUiState = StorageBlockUiState(
-            selectedStorages = setOf(0,1),
-        ),
+        selectedList = setOf(0,1),
         pagerState = rememberPagerState(pageCount = { 2 }),
         storages = listOf(
             Storage.create(
@@ -71,19 +68,21 @@ fun Test7(){
         itemsPerPage = 3,
         onEditStorageClick = {  },
         onStorageClick = {  },
-        onAddStorageClick = {  }
+        onAddStorageClick = {  },
+        onStorageLongClick = { }
     )
 }
 
 @Composable
 fun PagesPartStorageBlock(
-    storageBlockUiState: StorageBlockUiState,
+    selectedList: Set<Int>,
     pagerState: PagerState,
     storages: List<Storage>,
     itemsPerPage: Int,
     elementHeight: Int = 65, //Высота плиток, для того что бы плашка карты, плашка карты добавления и пустые элементы были одной высоты
     onEditStorageClick: (index: Int) -> Unit,
     onStorageClick: (index: Int) -> Unit,
+    onStorageLongClick: (index: Int) -> Unit,
     onAddStorageClick: () -> Unit,
     ){
 
@@ -102,11 +101,10 @@ fun PagesPartStorageBlock(
                 Box() {
                     when {
                         itemIndex <storages.size -> {
-                            val currentStorage = storages[itemIndex]
-                            val isSelected = storageBlockUiState.isSelected(itemIndex)
+                            val isSelected = selectedList.contains(itemIndex)
                             StorageHorizontalCard(
                                 isSelected = isSelected,
-                                isSelectedMode = storageBlockUiState.isSelectedMode,
+                                isSelectedMode = selectedList.size>1,
                                 cardHeight = elementHeight,
                                 storage = storages[itemIndex],
                                 onEditStorageClick = {
@@ -114,6 +112,9 @@ fun PagesPartStorageBlock(
                                 },
                                 onStorageClick = {
                                     onStorageClick(itemIndex)
+                                },
+                                onStorageLongClick = {
+                                    onStorageLongClick(itemIndex)
                                 }
                             )
                         }

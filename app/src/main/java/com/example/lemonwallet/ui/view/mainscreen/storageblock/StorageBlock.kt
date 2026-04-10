@@ -11,27 +11,76 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.Storage
-import com.example.lemonwallet.ui.state.StorageBlockUiState
+import com.example.lemonwallet.model.domain.SystemColor
+import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.ui.theme.MainLight
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.BottomBarStorageBlock
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.PagesPartStorageBlock
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.TopBarStorageBlock
 import com.example.lemonwallet.viewmodel.MainViewModel
 
-
+@Preview
+@Composable
+fun Test8(){
+StorageBlock(
+    selectedList = setOf(0,1),
+    storages = listOf(
+        Storage.create(
+            id = 1,
+            name = "Sber",
+            userId = -1,
+            currency = Currency.RUB,
+            typeStorage = TypeStorage.BANK_ACCOUNT,
+            note = null,
+            color = SystemColor.create(1, "#FF5733"),
+            isStatistics = true,
+            isArchive = false
+        ),
+        Storage.create(
+            id = 2,
+            name = "Sber",
+            userId = -1,
+            currency = Currency.RUB,
+            typeStorage = TypeStorage.BANK_ACCOUNT,
+            note = null,
+            color = SystemColor.create(1, "#FF5733"),
+            isStatistics = true,
+            isArchive = false
+        ),
+        Storage.create(
+            id = 3,
+            name = "Sber",
+            userId = -1,
+            currency = Currency.RUB,
+            typeStorage = TypeStorage.BANK_ACCOUNT,
+            note = null,
+            color = SystemColor.create(1, "#FF5733"),
+            isStatistics = true,
+            isArchive = false
+        ),
+    ),
+    roundedCornerShapeBlock = 22.dp,
+    onEditStorageClick = { },
+    onStorageClick = { },
+    onStorageLongClick = { }
+) { }
+}
 /**
  * Основной компонент блока счетов с пагинацией
  */
 @Composable
 fun StorageBlock(
     storages: List<Storage>,
-    storageBlockUIState: StorageBlockUiState,
+    selectedList: Set<Int>,
     roundedCornerShapeBlock: Dp,
     onEditStorageClick: (index: Int) -> Unit,
     onStorageClick: (index: Int) -> Unit,
+    onStorageLongClick: (index: Int) -> Unit,
     onAddStorageClick: () -> Unit
 ) {
 
@@ -50,13 +99,14 @@ fun StorageBlock(
     ) {
         TopBarStorageBlock(contentHorizontalPadding)
         PagesPartStorageBlock(
-            storageBlockUiState = storageBlockUIState,
+            selectedList = selectedList,
             pagerState = pagerState,
             storages = storages,
             itemsPerPage = itemsPerPage,
             onStorageClick = onStorageClick,
             onEditStorageClick = onEditStorageClick,
-            onAddStorageClick = onAddStorageClick
+            onAddStorageClick = onAddStorageClick,
+            onStorageLongClick = onStorageLongClick
         )
         BottomBarStorageBlock(contentHorizontalPadding)
     }

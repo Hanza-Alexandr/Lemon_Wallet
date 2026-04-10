@@ -1,7 +1,12 @@
 package com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +22,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,7 +67,8 @@ fun Test6(){
         isSelected = true,
         isSelectedMode = false,
         onEditStorageClick = {},
-        onStorageClick = {}
+        onStorageClick = {},
+        onStorageLongClick = {}
     )
 }
 @Composable
@@ -71,17 +80,27 @@ fun StorageHorizontalCard(
     round: Int = 6,
     sizeCof: Float = 1f,
     onEditStorageClick: () -> Unit,
-    onStorageClick: () -> Unit
+    onStorageClick: () -> Unit,
+    onStorageLongClick: ()-> Unit
 ) {
+    val backgroundColorAnimate by animateColorAsState(
+        targetValue = if (isSelected) MainDark else MainLight,
+        animationSpec = tween(
+            durationMillis = 100, easing = LinearOutSlowInEasing),
+        label = "BgColorAnimation"
+    )
     val backgroundColor  = if (isSelected) MainDark else MainLight
 
     Row(
         modifier = Modifier.fillMaxWidth()
             .clip(RoundedCornerShape(round.dp))
-            .background(backgroundColor)
-            .clickable {
-                onStorageClick()
-            }
+            .background(backgroundColorAnimate)
+            .combinedClickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick =  onStorageClick,
+                onLongClick =onStorageLongClick
+            )
             .height((cardHeight * sizeCof).dp)
             .padding(6.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
