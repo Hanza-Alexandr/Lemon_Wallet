@@ -1,15 +1,7 @@
 package com.example.lemonwallet.model.domain
 
-import com.example.lemonwallet.model.StateDomain
+import com.example.lemonwallet.model.state.StateDomain
 
-/**
-data class Storage(
-    val name: String,
-    val balance: String,
-    val color: Color = Color.Companion.LightGray, // Лимонный по умолчанию
-    val isSelect: Boolean
-)
-*/
 
 abstract class BaseStorage{
     abstract val name: String
