@@ -47,7 +47,7 @@ class PreferencesDataStore(private val context: Context) {
 
     }
 
-    inner class User{
+    inner class Account{
         val userIdFlow: Flow<Int?> = context.dataStore.data
             .catch { exception ->
                 if (exception is IOException) emit(emptyPreferences())
@@ -97,7 +97,6 @@ class PreferencesDataStore(private val context: Context) {
             try {
                 context.dataStore.edit {preferences ->
                     preferences[Keys.IS_FIRST_OPENING_APP] = false
-
                 }
             }
             catch (e: IOException){
@@ -105,7 +104,5 @@ class PreferencesDataStore(private val context: Context) {
             }
         }
     }
-
-
 
 }

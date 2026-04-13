@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.first
 class StorageService(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore): IStorageService {
 
     inner class UIStorageService() {
-
         // Поток остается таким же — он просто наблюдает
         val stateSelectedStorages= combine(
             storageRepo.getAll(),
@@ -99,6 +98,4 @@ class StorageService(private val storageRepo: IStorageRepository, private val da
             else -> StateDomain.Success(0.0)
         }
     }
-
-
 }

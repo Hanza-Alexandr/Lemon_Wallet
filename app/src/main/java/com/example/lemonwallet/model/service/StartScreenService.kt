@@ -5,7 +5,7 @@ import com.example.lemonwallet.model.state.AuthState
 import kotlinx.coroutines.flow.map
 
 class StartScreenService(private val dataStorePreferences: PreferencesDataStore){
-    val stateAuth = dataStorePreferences.User().userIdFlow
+    val stateAuth = dataStorePreferences.Account().userIdFlow
         .map {
             when (it) {
                 null -> AuthState.NoAuth
@@ -23,7 +23,7 @@ class StartScreenService(private val dataStorePreferences: PreferencesDataStore)
     }
 
     suspend fun logIn(id: Int){
-        dataStorePreferences.User().logIn(id)
+        dataStorePreferences.Account().logIn(id)
 
     }
 
