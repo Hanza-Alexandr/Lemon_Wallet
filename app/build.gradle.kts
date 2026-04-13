@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp") // Инструмент для кодогенирации вместо kapt
-
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -43,16 +43,28 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.compose.material.icons.extended) // Если вы используете Material 3, также убедитесь, что есть это:
+    //Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    //Иконки Material
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.material3)
-    implementation(libs.androidx.navigation.compose) // JetPack Navigation, навигация
-    implementation(libs.kotlinx.serialization.json) // Сериализация
-    implementation(libs.androidx.core.splashscreen) // Встроенный сплешскрин
-    implementation(libs.androidx.datastore.preferences) // DataStore, вариант Preferences
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.material3) // Библиотека Room
+    //Jetpack Navigation
+    implementation(libs.androidx.navigation.compose)
+    //Сериализация
+    implementation(libs.kotlinx.serialization.json)
+    // Встроенный сплешскрин
+    implementation(libs.androidx.core.splashscreen)
+    // DataStore, вариант Preferences
+    implementation(libs.androidx.datastore.preferences)
+    //Room
     ksp(libs.androidx.room.compiler) // Room Кодогенератор
     implementation(libs.androidx.room.ktx) // Доп для корутин и потоков
+    implementation(libs.androidx.room.runtime)
+
+    implementation(libs.material)
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

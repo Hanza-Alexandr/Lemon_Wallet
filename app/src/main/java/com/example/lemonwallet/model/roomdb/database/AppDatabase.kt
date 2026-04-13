@@ -8,6 +8,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.lemonwallet.model.roomdb.dao.StorageDao
 import com.example.lemonwallet.model.roomdb.entities.ColorRoomEntity
 import com.example.lemonwallet.model.roomdb.entities.StorageRoomEntity
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Database(
     version = 1,
@@ -20,19 +26,27 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getStorageDao(): StorageDao
 
-    companion object RoomDataBase {
+}
 
-        private lateinit var applicationContext: Context
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
 
-        fun init(context: Context) {
-            applicationContext = context
-        }
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "room_database.db" // Ваше имя БД
+        )
+            .addCallback(DatabaseCallback()) // Ваша коллбек-логика
+            .build()
+    }
 
-        val appDatabase: AppDatabase by lazy {
-            Room.databaseBuilder(applicationContext, AppDatabase::class.java, "room_database.db")
-                .addCallback(DatabaseCallback())
-                .build()
-        }
+    @Provides
+    fun provideStorageDao(db: AppDatabase): StorageDao {
+        return db.getStorageDao()
     }
 }
 

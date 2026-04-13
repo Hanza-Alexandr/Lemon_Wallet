@@ -3,8 +3,9 @@ package com.example.lemonwallet.model.service
 import com.example.lemonwallet.model.repository.PreferencesDataStore
 import com.example.lemonwallet.model.state.AuthState
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class StartScreenService(private val dataStorePreferences: PreferencesDataStore){
+class StartScreenService @Inject constructor(private val dataStorePreferences: PreferencesDataStore){
     val stateAuth = dataStorePreferences.Account().userIdFlow
         .map {
             when (it) {

@@ -7,11 +7,26 @@ import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
 import com.example.lemonwallet.model.repository.PreferencesDataStore
+import com.example.lemonwallet.model.repository.StorageRoomRepository
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class StorageService(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore): IStorageService {
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindStorageRepository(
+        impl: StorageRoomRepository // Что Hilt должен СОЗДАТЬ
+    ): IStorageRepository           // Под видом КАКОГО интерфейса отдать
+}
+class StorageService @Inject constructor(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore): IStorageService {
 
     inner class UIStorageService() {
         // Поток остается таким же — он просто наблюдает

@@ -10,14 +10,16 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "cache")
 
-class PreferencesDataStore(private val context: Context) {
+class PreferencesDataStore @Inject constructor(@ApplicationContext private val context: Context) {
     private object Keys{
         val IS_FIRST_OPENING_APP = booleanPreferencesKey("is_first_opening_app")
         val USER_ID = intPreferencesKey("user_id")

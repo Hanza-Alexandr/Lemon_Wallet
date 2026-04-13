@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.service.StartScreenService
 import com.example.lemonwallet.model.state.AuthState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StartScreenViewModel(private val startScreenService: StartScreenService): ViewModel(){
+@HiltViewModel
+class StartScreenViewModel @Inject constructor(private val startScreenService: StartScreenService): ViewModel(){
     val stateAuth = startScreenService.stateAuth
         .stateIn(
             scope = viewModelScope,

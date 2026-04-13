@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lemonwallet.ui.theme.MainDark
 import com.example.lemonwallet.ui.view.mainscreen.cashflowgrafficsblock.CashFlowGraffias
@@ -28,9 +29,8 @@ import com.example.lemonwallet.ui.view.mainscreen.topbar.TopBar
 import com.example.lemonwallet.viewmodel.MainViewModel
 
 @Composable
-fun MainScreenView(
-    vm: MainViewModel
-){
+fun MainScreenView(){
+    val vm: MainViewModel = hiltViewModel()
     var sizeMainButton by remember { mutableStateOf(0.dp) } //Размеры главной кнопки для нижнего отсупа
     val density = LocalDensity.current
     val roundedCornerShapeBlock = 22.dp //Скругление блоков интерфейса

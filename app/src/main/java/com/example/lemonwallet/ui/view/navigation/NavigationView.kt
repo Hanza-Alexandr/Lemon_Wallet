@@ -6,6 +6,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.lemonwallet.ui.view.authscreen.AuthScreenView
@@ -17,7 +18,9 @@ import com.example.lemonwallet.viewmodel.StartScreenViewModel
 
 
 @Composable
-fun AppNavigation(startScreenVM: StartScreenViewModel, mainViewModel: MainViewModel){
+fun AppNavigation (){
+    val startScreenVM: StartScreenViewModel = hiltViewModel()
+
     val navController = rememberNavController()
 
     val isFirstOpen by startScreenVM.isFirstOpeningApp.collectAsState()
@@ -67,7 +70,7 @@ fun AppNavigation(startScreenVM: StartScreenViewModel, mainViewModel: MainViewMo
                 })
         }
         composable<Screen.MainScreen> {
-            MainScreenView(mainViewModel)
+            MainScreenView()
         }
     }
 
