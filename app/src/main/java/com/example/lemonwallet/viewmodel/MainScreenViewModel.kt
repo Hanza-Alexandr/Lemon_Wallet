@@ -16,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(private val storageService: StorageService): ViewModel() {
 
+
     val storageList: StateFlow<List<Storage>?> = storageService.getFlowStorageList()
         .stateIn(
             scope = viewModelScope,
@@ -23,7 +24,7 @@ class MainScreenViewModel @Inject constructor(private val storageService: Storag
             initialValue = null
         )
 
-    val storageBlockSelectState = storageService.UIStorageService().stateSelectedStorages.stateIn(
+    val storageBlockSelectState = storageService.stateSelectedStorages.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000), // Экономит ресурсы при сворачивании
         initialValue = emptySet()
@@ -31,8 +32,10 @@ class MainScreenViewModel @Inject constructor(private val storageService: Storag
 
     fun onSelect(isLongClick: Boolean, index: Int) {
         viewModelScope.launch {
-            storageService.UIStorageService().onSelect(isLongClick, index)
+            storageService.onSelect(isLongClick, index)
         }
     }
+
+
 
 }

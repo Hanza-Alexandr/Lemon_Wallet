@@ -77,7 +77,7 @@ fun PagesPartStorageBlock(
     storages: List<Storage>,
     itemsPerPage: Int,
     elementHeight: Int = 65, //Высота плиток, для того что бы плашка карты, плашка карты добавления и пустые элементы были одной высоты
-    onEditStorageClick: (index: Int) -> Unit,
+    onEditStorageClick: (storageId: Long) -> Unit,
     onStorageClick: (index: Int) -> Unit,
     onStorageLongClick: (index: Int) -> Unit,
     onAddStorageClick: () -> Unit,
@@ -104,9 +104,7 @@ fun PagesPartStorageBlock(
                                 isSelectedMode = selectedList.size>1,
                                 cardHeight = elementHeight,
                                 storage = storages[itemIndex],
-                                onEditStorageClick = {
-                                    onEditStorageClick(itemIndex)
-                                },
+                                onEditStorageClick = onEditStorageClick,
                                 onStorageClick = {
                                     onStorageClick(itemIndex)
                                 },

@@ -1,5 +1,10 @@
 package com.example.lemonwallet.ui.view.navigation
 
+import android.util.Log
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
@@ -8,10 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.example.lemonwallet.ui.view.authscreen.AuthScreenView
 import com.example.lemonwallet.ui.view.mainscreen.MainScreenView
 import com.example.lemonwallet.ui.view.startscreen.StartScreenView
 import com.example.lemonwallet.model.state.AuthorizationState
+import com.example.lemonwallet.ui.view.mainscreen.EditStorageView
 import com.example.lemonwallet.viewmodel.StartScreenViewModel
 
 
@@ -56,10 +63,20 @@ fun AppNavigation (){
                     navController.navigate(Screen.MainScreen) {
                         popUpTo(Screen.AuthScreen) { inclusive = true }
                     }
-                })
+                }
+            )
         }
-        composable<Screen.MainScreen> {
-            MainScreenView()
+        composable<Screen.MainScreen>{
+            MainScreenView(
+                onEditStorageClick = { id ->
+                    navController.navigate(Screen.EditStorage(storageId = id))
+                    Log.d("MainScreenViewModel", "onEditStorageClick")
+                }
+            )
+        }
+        composable<Screen.EditStorage> { backStackEntry ->
+            val route: Screen.EditStorage = backStackEntry.toRoute()
+            EditStorageView(route.storageId)
         }
     }
 
@@ -73,4 +90,6 @@ sealed class Screen{
     object AuthScreen: Screen()
     @Serializable
     object MainScreen: Screen()
+    @Serializable
+    data class EditStorage(val storageId: Long): Screen()
 }

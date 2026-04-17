@@ -75,7 +75,7 @@ fun StorageBlock(
     storages: List<Storage>,
     selectedList: Set<Int>,
     roundedCornerShapeBlock: Dp,
-    onEditStorageClick: (index: Int) -> Unit,
+    onEditStorageClick: (storageId: Long) -> Unit,
     onStorageClick: (index: Int) -> Unit,
     onStorageLongClick: (index: Int) -> Unit,
     onAddStorageClick: () -> Unit

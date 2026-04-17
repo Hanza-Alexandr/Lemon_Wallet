@@ -1,5 +1,7 @@
 package com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal
 
+import android.nfc.Tag
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -79,7 +81,7 @@ fun StorageHorizontalCard(
     cardHeight: Int,
     round: Int = 6,
     sizeCof: Float = 1f,
-    onEditStorageClick: () -> Unit,
+    onEditStorageClick: (storageId: Long) -> Unit,
     onStorageClick: () -> Unit,
     onStorageLongClick: ()-> Unit
 ) {
@@ -139,7 +141,10 @@ fun StorageHorizontalCard(
         }
         if (isSelected && !isSelectedMode) {
             IconButton(
-                onClick = onEditStorageClick,
+                onClick = {
+                    onEditStorageClick(storage.id)
+                    Log.d("StorageHorizontalCard", "onClick")
+                },
                 modifier = Modifier.size((40 * sizeCof).dp)
             ) {
                 Icon(

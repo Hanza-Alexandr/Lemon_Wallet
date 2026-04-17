@@ -28,48 +28,48 @@ abstract class RepositoryModule {
 }
 class StorageService @Inject constructor(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore): IStorageService {
 
-    inner class UIStorageService() {
-        // Поток остается таким же — он просто наблюдает
-        val stateSelectedStorages= combine(
-            storageRepo.getAll(),
-            dataStorePref.UIState().indexesSelectedStorageFlow
-        ) { storages, savedState ->
-            val validIndexes = storages.indices.toSet()
-            savedState.intersect(validIndexes)
-        }
-        suspend fun onSelect(isLongClick: Boolean, index: Int) {
-            val currentSelected = dataStorePref.UIState().indexesSelectedStorageFlow.first()
-            val storages = storageRepo.getAll().first()
 
-            val isAlreadySelected = currentSelected.contains(index)
-            val isSelectModeActive = currentSelected.size > 1
+    // Поток остается таким же — он просто наблюдает
+    val stateSelectedStorages= combine(
+        storageRepo.getAll(),
+        dataStorePref.indexesSelectedStorageFlow
+    ) { storages, savedState ->
+        val validIndexes = storages.indices.toSet()
+        savedState.intersect(validIndexes)
+    }
+    suspend fun onSelect(isLongClick: Boolean, index: Int) {
+        val currentSelected = dataStorePref.indexesSelectedStorageFlow.first()
+        val storages = storageRepo.getAll().first()
 
-            val newSelected = currentSelected.toMutableSet().apply {
-                when {
-                    // 1. Долгий клик: всегда приводит к выделению одного или добавлению в стек
-                    isLongClick -> {
-                        if (isSelectModeActive) clear() // Твоя новая логика: сброс мультивыбора
-                        add(index)
-                    }
+        val isAlreadySelected = currentSelected.contains(index)
+        val isSelectModeActive = currentSelected.size > 1
 
-                    // 2. Обычный клик по уже выделенному: пробуем снять выделение
-                    isAlreadySelected -> {
-                        if (size > 1) remove(index)
-                    }
+        val newSelected = currentSelected.toMutableSet().apply {
+            when {
+                // 1. Долгий клик: всегда приводит к выделению одного или добавлению в стек
+                isLongClick -> {
+                    if (isSelectModeActive) clear() // Твоя новая логика: сброс мультивыбора
+                    add(index)
+                }
 
-                    // 3. Обычный клик по новому элементу:
-                    // если уже в режиме выбора — добавляем, если нет — переключаем (одиночный выбор)
-                    else -> {
-                        if (size == 1) clear()
-                        add(index)
-                    }
+                // 2. Обычный клик по уже выделенному: пробуем снять выделение
+                isAlreadySelected -> {
+                    if (size > 1) remove(index)
+                }
+
+                // 3. Обычный клик по новому элементу:
+                // если уже в режиме выбора — добавляем, если нет — переключаем (одиночный выбор)
+                else -> {
+                    if (size == 1) clear()
+                    add(index)
                 }
             }
-
-            // Валидация и сохранение
-            val validIndexes = storages.indices.toSet()
-            dataStorePref.UIState().saveSelectedIds(newSelected.intersect(validIndexes))
         }
+
+        // Валидация и сохранение
+        val validIndexes = storages.indices.toSet()
+        dataStorePref.saveSelectedIds(newSelected.intersect(validIndexes))
+
     }
     override fun getFlowStorageList(): Flow<List<Storage>> {
         return storageRepo.getAll()

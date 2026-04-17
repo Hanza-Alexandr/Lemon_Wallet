@@ -29,7 +29,9 @@ import com.example.lemonwallet.ui.view.mainscreen.topbar.TopBar
 import com.example.lemonwallet.viewmodel.MainScreenViewModel
 
 @Composable
-fun MainScreenView(){
+fun MainScreenView(
+    onEditStorageClick: (storageId: Long)-> Unit
+){
     val vm: MainScreenViewModel = hiltViewModel()
     var sizeMainButton by remember { mutableStateOf(0.dp) } //Размеры главной кнопки для нижнего отсупа
     val density = LocalDensity.current
@@ -61,9 +63,7 @@ fun MainScreenView(){
                     onStorageClick = { index ->
                         vm.onSelect(false,index)
                     },
-                    onEditStorageClick = {
-
-                    },
+                    onEditStorageClick = onEditStorageClick,
                     onAddStorageClick = {
 
                     },

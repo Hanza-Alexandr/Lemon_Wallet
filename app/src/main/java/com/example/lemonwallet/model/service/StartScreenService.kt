@@ -10,7 +10,7 @@ import javax.inject.Inject
  */
 
 class StartScreenService @Inject constructor(private val dataStorePreferences: PreferencesDataStore){
-    val stateAuth = dataStorePreferences.Account().userIdFlow
+    val stateAuth = dataStorePreferences.userIdFlow
         .map {
             when (it) {
                 null -> AuthorizationState.NoAuthorization
@@ -19,14 +19,14 @@ class StartScreenService @Inject constructor(private val dataStorePreferences: P
             }
         }
 
-    val isFirstOpeningApp = dataStorePreferences.FirstOpen().isFirstOpeningApp
+    val isFirstOpeningApp = dataStorePreferences.isFirstOpeningApp
 
     suspend fun markFirstAppOpeningCompleted(){
-        dataStorePreferences.FirstOpen().markFirstAppOpeningCompleted()
+        dataStorePreferences.markFirstAppOpeningCompleted()
     }
 
     suspend fun logIn(id: Int){
-        dataStorePreferences.Account().logIn(id)
+        dataStorePreferences.logIn(id)
 
     }
 
