@@ -74,7 +74,7 @@ fun AppNavigation (){
                 }
             )
         }
-        composable<Screen.EditStorage> { backStackEntry ->
+        composable<Screen.EditStorage>{ backStackEntry ->
             val route: Screen.EditStorage = backStackEntry.toRoute()
             EditStorageView(route.storageId)
         }

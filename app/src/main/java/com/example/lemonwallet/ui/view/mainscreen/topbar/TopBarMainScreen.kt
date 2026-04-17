@@ -24,7 +24,9 @@ import com.example.lemonwallet.R
 fun TopBar(){
     Row(
         modifier = Modifier
-            .background(Color.White).fillMaxWidth().statusBarsPadding(),
+            .background(Color.White)
+            .fillMaxWidth()
+            .statusBarsPadding(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){
@@ -39,7 +41,7 @@ fun TopBar(){
         ) {
             Icon(
                 modifier = Modifier.size(18.dp),
-                painter = painterResource(R.drawable.group_4),
+                painter = painterResource(R.drawable.more_horiz),
                 contentDescription = null,
             )
         }
