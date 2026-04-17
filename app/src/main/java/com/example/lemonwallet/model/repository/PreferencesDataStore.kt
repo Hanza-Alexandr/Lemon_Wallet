@@ -33,6 +33,7 @@ class PreferencesDataStore @Inject constructor(@ApplicationContext private val c
                 else throw exception
             }
             .map { preferences ->
+                //Если данных нет то создается пустой список
                 preferences[Keys.INDEXES_SELECTED_STORAGE]?.map { it.toInt() }?.toSet() ?: emptySet()
             }
 
@@ -56,6 +57,7 @@ class PreferencesDataStore @Inject constructor(@ApplicationContext private val c
                 else throw exception
             }
             .map { preferences ->
+                //Если данных нет то пользователь не авторизован и null тоже является состоянием авторизации
                 preferences[Keys.USER_ID]
             }
 
@@ -89,6 +91,7 @@ class PreferencesDataStore @Inject constructor(@ApplicationContext private val c
                 else throw exception
             }
             .map { preferences ->
+                //Если данных нет, можно сделать вывод что приложение открывается в первый раз
                 preferences[Keys.IS_FIRST_OPENING_APP] ?: true
             }
 

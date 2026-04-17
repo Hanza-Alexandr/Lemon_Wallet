@@ -2,7 +2,7 @@ package com.example.lemonwallet.model.service
 
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
-import com.example.lemonwallet.model.state.StateDomain
+import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
@@ -75,7 +75,7 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         return storageRepo.getAll()
     }
 
-    override suspend fun getStorage(storageId: Int): StateDomain<Storage> {
+    override suspend fun getStorage(storageId: Int): DomainState<Storage> {
         TODO("Not yet implemented")
     }
 
@@ -85,7 +85,7 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         typeStorage: TypeStorage,
         note: String?,
         color: ExistColor
-    ): StateDomain<Storage> {
+    ): DomainState<Storage> {
         TODO("Not yet implemented")
     }
 
@@ -97,20 +97,20 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         color: ExistColor?,
         isStatistic: Boolean?,
         isArchive: Boolean?
-    ): StateDomain<Storage> {
+    ): DomainState<Storage> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteStorage(storage: Storage): StateDomain<Storage> {
+    override suspend fun deleteStorage(storage: Storage): DomainState<Storage> {
         TODO("Not yet implemented")
     }
 
-    override fun getStorageBalance(storage: Storage): StateDomain<Double> {
+    override fun getStorageBalance(storage: Storage): DomainState<Double> {
         return when(storage.id){
-            1L -> StateDomain.Success(2000.0)
-            2L -> StateDomain.Success(5000.0)
-            3L -> StateDomain.Success(12345.34)
-            else -> StateDomain.Success(0.0)
+            1L -> DomainState.Success(2000.0)
+            2L -> DomainState.Success(5000.0)
+            3L -> DomainState.Success(12345.34)
+            else -> DomainState.Success(0.0)
         }
     }
 }

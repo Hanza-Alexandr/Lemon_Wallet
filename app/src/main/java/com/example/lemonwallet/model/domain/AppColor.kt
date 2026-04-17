@@ -2,7 +2,7 @@ package com.example.lemonwallet.model.domain
 
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
-import com.example.lemonwallet.model.state.StateDomain
+import com.example.lemonwallet.model.state.DomainState
 
 abstract class AppColor{
     abstract val hexCode: String
@@ -39,9 +39,9 @@ class UserColor private constructor(
         }
     }
 
-    fun hexChange(newHex: String): StateDomain<UserColor> {
-        return if (!isValidHex(newHex)) StateDomain.Error("❌Некорректный HexCode")
-        else StateDomain.Success(create(id,newHex,owner))
+    fun hexChange(newHex: String): DomainState<UserColor> {
+        return if (!isValidHex(newHex)) DomainState.Error("❌Некорректный HexCode")
+        else DomainState.Success(create(id,newHex,owner))
     }
 }
 
@@ -66,9 +66,9 @@ class NewColor private constructor(
 
 ): AppColor(){
     companion object{
-        fun create(hexCode: String, structure: Owner.User): StateDomain<NewColor> {
-            if (!isValidHex(hexCode)) return StateDomain.Error("❌Ошибка при создании объекта. Некорректный Hex")
-            return StateDomain.Success(NewColor(hexCode,structure))
+        fun create(hexCode: String, structure: Owner.User): DomainState<NewColor> {
+            if (!isValidHex(hexCode)) return DomainState.Error("❌Ошибка при создании объекта. Некорректный Hex")
+            return DomainState.Success(NewColor(hexCode,structure))
         }
     }
 }

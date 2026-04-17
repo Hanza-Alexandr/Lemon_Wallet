@@ -54,7 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     //Сериализация
     implementation(libs.kotlinx.serialization.json)
-    // Встроенный сплешскрин
+    // Встроенный SplashScreen
     implementation(libs.androidx.core.splashscreen)
     // DataStore, вариант Preferences
     implementation(libs.androidx.datastore.preferences)

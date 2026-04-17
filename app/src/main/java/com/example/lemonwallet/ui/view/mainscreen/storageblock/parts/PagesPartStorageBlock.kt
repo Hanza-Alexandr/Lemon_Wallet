@@ -11,8 +11,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,6 @@ import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.AccountHorizontalAddCard
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.parts.elements.horizontal.StorageHorizontalCard
-import com.example.lemonwallet.viewmodel.MainViewModel
 
 @Preview
 @Composable

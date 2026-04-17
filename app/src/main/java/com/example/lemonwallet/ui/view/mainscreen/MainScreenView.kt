@@ -26,11 +26,11 @@ import com.example.lemonwallet.ui.view.mainscreen.lastoperationsblock.LastOperat
 import com.example.lemonwallet.ui.view.mainscreen.mainbutton.MainButton
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.StorageBlock
 import com.example.lemonwallet.ui.view.mainscreen.topbar.TopBar
-import com.example.lemonwallet.viewmodel.MainViewModel
+import com.example.lemonwallet.viewmodel.MainScreenViewModel
 
 @Composable
 fun MainScreenView(){
-    val vm: MainViewModel = hiltViewModel()
+    val vm: MainScreenViewModel = hiltViewModel()
     var sizeMainButton by remember { mutableStateOf(0.dp) } //Размеры главной кнопки для нижнего отсупа
     val density = LocalDensity.current
     val roundedCornerShapeBlock = 22.dp //Скругление блоков интерфейса

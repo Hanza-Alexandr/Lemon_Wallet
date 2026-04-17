@@ -1,6 +1,6 @@
 package com.example.lemonwallet.model.domain
 
-import com.example.lemonwallet.model.state.StateDomain
+import com.example.lemonwallet.model.state.DomainState
 
 
 abstract class BaseStorage{
@@ -84,12 +84,12 @@ class NewStorage private constructor(
     override val isArchive: Boolean = false
 ): BaseStorage(){
     companion object{
-        fun create(name: String, userId: Long, currency: Currency, typeStorage: TypeStorage, note: String?, color: ExistColor): StateDomain<NewStorage> {
+        fun create(name: String, userId: Long, currency: Currency, typeStorage: TypeStorage, note: String?, color: ExistColor): DomainState<NewStorage> {
             if(!isNameValid(name)) {
-                return StateDomain.Error("❌Некорректное имя")
+                return DomainState.Error("❌Некорректное имя")
             }
-            if(!isNoteValid(note)) return StateDomain.Error("❌Некорректная заметка")
-            return StateDomain.Success(NewStorage(name, userId, currency, typeStorage, note, color, isStatistics = true, isArchive = false))
+            if(!isNoteValid(note)) return DomainState.Error("❌Некорректная заметка")
+            return DomainState.Success(NewStorage(name, userId, currency, typeStorage, note, color, isStatistics = true, isArchive = false))
         }
     }
 }
