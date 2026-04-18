@@ -23,36 +23,10 @@ import javax.inject.Singleton
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun getStorageDao(): StorageDao
-
 }
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DatabaseModule {
-
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "room_database.db" // Ваше имя БД
-        )
-            .addCallback(DatabaseCallback()) // Ваша коллбек-логика
-            .build()
-    }
-
-    @Provides
-    fun provideStorageDao(db: AppDatabase): StorageDao {
-        return db.getStorageDao()
-    }
-}
-
-
 // Внутренний класс для заполнения данными
-private class DatabaseCallback : RoomDatabase.Callback() {
+class DatabaseCallback : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
         // Эти SQL-запросы выполнятся только ПРИ ПЕРВОМ создании файла БД

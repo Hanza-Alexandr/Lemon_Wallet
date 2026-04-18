@@ -19,15 +19,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
 
-    @Binds
-    abstract fun bindStorageRepository(
-        impl: StorageRoomRepository // Что Hilt должен СОЗДАТЬ
-    ): IStorageRepository           // Под видом КАКОГО интерфейса отдать
-}
 class StorageService @Inject constructor(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore, private val accountService: AccountService): IStorageService {
 
 
