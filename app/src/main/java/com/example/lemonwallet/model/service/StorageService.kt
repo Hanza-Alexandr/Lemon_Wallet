@@ -2,12 +2,14 @@ package com.example.lemonwallet.model.service
 
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
+import com.example.lemonwallet.model.domain.NewStorage
 import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
 import com.example.lemonwallet.model.repository.PreferencesDataStore
 import com.example.lemonwallet.model.repository.StorageRoomRepository
+import com.example.lemonwallet.model.state.AuthorizationState
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -26,7 +28,7 @@ abstract class RepositoryModule {
         impl: StorageRoomRepository // Что Hilt должен СОЗДАТЬ
     ): IStorageRepository           // Под видом КАКОГО интерфейса отдать
 }
-class StorageService @Inject constructor(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore): IStorageService {
+class StorageService @Inject constructor(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore, private val accountService: AccountService): IStorageService {
 
 
     // Поток остается таким же — он просто наблюдает
@@ -76,7 +78,12 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
     }
 
     override suspend fun getStorage(storageId: Int): DomainState<Storage> {
-        TODO("Not yet implemented")
+        storageRepo.getById(storageId.toLong()).let {
+            return when(it){
+                null -> DomainState.Error("Ошибка получения")
+                else -> DomainState.Success(it)
+            }
+        }
     }
 
     override suspend fun createStorage(
@@ -86,9 +93,36 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         note: String?,
         color: ExistColor
     ): DomainState<Storage> {
-        TODO("Not yet implemented")
-    }
-
+        val newStorageState = NewStorage.create(
+            userId = accountService.stateAuth.first().let {
+                when(it){
+                    is AuthorizationState.Authorization -> it.id.toLong()
+                    else -> -1L
+                }
+            },
+            name = name,
+            currency = currency,
+            typeStorage = typeStorage,
+            note = note,
+            color = color
+        )
+        val newStorage = when(newStorageState){
+            is DomainState.Success -> newStorageState.domain
+            is DomainState.Error -> null
+        }
+        if (newStorage!=null){
+            storageRepo.save(newStorage).let {
+                return when(it){
+                    null -> DomainState.Error("Ошибка создания на стороне БД")
+                    else -> DomainState.Success(it)
+                }
+            }
+        }
+        val message = when(newStorageState) {
+            is DomainState.Success -> null
+            is DomainState.Error -> newStorageState.message
+        }
+        return DomainState.Error("Ошибка создания на стороне ПРИЛОЖЕНИЯ $message")}
     override suspend fun updateStorage(
         changingStorage: Storage,
         name: String?,
@@ -98,14 +132,37 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         isStatistic: Boolean?,
         isArchive: Boolean?
     ): DomainState<Storage> {
-        TODO("Not yet implemented")
+        storageRepo.save(
+            Storage(
+                id = changingStorage.id,
+                userId = changingStorage.userId,
+                name = name ?: changingStorage.name,
+                currency = changingStorage.currency,
+                typeStorage = typeStorage ?: changingStorage.typeStorage,
+                note = note ?: changingStorage.note,
+                color = color ?: changingStorage.color,
+                isStatistics = isStatistic ?: changingStorage.isStatistics,
+                isArchive = isArchive ?: changingStorage.isArchive
+            )
+        ).let {
+            return when(it){
+                null -> DomainState.Error("Ошибка создания")
+                else -> DomainState.Success(it)
+            }
+        }
     }
 
     override suspend fun deleteStorage(storage: Storage): DomainState<Storage> {
-        TODO("Not yet implemented")
+        storageRepo.delete(storage).let {
+            return when(it){
+                null -> DomainState.Error("Ошибка удаления")
+                else -> DomainState.Success(it)
+            }
+        }
     }
 
     override fun getStorageBalance(storage: Storage): DomainState<Double> {
+        //TODO(НУЖО ЕЩЕ ПОДКЛЮЧИТСЯ К ОПЕРАЦИЯМ СЧЕТА И ПРОИЗВОДИТЬ ЛОГИКУ ПОДСЧЕТА)
         return when(storage.id){
             1L -> DomainState.Success(2000.0)
             2L -> DomainState.Success(5000.0)

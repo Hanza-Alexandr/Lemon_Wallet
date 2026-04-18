@@ -45,7 +45,7 @@ import com.example.lemonwallet.ui.theme.SecondLight
 
 @Preview
 @Composable
-fun Test7(){
+fun AccountHorizontalAddCardPreview(){
     AccountHorizontalAddCard(
         60,
         {}

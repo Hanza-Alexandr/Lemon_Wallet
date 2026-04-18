@@ -116,7 +116,7 @@ fun PagesPartStorageBlock(
                         itemIndex == storages.size -> {
                             AccountHorizontalAddCard(
                                 elementHeight,
-                                onAddStorageClick
+                                onAddStorageClick = onAddStorageClick
                             )
                         }
                         else -> {

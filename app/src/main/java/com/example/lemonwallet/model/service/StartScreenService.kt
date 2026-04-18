@@ -9,15 +9,8 @@ import javax.inject.Inject
  * Класс бизнес логики для старта приложения.
  */
 
-class StartScreenService @Inject constructor(private val dataStorePreferences: PreferencesDataStore){
-    val stateAuth = dataStorePreferences.userIdFlow
-        .map {
-            when (it) {
-                null -> AuthorizationState.NoAuthorization
-                -1 -> AuthorizationState.Guest
-                else -> AuthorizationState.Authorization(it)
-            }
-        }
+class StartScreenService @Inject constructor(private val dataStorePreferences: PreferencesDataStore, private val accountService: AccountService){
+    val stateAuth = accountService.stateAuth
 
     val isFirstOpeningApp = dataStorePreferences.isFirstOpeningApp
 

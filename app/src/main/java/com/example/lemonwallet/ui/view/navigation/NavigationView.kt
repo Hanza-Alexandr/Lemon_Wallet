@@ -1,6 +1,5 @@
 package com.example.lemonwallet.ui.view.navigation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -18,7 +17,8 @@ import com.example.lemonwallet.ui.view.authscreen.AuthScreenView
 import com.example.lemonwallet.ui.view.mainscreen.MainScreenView
 import com.example.lemonwallet.ui.view.startscreen.StartScreenView
 import com.example.lemonwallet.model.state.AuthorizationState
-import com.example.lemonwallet.ui.view.mainscreen.EditStorageView
+import com.example.lemonwallet.ui.view.templatestorage.CreateStorageView
+import com.example.lemonwallet.ui.view.templatestorage.EditStorageView
 import com.example.lemonwallet.viewmodel.StartScreenViewModel
 
 
@@ -34,8 +34,7 @@ fun AppNavigation (){
     val isFirstOpen by startScreenVM.isFirstOpeningApp.collectAsState()
     val authState by startScreenVM.stateAuth.collectAsState()
 
-    // UI-логика вычисления стартового экрана после гарантированного прихода данных
-    val startScreen =when {
+    val startScreen = when {
         isFirstOpen == true -> Screen.FirstOpened
         authState is AuthorizationState.Authorization || authState is AuthorizationState.Guest -> Screen.MainScreen
         else -> Screen.AuthScreen
@@ -47,7 +46,7 @@ fun AppNavigation (){
     ){
         composable<Screen.FirstOpened> {
             StartScreenView {
-                startScreenVM.markFirstAppOpeningCompleted() //Запись в данные приложения что пользователь открыл приложение что бы стартовый экран не показывался вновь
+                startScreenVM.markFirstAppOpeningCompleted()
                 navController.navigate(Screen.AuthScreen) {
                     popUpTo(Screen.FirstOpened) { inclusive = true }
                 }
@@ -55,9 +54,7 @@ fun AppNavigation (){
         }
         composable<Screen.AuthScreen> {
             AuthScreenView(
-                onLoginSuccess = {
-
-                },
+                onLoginSuccess = {},
                 onContinueAsGuest = {
                     startScreenVM.logIn(-1)
                     navController.navigate(Screen.MainScreen) {
@@ -70,26 +67,77 @@ fun AppNavigation (){
             MainScreenView(
                 onEditStorageClick = { id ->
                     navController.navigate(Screen.EditStorage(storageId = id))
-                    Log.d("MainScreenViewModel", "onEditStorageClick")
+                },
+                onCreateStorageClick = {
+                    navController.navigate(Screen.CreateStorage)
                 }
             )
         }
-        composable<Screen.EditStorage>{ backStackEntry ->
+        composable<Screen.EditStorage>(
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(150)
+                ) + fadeIn(animationSpec = tween(150))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(150))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(150))
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(150)
+                ) + fadeOut(animationSpec = tween(150))
+            }
+        ){ backStackEntry ->
             val route: Screen.EditStorage = backStackEntry.toRoute()
-            EditStorageView(route.storageId)
+            EditStorageView(
+                storageId = route.storageId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.CreateStorage>(
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(150)
+                ) + fadeIn(animationSpec = tween(150))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(150))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(150))
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(150)
+                ) + fadeOut(animationSpec = tween(150))
+            }
+        ){
+            CreateStorageView(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 
 }
 
 @Serializable
-sealed class Screen{
+sealed class Screen {
     @Serializable
-    object FirstOpened: Screen()
+    data object FirstOpened: Screen()
     @Serializable
-    object AuthScreen: Screen()
+    data object AuthScreen: Screen()
     @Serializable
-    object MainScreen: Screen()
+    data object MainScreen: Screen()
     @Serializable
     data class EditStorage(val storageId: Long): Screen()
+    @Serializable
+    object CreateStorage: Screen()
 }

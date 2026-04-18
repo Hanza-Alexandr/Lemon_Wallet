@@ -25,12 +25,14 @@ import com.example.lemonwallet.ui.view.mainscreen.cashflowgrafficsblock.CashFlow
 import com.example.lemonwallet.ui.view.mainscreen.lastoperationsblock.LastOperations
 import com.example.lemonwallet.ui.view.mainscreen.mainbutton.MainButton
 import com.example.lemonwallet.ui.view.mainscreen.storageblock.StorageBlock
-import com.example.lemonwallet.ui.view.mainscreen.topbar.TopBar
+import com.example.lemonwallet.ui.view.topbars.GlobalTopBar
+import com.example.lemonwallet.ui.view.topbars.TopBarMainScreen
 import com.example.lemonwallet.viewmodel.MainScreenViewModel
 
 @Composable
 fun MainScreenView(
-    onEditStorageClick: (storageId: Long)-> Unit
+    onEditStorageClick: (storageId: Long)-> Unit,
+    onCreateStorageClick: ()-> Unit
 ){
     val vm: MainScreenViewModel = hiltViewModel()
     var sizeMainButton by remember { mutableStateOf(0.dp) } //Размеры главной кнопки для нижнего отсупа
@@ -45,7 +47,12 @@ fun MainScreenView(
             .fillMaxSize()
             .background(MainDark),
     ) {
-        TopBar()
+        TopBarMainScreen(
+            onMore = {
+                TODO("Not Implement")
+            }
+        )
+
         Box{
             Column(
                 modifier = Modifier
@@ -64,9 +71,7 @@ fun MainScreenView(
                         vm.onSelect(false,index)
                     },
                     onEditStorageClick = onEditStorageClick,
-                    onAddStorageClick = {
-
-                    },
+                    onAddStorageClick = onCreateStorageClick,
                     onStorageLongClick = { index ->
                         vm.onSelect(true,index)
                     }

@@ -40,7 +40,7 @@ data class StorageRoomEntity(
     val note: String?, // Знак ? означает, что поле может быть NULL
 
     @ColumnInfo(name = "color_id")
-    val colorId: Int,
+    val colorId: Long,
 
     @ColumnInfo(name = "is_statistics", defaultValue = "1")
     val isStatistics: Boolean,
