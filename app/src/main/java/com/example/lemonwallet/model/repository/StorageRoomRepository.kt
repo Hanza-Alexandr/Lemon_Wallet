@@ -13,13 +13,13 @@ class StorageRoomRepository @Inject constructor(private val storageDao: StorageD
 
     override fun getAll(): Flow<List<Storage>> {
         return storageDao.getAllStorageWithColorsFlow().map { list ->
-            list.map { it.toDomain(ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain()) }
+            list.map { it.toDomain(if (it.colorId == null || it.colorHex == null ) null else ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain()) }
         }
     }
 
     override suspend fun getById(id: Long): Storage? {
         return storageDao.getStorageWithColorById(id)?.let {
-            it.toDomain(ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain())
+            it.toDomain(if (it.colorId == null || it.colorHex == null) null else ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain())
         }
     }
 
@@ -31,7 +31,7 @@ class StorageRoomRepository @Inject constructor(private val storageDao: StorageD
             currency = storage.currency.name,
             typeStorage = storage.typeStorage.name,
             note = storage.note,
-            colorId = storage.color.id,
+            colorId = storage.color?.id,
             isStatistics = storage.isStatistics,
             isArchive = storage.isArchive
         )
@@ -46,7 +46,7 @@ class StorageRoomRepository @Inject constructor(private val storageDao: StorageD
             currency = storage.currency.name,
             typeStorage = storage.typeStorage.name,
             note = storage.note,
-            colorId = storage.color.id,
+            colorId = storage.color?.id,
             isStatistics = storage.isStatistics,
             isArchive = storage.isArchive
         )

@@ -83,7 +83,7 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         currency: Currency,
         typeStorage: TypeStorage,
         note: String?,
-        color: ExistColor
+        color: ExistColor?
     ): DomainState<Storage> {
         val newStorageState = NewStorage.create(
             userId = accountService.stateAuth.first().let {

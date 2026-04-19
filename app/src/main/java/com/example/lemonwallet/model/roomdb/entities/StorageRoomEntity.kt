@@ -40,7 +40,7 @@ data class StorageRoomEntity(
     val note: String?, // Знак ? означает, что поле может быть NULL
 
     @ColumnInfo(name = "color_id")
-    val colorId: Long,
+    val colorId: Long?,
 
     @ColumnInfo(name = "is_statistics", defaultValue = "1")
     val isStatistics: Boolean,
@@ -59,7 +59,7 @@ data class StorageWithColor(
     val typeStorage: String,
     val note: String?,
     @ColumnInfo(name = "color_id")
-    val colorId: Long,
+    val colorId: Long?,
     @ColumnInfo(name = "is_statistics")
     val isStatistics: Boolean,
     @ColumnInfo(name = "is_archive")
@@ -67,11 +67,11 @@ data class StorageWithColor(
 
     // Поля из таблицы ColorEntity
     @ColumnInfo(name = "color_hex")
-    val colorHex: String,
+    val colorHex: String?,
     @ColumnInfo(name = "color_user_id")
     val colorUserId: Long?
 ){
-    fun toDomain(color: ExistColor): Storage{
+    fun toDomain(color: ExistColor?): Storage{
         return Storage(
             id = id,
             name = name,

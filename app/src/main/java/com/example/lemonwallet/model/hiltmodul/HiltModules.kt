@@ -2,11 +2,13 @@ package com.example.lemonwallet.model.hiltmodul
 
 import android.content.Context
 import androidx.room.Room
+import com.example.lemonwallet.model.repository.ColorRoomRepository
+import com.example.lemonwallet.model.repository.IColorRepository
 import com.example.lemonwallet.model.repository.IStorageRepository
 import com.example.lemonwallet.model.repository.StorageRoomRepository
+import com.example.lemonwallet.model.roomdb.dao.ColorDao
 import com.example.lemonwallet.model.roomdb.dao.StorageDao
 import com.example.lemonwallet.model.roomdb.database.AppDatabase
-import com.example.lemonwallet.model.roomdb.database.DatabaseCallback
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -23,6 +25,11 @@ abstract class RepositoryModule {
     abstract fun bindStorageRepository(
         impl: StorageRoomRepository // Что Hilt должен СОЗДАТЬ
     ): IStorageRepository           // Под видом КАКОГО интерфейса отдать
+
+    @Binds
+    abstract fun bindColorRepository(
+        impl: ColorRoomRepository
+    ): IColorRepository
 }
 
 @Module
@@ -37,7 +44,8 @@ object DatabaseModule {
             AppDatabase::class.java,
             "room_database.db" // Ваше имя БД
         )
-            .addCallback(DatabaseCallback()) // Ваша коллбек-логика
+
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 
@@ -45,4 +53,10 @@ object DatabaseModule {
     fun provideStorageDao(db: AppDatabase): StorageDao {
         return db.getStorageDao()
     }
+    @Provides
+    fun provideColorDao(db: AppDatabase): ColorDao {
+        return db.getColorDao()
+    }
 }
+
+

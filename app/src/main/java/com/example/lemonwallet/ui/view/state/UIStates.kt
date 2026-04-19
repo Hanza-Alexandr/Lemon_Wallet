@@ -16,6 +16,7 @@ abstract class GlobalStorageUiState{
     abstract val isStatistics: Boolean
     abstract val isArchive: Boolean
     abstract val color: ExistColor?
+    abstract val availableColors: List<ExistColor>
     abstract val error: String?
     abstract val isSaved: Boolean
 }
@@ -29,7 +30,8 @@ data class CreateStorageUiState(
     override val currency: Currency = Currency.RUB,
     override val isStatistics: Boolean = true,
     override val isArchive: Boolean = false,
-    override val color: ExistColor = SystemColor.create(1L,"AAAAAA"),
+    override val color: ExistColor? = null,
+    override val availableColors: List<ExistColor> = emptyList(),
     override val error: String? = null,
     override val isSaved: Boolean = false
 ): GlobalStorageUiState()
@@ -44,6 +46,7 @@ data class EditStorageUiState(
     override val isStatistics: Boolean = true,
     override val isArchive: Boolean = false,
     override val color: ExistColor? = null,
+    override val availableColors: List<ExistColor> = emptyList(),
     override val error: String? = null,
     override val isSaved: Boolean = false
 ): GlobalStorageUiState()

@@ -111,7 +111,7 @@ fun StorageHorizontalCard(
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
-                .background(storage.color.toDomain())
+                .background(storage.color?.toDomain() ?: MainLight)
                 .padding(8.dp)
         ){
             Icon(

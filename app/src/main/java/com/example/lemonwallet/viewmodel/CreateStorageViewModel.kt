@@ -7,29 +7,33 @@ import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.model.repository.IStorageRepository
+import com.example.lemonwallet.model.repository.IColorRepository
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.ui.view.state.CreateStorageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
-
 @HiltViewModel
 class CreateStorageViewModel @Inject constructor(
     private val storageService: StorageService,
+    private val colorRepo: IColorRepository
 ) : ViewModel() {
 
-    //Создаем приватный изменяемый поток состояния который будет хранить данные о вьюмодели
     private val _uiState = MutableStateFlow(CreateStorageUiState())
     val uiState = _uiState.asStateFlow()
-    //Создаем неизменяемый поток состояния который будет предоставлять данные о вьюмодели во вне
+
+    init {
+        viewModelScope.launch {
+            colorRepo.getAllFlow().collect { colors ->
+                _uiState.update { it.copy(availableColors = colors) }
+            }
+        }
+    }
 
     fun onNameChange(newName: String) {
         _uiState.update { it.copy(name = newName) }
@@ -55,7 +59,7 @@ class CreateStorageViewModel @Inject constructor(
         _uiState.update { it.copy(isArchive = value) }
     }
 
-    fun onColorChange(newColor: ExistColor) {
+    fun onColorChange(newColor: ExistColor?) {
         _uiState.update { it.copy(color = newColor) }
     }
 

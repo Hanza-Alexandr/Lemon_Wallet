@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.lemonwallet.ui.theme.MainDark
@@ -25,9 +26,11 @@ fun CreateStorageView(
     val uiState by viewModel.uiState.collectAsState()
 
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
+            focusManager.clearFocus()
             keyboardController?.hide()
             onBack()
         }

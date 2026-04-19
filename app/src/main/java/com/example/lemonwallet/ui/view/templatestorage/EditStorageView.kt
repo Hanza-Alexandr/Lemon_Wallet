@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ fun EditStorageView(
     viewModel: EditStorageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
@@ -42,6 +44,7 @@ fun EditStorageView(
 
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
+            focusManager.clearFocus()
             keyboardController?.hide()
             onBack()
         }

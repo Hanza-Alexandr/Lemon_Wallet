@@ -9,7 +9,7 @@ abstract class BaseStorage{
     abstract val currency: Currency
     abstract val typeStorage: TypeStorage
     abstract val note: String?
-    abstract val color: ExistColor
+    abstract val color: ExistColor?
     abstract val isStatistics: Boolean
     abstract val isArchive: Boolean
 
@@ -31,7 +31,7 @@ data class Storage(
     override val currency: Currency,
     override val typeStorage: TypeStorage,
     override val note: String?,
-    override val color: ExistColor,
+    override val color: ExistColor?,
     override val isStatistics: Boolean,
     override val isArchive: Boolean
 ):BaseStorage(){
@@ -56,7 +56,7 @@ data class Storage(
     fun changeNote(newNote: String?): Storage=
         copy(note = newNote) //TODO()отсутсвует проверка на корректность. Т.к я хз как сделать так что бы было удобно использовать функцию и что бы я был уверен что имя соответсвует логикик и огранияениям
 
-    fun changeColor(newColor: ExistColor): Storage =
+    fun changeColor(newColor: ExistColor?): Storage =
         copy(color = newColor)
 
     fun switchStatistic(bool: Boolean): Storage{
@@ -79,12 +79,12 @@ class NewStorage private constructor(
     override val currency: Currency,
     override val typeStorage: TypeStorage,
     override val note: String?,
-    override val color: ExistColor,
+    override val color: ExistColor?,
     override val isStatistics: Boolean = true,
     override val isArchive: Boolean = false
 ): BaseStorage(){
     companion object{
-        fun create(name: String, userId: Long, currency: Currency, typeStorage: TypeStorage, note: String?, color: ExistColor): DomainState<NewStorage> {
+        fun create(name: String, userId: Long, currency: Currency, typeStorage: TypeStorage, note: String?, color: ExistColor?): DomainState<NewStorage> {
             if(!isNameValid(name)) {
                 return DomainState.Error("❌Некорректное имя")
             }

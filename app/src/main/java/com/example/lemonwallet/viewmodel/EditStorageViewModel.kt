@@ -80,7 +80,7 @@ class EditStorageViewModel @Inject constructor(
         _uiState.update { it.copy(isArchive = value) }
     }
     
-    fun onColorChange(newColor: ExistColor) {
+    fun onColorChange(newColor: ExistColor?) {
         _uiState.update { it.copy(color = newColor) }
     }
 

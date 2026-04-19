@@ -23,7 +23,7 @@ interface StorageDao {
             c.hex_code AS color_hex, 
             c.user_id AS color_user_id
         FROM storage AS s
-        JOIN color AS c ON s.color_id = c.id
+        LEFT JOIN color AS c ON s.color_id = c.id
         WHERE s.id = :id
     """)
     suspend fun getStorageWithColorById(id: Long): StorageWithColor?
@@ -35,7 +35,7 @@ interface StorageDao {
             c.hex_code AS color_hex, 
             c.user_id AS color_user_id
         FROM storage AS s
-        JOIN color AS c ON s.color_id = c.id
+        LEFT JOIN color AS c ON s.color_id = c.id
     """)
     fun getAllStorageWithColorsFlow(): Flow<List<StorageWithColor>>
 

@@ -8,39 +8,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lemonwallet.R
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.ui.view.state.EditStorageUiState
 import com.example.lemonwallet.ui.view.state.GlobalStorageUiState
+import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.ColorPickerRow
 
 @Preview
 @Composable
@@ -62,6 +48,7 @@ fun GlobalDetailStorageContentPreview() {
         onArchiveChange = {}
     )
 }
+
 @Composable
 fun GlobalDetailStorageContent(
     uiState: GlobalStorageUiState,
@@ -69,11 +56,11 @@ fun GlobalDetailStorageContent(
     onNoteChange: (String) -> Unit,
     onTypeChange: (TypeStorage) -> Unit,
     onCurrencyChange: (Currency) -> Unit,
-    onColorChange: (ExistColor) -> Unit,
+    onColorChange: (ExistColor?) -> Unit,
     onStatisticsChange: (Boolean) -> Unit,
     onArchiveChange: (Boolean) -> Unit,
 ) {
-    Column{
+    Column {
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Color.White)
@@ -108,10 +95,9 @@ fun GlobalDetailStorageContent(
                     )
                 )
 
-                // Заменяем старый Row с OutlinedTextField для типа счета:
                 StorageExposedDropdown(
                     label = "Тип счета",
-                    options = TypeStorage.entries, // Получаем все варианты Enum
+                    options = TypeStorage.entries,
                     selectedOption = uiState.typeStorage,
                     onOptionSelected = onTypeChange,
                     modifier = Modifier.fillMaxWidth()
@@ -125,28 +111,15 @@ fun GlobalDetailStorageContent(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .weight(1F),
-                        shape = RoundedCornerShape(6.dp),
-                        onClick = {}
-                    ) {
-
-                    }
-                    IconButton(
-                        onClick = {
-                            TODO("Not implement")
-                        }
-                    ) {
-                        Icon(painterResource(R.drawable.expand_more), contentDescription = "Save")
-                    }
-
+                // Секция выбора цвета
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Цвет счета", color = Color.Gray, fontSize = 14.sp)
+                    ColorPickerRow(
+                        availableColors = uiState.availableColors,
+                        selectedColor = uiState.color,
+                        onColorSelected = onColorChange,
+                        onAddNewColorClick = { /* TODO: Open Color Picker Dialog */ }
+                    )
                 }
 
                 Row(
@@ -156,7 +129,11 @@ fun GlobalDetailStorageContent(
                 ) {
                     Column {
                         Text("Учитывать в статистике", fontSize = 16.sp)
-                        Text("Данные будут влиять на общую статистику", color = Color.Gray, fontSize = 12.sp)
+                        Text(
+                            "Данные будут влиять на общую статистику",
+                            color = Color.Gray,
+                            fontSize = 12.sp
+                        )
                     }
                     Switch(
                         checked = uiState.isStatistics,
@@ -180,7 +157,11 @@ fun GlobalDetailStorageContent(
                 }
 
                 if (uiState.error != null) {
-                    Text(text = uiState.error!!, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+                    Text(
+                        text = uiState.error!!,
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
                 }
             }
         }
@@ -188,56 +169,4 @@ fun GlobalDetailStorageContent(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun <T> StorageExposedDropdown(
-    label: String,
-    options: List<T>,
-    selectedOption: T,
-    onOptionSelected: (T) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var expanded by remember { mutableStateOf(false) }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = modifier
-    ) {
-        OutlinedTextField(
-            // Важно: в M3 .menuAnchor() привязывает меню к полю
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(),
-            value = selectedOption.toString(), // Здесь можно добавить логику перевода
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(label, color = Color.Gray) },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Gray,
-                unfocusedLabelColor = Color.Gray,
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-            )
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(text = option.toString()) },
-                    onClick = {
-                        onOptionSelected(option)
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                )
-            }
-        }
-    }
-}
