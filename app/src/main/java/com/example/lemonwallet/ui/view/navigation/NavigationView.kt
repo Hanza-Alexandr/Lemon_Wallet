@@ -73,26 +73,7 @@ fun AppNavigation (){
                 }
             )
         }
-        composable<Screen.EditStorage>(
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(150)
-                ) + fadeIn(animationSpec = tween(150))
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(150))
-            },
-            popEnterTransition = {
-                fadeIn(animationSpec = tween(150))
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    animationSpec = tween(150)
-                ) + fadeOut(animationSpec = tween(150))
-            }
-        ){ backStackEntry ->
+        composable<Screen.EditStorage>{ backStackEntry ->
             val route: Screen.EditStorage = backStackEntry.toRoute()
             EditStorageView(
                 storageId = route.storageId,
@@ -100,26 +81,7 @@ fun AppNavigation (){
             )
         }
 
-        composable<Screen.CreateStorage>(
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(150)
-                ) + fadeIn(animationSpec = tween(150))
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(150))
-            },
-            popEnterTransition = {
-                fadeIn(animationSpec = tween(150))
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    animationSpec = tween(150)
-                ) + fadeOut(animationSpec = tween(150))
-            }
-        ){
+        composable<Screen.CreateStorage>{
             CreateStorageView(
                 onBack = { navController.popBackStack() }
             )

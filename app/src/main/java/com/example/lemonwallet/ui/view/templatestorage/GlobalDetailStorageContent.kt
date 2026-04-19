@@ -12,13 +12,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -99,71 +108,22 @@ fun GlobalDetailStorageContent(
                     )
                 )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    OutlinedTextField(
-                        enabled = false,
-                        value = uiState.typeStorage.toString(),
-                        onValueChange = {},
-                        label = { Text("Тип счета", color = Color.Gray) },
-                        modifier = Modifier
-                            .padding(bottom = 8.dp)
-                            .weight(1F),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            // Настраиваем цвета для disabled состояния, чтобы они выглядели как обычные
-                            disabledBorderColor = Color.Gray,
-                            disabledLabelColor = Color.Gray,
-                            disabledContainerColor = Color.Transparent,
-                            // Убираем прозрачность, которую Material накладывает на disabled элементы
-                            disabledPlaceholderColor = Color.Gray
-                        )
-                    )
-                    IconButton(
-                        onClick = {
-                            TODO("Not implement")
-                        }
-                    ) {
-                        Icon(painterResource(R.drawable.expand_more), contentDescription = "Save")
-                    }
+                // Заменяем старый Row с OutlinedTextField для типа счета:
+                StorageExposedDropdown(
+                    label = "Тип счета",
+                    options = TypeStorage.entries, // Получаем все варианты Enum
+                    selectedOption = uiState.typeStorage,
+                    onOptionSelected = onTypeChange,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    OutlinedTextField(
-                        enabled = false,
-                        value = uiState.currency.toString(),
-                        onValueChange = {},
-                        label = { Text("Валюта", color = Color.Gray) },
-                        modifier = Modifier
-                            .padding(bottom = 8.dp)
-                            .weight(1F),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            // Настраиваем цвета для disabled состояния, чтобы они выглядели как обычные
-                            disabledBorderColor = Color.Gray,
-                            disabledLabelColor = Color.Gray,
-                            disabledContainerColor = Color.Transparent,
-                            // Убираем прозрачность, которую Material накладывает на disabled элементы
-                            disabledPlaceholderColor = Color.Gray
-                        )
-                    )
-                    IconButton(
-                        onClick = {
-                            TODO("Not implement")
-                        }
-                    ) {
-                        Icon(painterResource(R.drawable.expand_more), contentDescription = "Save")
-                    }
-
-                }
+                StorageExposedDropdown(
+                    label = "Валюта",
+                    options = Currency.entries,
+                    selectedOption = uiState.currency,
+                    onOptionSelected = onCurrencyChange,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
                 Row(
                     modifier = Modifier
@@ -222,6 +182,61 @@ fun GlobalDetailStorageContent(
                 if (uiState.error != null) {
                     Text(text = uiState.error!!, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
                 }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T> StorageExposedDropdown(
+    label: String,
+    options: List<T>,
+    selectedOption: T,
+    onOptionSelected: (T) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            // Важно: в M3 .menuAnchor() привязывает меню к полю
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(),
+            value = selectedOption.toString(), // Здесь можно добавить логику перевода
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(label, color = Color.Gray) },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedBorderColor = Color.Gray,
+                unfocusedLabelColor = Color.Gray,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+            )
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(text = option.toString()) },
+                    onClick = {
+                        onOptionSelected(option)
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
             }
         }
     }
