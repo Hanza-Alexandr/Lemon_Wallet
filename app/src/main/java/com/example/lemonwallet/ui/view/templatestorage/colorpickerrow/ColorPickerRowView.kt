@@ -70,11 +70,14 @@ fun ColorPickerRow(
         }
 
         // 2. Цвета из БД
-        items(availableColors) { existColor ->
+        items(availableColors) { colorUiState ->
             ColorCircle(
-                color = existColor.toColor(),
-                isSelected = selectedColor == existColor,
-                onColorSelectClick = { onColorSelected(existColor) }
+                color = when(colorUiState) {
+                    is ColorUIState.LocalSystemColor -> colorUiState.toColor()
+                    is ColorUIState.DataBaseColor -> colorUiState.toColor()
+                                           },
+                isSelected = selectedColor?.toColor() == colorUiState.toColor(),
+                onColorSelectClick = { onColorSelected(colorUiState) }
             )
         }
         // 3. Последний элемент - Создание цвета
@@ -84,106 +87,3 @@ fun ColorPickerRow(
     }
 }
 
-@Preview
-@Composable
-fun ColorCirclePreview() {
-    ColorCircle(
-        color = Color.Red,
-        isSelected = true,
-        onColorSelectClick = {}
-    )
-}
-@Composable
-fun ColorCircle(
-    color: Color?,
-    isSelected: Boolean,
-    onColorSelectClick: () -> Unit
-) {
-    val borderColor = if (isSelected) Color.Black else Color.Transparent
-    val backgroundColor = color?: Color.Transparent
-
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(CircleShape)
-            .border(2.dp, borderColor, CircleShape)
-            .padding(4.dp) // Отступ для эффекта рамки вокруг цвета
-            .clip(CircleShape)
-            .background(if (color == null) Color.Gray.copy(alpha = 0.1f) else backgroundColor)
-            .clickable { onColorSelectClick() },
-        contentAlignment = Alignment.Center
-    ) {
-        if (color == null) {
-            Icon(
-                imageVector = Icons.Default.Block,
-                contentDescription = "Без цвета",
-                tint = Color.Gray,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
-@Preview
-@Composable
-fun EmptyColorCirclePreview() {
-    EmptyColorCircle(
-        isSelected = false,
-        onSetNoColorClick = {}
-    )
-}
-
-@Composable
-fun EmptyColorCircle(
-    isSelected: Boolean,
-    onSetNoColorClick: () -> Unit
-) {
-    val borderColor = if (isSelected) Color.White else Color.Transparent
-
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(CircleShape)
-            .border(2.dp, borderColor, CircleShape)
-            .padding(4.dp) // Отступ для эффекта рамки вокруг цвета
-            .clip(CircleShape)
-            .background(Color.Gray.copy(alpha = 0.1f))
-            .clickable { onSetNoColorClick() },
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Default.Block,
-            contentDescription = "Без цвета",
-            tint = Color.Gray,
-            modifier = Modifier.size(24.dp)
-        )
-
-    }
-}
-
-@Preview
-@Composable
-fun AddColorCirclePreview() {
-    AddColorCircle(
-        onAddColorClick = {}
-    )
-}
-
-@Composable
-fun AddColorCircle(
-    onAddColorClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(CircleShape)
-            .background(Color.Gray.copy(alpha = 0.2f))
-            .clickable { onAddColorClick() },
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Default.Add,
-            contentDescription = "Добавить цвет",
-            tint = Color.White
-        )
-    }
-}

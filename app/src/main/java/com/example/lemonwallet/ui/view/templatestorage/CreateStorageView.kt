@@ -12,11 +12,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.lemonwallet.ui.theme.MainDark
-import com.example.lemonwallet.ui.view.state.CreateStorageUiState
 import com.example.lemonwallet.ui.view.topbars.TopBarCreateStorage
-import com.example.lemonwallet.ui.view.topbars.TopBarEditStorage
 import com.example.lemonwallet.viewmodel.CreateStorageViewModel
-import com.example.lemonwallet.viewmodel.EditStorageViewModel
 
 @Composable
 fun CreateStorageView(

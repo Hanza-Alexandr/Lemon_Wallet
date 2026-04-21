@@ -37,6 +37,4 @@ enum class EnumColor(val hexCode: String) {
     PURPLE("#9C27B0"),
     ORANGE("#FF9800"),
     GREY("#9E9E9E"),
-    BLACK("#000000"),
-    WHITE("#FFFFFF")
 }

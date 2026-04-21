@@ -13,6 +13,7 @@ import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.ui.view.state.ColorUIState
 import com.example.lemonwallet.ui.view.state.CreateStorageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -67,51 +68,40 @@ class CreateStorageViewModel @Inject constructor(
 
     fun saveNewStorage() {
         val currentState = _uiState.value
-
-        // Если имя пустое, можно сразу вернуть ошибку (пример валидации)
         if (currentState.name.isBlank()) {
             _uiState.update { it.copy(error = "Имя не может быть пустым") }
             return
         }
-
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-
-            // 1. Получаем объект ExistColor (из базы или сохраняем новый)
             val colorToSave: ExistColor? = when (val selectedColor = currentState.color) {
-                is ColorUIState.DataBaseColor -> {
-                    selectedColor.color
-                }
+                is ColorUIState.DataBaseColor -> selectedColor.color
                 is ColorUIState.LocalSystemColor -> {
-                    // Сохраняем системный цвет в БД, если его там еще нет
-                   colorService.save(selectedColor)
+                    val colorSaved = colorService.save(selectedColor)
+                    if (colorSaved==null) {
+                        _uiState.update { it.copy(error = "Ошибка сохранения цвета") }
+                        cancel()
+                    }
+                    colorSaved
                 }
-                null -> null
+                else -> null
+            }
+            val result = try {
+                storageService.createStorage(
+                    name = currentState.name,
+                    typeStorage = currentState.typeStorage,
+                    note = currentState.note,
+                    color = colorToSave, // Передаем уже сохраненный объект
+                    currency = currentState.currency,
+                )
+            }catch (e: Exception){
+                DomainState.Error(e.message ?: "Unknown error")
             }
 
-            if (colorToSave == null) {
-                _uiState.update { it.copy(error = "Ошибка подготовки цвета", isLoading = false) }
-                return@launch
-            }
-
-            // 2. Создаем хранилище с полученным цветом
-            val result = storageService.createStorage(
-                name = currentState.name,
-                typeStorage = currentState.typeStorage,
-                note = currentState.note,
-                color = colorToSave, // Передаем уже сохраненный объект
-                currency = currentState.currency,
-            )
-
-            // 3. Обработка результата
-            when (result) {
-                is DomainState.Success -> {
-                    _uiState.update { it.copy(isSaved = true, isLoading = false) }
+            _uiState.update {
+                when (result) {
+                    is DomainState.Success -> it.copy(isSaved = true, isLoading = false)
+                    is DomainState.Error -> it.copy(error = result.message, isLoading = false)
                 }
-                is DomainState.Error -> {
-                    _uiState.update { it.copy(error = result.message, isLoading = false) }
-                }
-                else -> {}
             }
         }
     }

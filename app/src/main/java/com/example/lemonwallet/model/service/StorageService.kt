@@ -69,8 +69,8 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
         return storageRepo.getAll()
     }
 
-    override suspend fun getStorage(storageId: Int): DomainState<Storage> {
-        storageRepo.getById(storageId.toLong()).let {
+    override suspend fun getStorage(storageId: Long): DomainState<Storage> {
+        storageRepo.getById(storageId ).let {
             return when(it){
                 null -> DomainState.Error("Ошибка получения")
                 else -> DomainState.Success(it)
@@ -133,7 +133,7 @@ class StorageService @Inject constructor(private val storageRepo: IStorageReposi
                 currency = currency ?: changingStorage.currency,
                 typeStorage = typeStorage ?: changingStorage.typeStorage,
                 note = note ?: changingStorage.note,
-                color = color ?: changingStorage.color,
+                color = color ,
                 isStatistics = isStatistic ?: changingStorage.isStatistics,
                 isArchive = isArchive ?: changingStorage.isArchive
             )
