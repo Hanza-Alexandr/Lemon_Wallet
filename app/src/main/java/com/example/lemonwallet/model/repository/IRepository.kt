@@ -1,5 +1,6 @@
 package com.example.lemonwallet.model.repository
 
+import com.example.lemonwallet.model.domain.DomainColor
 import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.NewStorage
@@ -18,9 +19,9 @@ interface IStorageRepository{
 interface IColorRepository {
     fun getAllFlow(): Flow<List<ExistColor>>
     suspend fun getById(id: Long): ExistColor?
-    suspend fun save(color: UserColor): ExistColor?
+    suspend fun update(color: UserColor): UserColor?
     suspend fun save(color: NewColor): ExistColor?
-    suspend fun delete(color: UserColor): Boolean
+    suspend fun delete(color: UserColor): UserColor?
 }
 /**
 interface IOperationRepository{

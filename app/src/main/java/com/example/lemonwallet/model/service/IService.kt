@@ -11,7 +11,7 @@ interface IStorageService{
     fun getFlowStorageList(): Flow<List<Storage>>
     suspend fun getStorage(storageId: Int): DomainState<Storage>
     suspend fun createStorage(name: String, currency: Currency, typeStorage: TypeStorage, note: String?, color: ExistColor?): DomainState<Storage>
-    suspend fun updateStorage(changingStorage: Storage, name: String?, typeStorage: TypeStorage?, note: String?, color: ExistColor?, isStatistic: Boolean?, isArchive: Boolean?): DomainState<Storage>
+    suspend fun updateStorage(changingStorage: Storage, name: String?, typeStorage: TypeStorage?, currency: Currency?, note: String?, color: ExistColor?, isStatistic: Boolean?, isArchive: Boolean?): DomainState<Storage>
     suspend fun deleteStorage(storage: Storage): DomainState<Storage>
     fun getStorageBalance(storage: Storage): DomainState<Double>
 }

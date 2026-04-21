@@ -24,21 +24,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.ExistColor
-import com.example.lemonwallet.model.domain.SystemColor
 import androidx.core.graphics.toColorInt
+import com.example.lemonwallet.model.domain.EnumColor
+import com.example.lemonwallet.model.domain.SystemColor
+import com.example.lemonwallet.ui.theme.MainDark
+import com.example.lemonwallet.ui.view.state.ColorUIState
 
 
 @Preview
 @Composable
 fun ColorPickerRowPreview() {
     val availableColors = listOf(
-        SystemColor.create(1,  "#FF0000"),
-        SystemColor.create(2,  "#00FF00"),
-        SystemColor.create(3, "#0000FF")
+        ColorUIState.LocalSystemColor(EnumColor.BLUE) ,
+        ColorUIState.LocalSystemColor(EnumColor.GREEN)
+
     )
     ColorPickerRow(
         availableColors = availableColors,
-        selectedColor = availableColors[0],
+        selectedColor = ColorUIState.LocalSystemColor(EnumColor.BLUE) ,
         onColorSelected = {},
         onAddNewColorClick = {}
     )
@@ -46,9 +49,9 @@ fun ColorPickerRowPreview() {
 
 @Composable
 fun ColorPickerRow(
-    availableColors: List<ExistColor>,
-    selectedColor: ExistColor?,
-    onColorSelected: (ExistColor?) -> Unit,
+    availableColors: List<ColorUIState>,
+    selectedColor: ColorUIState?,
+    onColorSelected: (ColorUIState?) -> Unit,
     onAddNewColorClick: () -> Unit
 ) {
     LazyRow(
@@ -69,8 +72,8 @@ fun ColorPickerRow(
         // 2. Цвета из БД
         items(availableColors) { existColor ->
             ColorCircle(
-                color = existColor,
-                isSelected = selectedColor?.id == existColor.id,
+                color = existColor.toColor(),
+                isSelected = selectedColor == existColor,
                 onColorSelectClick = { onColorSelected(existColor) }
             )
         }
@@ -85,19 +88,19 @@ fun ColorPickerRow(
 @Composable
 fun ColorCirclePreview() {
     ColorCircle(
-        color = SystemColor.create(1, "#FF0000"),
+        color = Color.Red,
         isSelected = true,
         onColorSelectClick = {}
     )
 }
 @Composable
 fun ColorCircle(
-    color: ExistColor?,
+    color: Color?,
     isSelected: Boolean,
     onColorSelectClick: () -> Unit
 ) {
-    val borderColor = if (isSelected) Color.White else Color.Transparent
-    val backgroundColor = color?.let { Color(it.hexCode.toColorInt()) } ?: Color.Transparent
+    val borderColor = if (isSelected) Color.Black else Color.Transparent
+    val backgroundColor = color?: Color.Transparent
 
     Box(
         modifier = Modifier

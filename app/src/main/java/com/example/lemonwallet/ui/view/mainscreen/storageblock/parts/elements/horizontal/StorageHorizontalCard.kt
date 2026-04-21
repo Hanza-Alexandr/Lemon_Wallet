@@ -61,7 +61,7 @@ fun Test6(){
             currency = Currency.RUB,
             typeStorage = TypeStorage.BANK_ACCOUNT,
             note = null,
-            color = SystemColor.create(1, "#FF5733"),
+            color = SystemColor(1, "#FF5733"),
             isStatistics = true,
             isArchive = false
         ),
@@ -111,7 +111,7 @@ fun StorageHorizontalCard(
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
-                .background(storage.color?.toDomain() ?: MainLight)
+                .background(storage.color?.toColor() ?: MainLight)
                 .padding(8.dp)
         ){
             Icon(

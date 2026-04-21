@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
 import androidx.room.Index
-import com.example.lemonwallet.model.domain.AppColor
+import com.example.lemonwallet.model.domain.DomainColor
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.Storage

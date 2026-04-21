@@ -13,6 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.Currency
+import com.example.lemonwallet.model.domain.EnumColor
+import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
@@ -34,7 +36,7 @@ StorageBlock(
             currency = Currency.RUB,
             typeStorage = TypeStorage.BANK_ACCOUNT,
             note = null,
-            color = SystemColor.create(1, "#FF5733"),
+            color = SystemColor(1, EnumColor.ORANGE.toString()),
             isStatistics = true,
             isArchive = false
         ),
@@ -45,7 +47,7 @@ StorageBlock(
             currency = Currency.RUB,
             typeStorage = TypeStorage.BANK_ACCOUNT,
             note = null,
-            color = SystemColor.create(1, "#FF5733"),
+            color = SystemColor(1, EnumColor.GREEN.toString()),
             isStatistics = true,
             isArchive = false
         ),
@@ -56,7 +58,7 @@ StorageBlock(
             currency = Currency.RUB,
             typeStorage = TypeStorage.BANK_ACCOUNT,
             note = null,
-            color = SystemColor.create(1, "#FF5733"),
+            color = SystemColor(1, EnumColor.BLUE.toString()),
             isStatistics = true,
             isArchive = false
         ),

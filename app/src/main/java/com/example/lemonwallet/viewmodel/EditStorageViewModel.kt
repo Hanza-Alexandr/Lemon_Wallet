@@ -1,5 +1,6 @@
 package com.example.lemonwallet.viewmodel
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.domain.Currency
@@ -7,8 +8,10 @@ import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
+import com.example.lemonwallet.model.service.ColorService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
+import com.example.lemonwallet.ui.view.state.ColorUIState
 import com.example.lemonwallet.ui.view.state.EditStorageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditStorageViewModel @Inject constructor(
     private val storageService: StorageService,
-    private val storageRepo: IStorageRepository
+    private val storageRepo: IStorageRepository,
+    private val colorService: ColorService,
 ) : ViewModel() {
 
     //Создаем приватный изменяемый поток состояния который будет хранить данные о вьюмодели
@@ -34,7 +38,6 @@ class EditStorageViewModel @Inject constructor(
     fun loadStorage(id: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            // Assuming we can get by ID from repo or service
             val storage = storageRepo.getById(id)
             if (storage != null) {
                 _uiState.update {
@@ -46,7 +49,7 @@ class EditStorageViewModel @Inject constructor(
                         currency = storage.currency,
                         isStatistics = storage.isStatistics,
                         isArchive = storage.isArchive,
-                        color = storage.color,
+                        color = storage.color?.toUiState(),
                         isLoading = false
                     )
                 }
@@ -80,29 +83,59 @@ class EditStorageViewModel @Inject constructor(
         _uiState.update { it.copy(isArchive = value) }
     }
     
-    fun onColorChange(newColor: ExistColor?) {
+    fun onColorChange(newColor: ColorUIState?) {
         _uiState.update { it.copy(color = newColor) }
     }
-
     fun saveChanges() {
         val currentState = _uiState.value
-        val currentStorage = currentState.storage ?: return
+
+        // Если имя пустое, можно сразу вернуть ошибку (пример валидации)
+        if (currentState.name.isBlank()) {
+            _uiState.update { it.copy(error = "Имя не может быть пустым") }
+            return
+        }
 
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            // 1. Получаем объект ExistColor (из базы или сохраняем новый)
+            val colorToSave: ExistColor? = when (val selectedColor = currentState.color) {
+                is ColorUIState.DataBaseColor -> {
+                    selectedColor.color
+                }
+                is ColorUIState.LocalSystemColor -> {
+                    // Сохраняем системный цвет в БД, если его там еще нет
+                    colorService.save(selectedColor)
+                }
+                null -> null
+            }
+
+            if (colorToSave == null) {
+                _uiState.update { it.copy(error = "Ошибка подготовки цвета", isLoading = false) }
+                return@launch
+            }
+
+            // 2. Создаем хранилище с полученным цветом
             val result = storageService.updateStorage(
-                changingStorage = currentStorage,
                 name = currentState.name,
                 typeStorage = currentState.typeStorage,
+                currency = currentState.currency,
                 note = currentState.note,
-                color = currentState.color,
+                color = colorToSave, // Передаем уже сохраненный объект
+                changingStorage = currentState.storage!!,
                 isStatistic = currentState.isStatistics,
-                isArchive = currentState.isArchive
+                isArchive = currentState.isArchive,
             )
-            
-            if (result is DomainState.Success) {
-                _uiState.update { it.copy(isSaved = true) }
-            } else if (result is DomainState.Error) {
-                _uiState.update { it.copy(error = result.message) }
+
+            // 3. Обработка результата
+            when (result) {
+                is DomainState.Success -> {
+                    _uiState.update { it.copy(isSaved = true, isLoading = false) }
+                }
+                is DomainState.Error -> {
+                    _uiState.update { it.copy(error = result.message, isLoading = false) }
+                }
+                else -> {}
             }
         }
     }

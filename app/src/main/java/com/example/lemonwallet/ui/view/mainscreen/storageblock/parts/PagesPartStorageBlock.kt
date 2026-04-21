@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.Currency
+import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
@@ -35,7 +36,7 @@ fun Test7(){
                 currency = Currency.RUB,
                 typeStorage = TypeStorage.BANK_ACCOUNT,
                 note = null,
-                color = SystemColor.create(1, "#FF5733"),
+                color = SystemColor(1, "#FF5733"),
                 isStatistics = true,
                 isArchive = false
             ),
@@ -46,7 +47,7 @@ fun Test7(){
                 currency = Currency.RUB,
                 typeStorage = TypeStorage.BANK_ACCOUNT,
                 note = null,
-                color = SystemColor.create(1, "#FF5733"),
+                color = SystemColor(1, "#FF5733"),
                 isStatistics = true,
                 isArchive = false
             ),
@@ -57,7 +58,7 @@ fun Test7(){
                 currency = Currency.RUB,
                 typeStorage = TypeStorage.BANK_ACCOUNT,
                 note = null,
-                color = SystemColor.create(1, "#FF5733"),
+                color = SystemColor(1, "#FF5733"),
                 isStatistics = true,
                 isArchive = false
             ),

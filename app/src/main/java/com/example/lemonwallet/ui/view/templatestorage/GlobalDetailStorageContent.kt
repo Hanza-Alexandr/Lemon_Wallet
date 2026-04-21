@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.TypeStorage
+import com.example.lemonwallet.ui.view.state.ColorUIState
 import com.example.lemonwallet.ui.view.state.EditStorageUiState
 import com.example.lemonwallet.ui.view.state.GlobalStorageUiState
 import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.ColorPickerRow
@@ -56,7 +57,7 @@ fun GlobalDetailStorageContent(
     onNoteChange: (String) -> Unit,
     onTypeChange: (TypeStorage) -> Unit,
     onCurrencyChange: (Currency) -> Unit,
-    onColorChange: (ExistColor?) -> Unit,
+    onColorChange: (ColorUIState?) -> Unit,
     onStatisticsChange: (Boolean) -> Unit,
     onArchiveChange: (Boolean) -> Unit,
 ) {

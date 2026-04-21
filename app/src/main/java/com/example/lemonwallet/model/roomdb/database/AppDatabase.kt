@@ -8,7 +8,7 @@ import com.example.lemonwallet.model.roomdb.entities.ColorRoomEntity
 import com.example.lemonwallet.model.roomdb.entities.StorageRoomEntity
 
 @Database(
-    version = 2,
+    version = 4,
     entities = [
         StorageRoomEntity::class,
         ColorRoomEntity::class,
