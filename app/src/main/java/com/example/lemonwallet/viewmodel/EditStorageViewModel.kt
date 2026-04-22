@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
+import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
 import com.example.lemonwallet.model.service.ColorService
-import com.example.lemonwallet.model.service.ColorUIService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.ui.view.state.ColorUIState
@@ -38,7 +38,6 @@ import javax.inject.Inject
 @HiltViewModel
 class EditStorageViewModel @Inject constructor(
     private val storageService: StorageService,
-    private val colorUIService: ColorUIService,
     private val colorService: ColorService,
 ) : ViewModel() {
 
@@ -51,7 +50,7 @@ class EditStorageViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val storage = storageService.getStorage(id)
-            val colors = colorUIService.colorListForPicker.first()
+            val colors = colorService.colorListForPicker.first()
             when(storage){
                 is DomainState.Error -> {
                     _uiState.update { it.copy(isLoading = false, error = "Storage not found") }
@@ -72,6 +71,25 @@ class EditStorageViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    fun onSaveColor(newColor: NewColor){
+        viewModelScope.launch {
+            val color = colorService.save(newColor)
+            if (color!=null){
+                val uiColor = color.toUiState()
+                val newList = _uiState.value.availableColors.toMutableList()
+                newList.add(uiColor)
+                _uiState.update {
+                    it.copy(
+                        availableColors = newList
+                    )
+                }
+            }
+            else{
+                _uiState.update { it.copy(error = "Ошибка сохранения цвета") }
             }
         }
     }
@@ -130,7 +148,7 @@ class EditStorageViewModel @Inject constructor(
                         typeStorage = currentState.typeStorage,
                         currency = currentState.currency,
                         note = currentState.note,
-                        color = colorToSave, // <--- Обязательно передай полученный выше цвет!
+                        color = colorToSave,
                         changingStorage = currentState.storage!!,
                         isStatistic = currentState.isStatistics,
                         isArchive = currentState.isArchive,

@@ -53,7 +53,7 @@ fun CreateStorageView(
             onColorChange = viewModel::onColorChange,
             onStatisticsChange = viewModel::onStatisticsChange,
             onArchiveChange = viewModel::onArchiveChange,
+            onSaveColor = viewModel::onSaveColor
         )
     }
-
 }

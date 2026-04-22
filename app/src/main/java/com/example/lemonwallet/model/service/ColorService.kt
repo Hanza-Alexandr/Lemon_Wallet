@@ -23,18 +23,18 @@ class ColorService @Inject constructor(private val colorRepo: IColorRepository) 
         }
     }
 
-    fun getAllColorFlow(): Flow<List<ExistColor>>{
+    private fun getAllColorFlow(): Flow<List<ExistColor>>{
         return colorRepo.getAllFlow()
     }
 
     suspend fun save(color: ColorUIState.LocalSystemColor): ExistColor?{
         return colorRepo.save(NewColor(color.color.hexCode))
     }
+    suspend fun save(color: NewColor): ExistColor?{
+        return colorRepo.save(color)
+    }
 
-}
-
-class ColorUIService @Inject constructor(colorService: ColorService){
-    val colorListForPicker: Flow<List<ColorUIState>> = colorService.getAllColorFlow().map { dbColors ->
+    val colorListForPicker: Flow<List<ColorUIState>> = getAllColorFlow().map { dbColors ->
         // 1. Создаем начальный список из всех системных цветов (Enum)
         val resultList: MutableList<ColorUIState> = EnumColor.entries.map {
             ColorUIState.LocalSystemColor(it)
@@ -64,6 +64,5 @@ class ColorUIService @Inject constructor(colorService: ColorService){
         // 3. Возвращаем итоговый список
         resultList.toList()
     }
-
 
 }

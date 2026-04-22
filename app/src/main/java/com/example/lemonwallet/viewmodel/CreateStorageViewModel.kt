@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
+import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.service.ColorService
-import com.example.lemonwallet.model.service.ColorUIService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.ui.view.state.ColorUIState
@@ -23,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateStorageViewModel @Inject constructor(
     private val storageService: StorageService,
-    private val colorUIService: ColorUIService,
     private val colorService: ColorService
 ) : ViewModel() {
 
@@ -32,8 +31,27 @@ class CreateStorageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            colorUIService.colorListForPicker.collect { colors ->
+            colorService.colorListForPicker.collect { colors ->
                 _uiState.update { it.copy(availableColors = colors) }
+            }
+        }
+    }
+
+    fun onSaveColor(newColor: NewColor){
+        viewModelScope.launch {
+            val color = colorService.save(newColor)
+            if (color!=null){
+                val uiColor = color.toUiState()
+                val newList = _uiState.value.availableColors.toMutableList()
+                newList.add(uiColor)
+                _uiState.update {
+                    it.copy(
+                        availableColors = newList
+                    )
+                }
+            }
+            else{
+                _uiState.update { it.copy(error = "Ошибка сохранения цвета") }
             }
         }
     }

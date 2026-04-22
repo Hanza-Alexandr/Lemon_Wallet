@@ -13,21 +13,21 @@ class StorageRoomRepository @Inject constructor(private val storageDao: StorageD
 
     override fun getAll(): Flow<List<Storage>> {
         return storageDao.getAllStorageWithColorsFlow().map { list ->
-            list.map { it.toDomain(if (it.colorId == null || it.colorHex == null || it.colorUserId == null ) null else ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain()) }
+            list.map { it.toDomain(if (it.colorId == null || it.colorHex == null) null else ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain()) }
         }
     }
 
     override suspend fun getById(id: Long): Storage? {
         return storageDao.getStorageWithColorById(id)?.let {
-            it.toDomain(if (it.colorId == null || it.colorHex == null || it.colorUserId == null) null else ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain())
+            it.toDomain(if (it.colorId == null || it.colorHex == null) null else ColorRoomEntity(it.colorId, it.colorUserId, it.colorHex).toDomain())
         }
     }
 
     override suspend fun save(storage: Storage): Storage? {
         val entity = StorageRoomEntity(
-            id = storage.id.toInt(),
+            id = storage.id,
             name = storage.name,
-            userId = storage.userId.toInt(),
+            userId = storage.userId,
             currency = storage.currency.name,
             typeStorage = storage.typeStorage.name,
             note = storage.note,
@@ -40,10 +40,9 @@ class StorageRoomRepository @Inject constructor(private val storageDao: StorageD
     }
 
     override suspend fun save(storage: NewStorage): Storage? {
-        val colorId = storage.color
-        val entity = StorageRoomEntity( // Auto-generate
+        val entity = StorageRoomEntity(
             name = storage.name,
-            userId = storage.userId.toInt(),
+            userId = storage.userId,
             currency = storage.currency.name,
             typeStorage = storage.typeStorage.name,
             note = storage.note,

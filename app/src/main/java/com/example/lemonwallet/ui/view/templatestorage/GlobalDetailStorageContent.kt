@@ -15,18 +15,26 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
+import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.TypeStorage
+import com.example.lemonwallet.model.domain.UserColor
 import com.example.lemonwallet.ui.view.state.ColorUIState
 import com.example.lemonwallet.ui.view.state.EditStorageUiState
 import com.example.lemonwallet.ui.view.state.GlobalStorageUiState
+import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.AddColorDialog
 import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.ColorPickerRow
 
 @Preview
@@ -46,7 +54,8 @@ fun GlobalDetailStorageContentPreview() {
         onCurrencyChange = {},
         onColorChange = {},
         onStatisticsChange = {},
-        onArchiveChange = {}
+        onArchiveChange = {},
+        onSaveColor = {}
     )
 }
 
@@ -60,7 +69,23 @@ fun GlobalDetailStorageContent(
     onColorChange: (ColorUIState?) -> Unit,
     onStatisticsChange: (Boolean) -> Unit,
     onArchiveChange: (Boolean) -> Unit,
+    onSaveColor: (NewColor) -> Unit
 ) {
+    var showColorPicker by remember { mutableStateOf(false) }
+
+    if (showColorPicker) {
+        AddColorDialog(
+            uiState.availableColors,
+            onDismiss = { showColorPicker = false },
+            onColorConfirmed = { color ->
+                onSaveColor(color)
+                // Конвертируем Color в hex строку для DataBaseColor
+                //onColorChange(ColorUIState.DataBaseColor(UserColor(id = 0, userId = -1, hex = color.hex)))
+                showColorPicker = false
+            }
+        )
+    }
+
     Column {
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -119,7 +144,7 @@ fun GlobalDetailStorageContent(
                         availableColors = uiState.availableColors,
                         selectedColor = uiState.color,
                         onColorSelected = onColorChange,
-                        onAddNewColorClick = { /* TODO: Open Color Picker Dialog */ }
+                        onAddNewColorClick = { showColorPicker = true }
                     )
                 }
 
@@ -168,6 +193,3 @@ fun GlobalDetailStorageContent(
         }
     }
 }
-
-
-

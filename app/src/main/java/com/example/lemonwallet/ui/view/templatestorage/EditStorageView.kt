@@ -67,6 +67,7 @@ fun EditStorageView(
             onColorChange = viewModel::onColorChange,
             onStatisticsChange = viewModel::onStatisticsChange,
             onArchiveChange = viewModel::onArchiveChange,
+            onSaveColor = viewModel::onSaveColor
         )
     }
 
@@ -92,6 +93,7 @@ fun EditStorageView(
             onColorChange = viewModel::onColorChange,
             onStatisticsChange = viewModel::onStatisticsChange,
             onArchiveChange = viewModel::onArchiveChange,
+            onSaveColor = viewModel::onSaveColor
         )
     }
 }
@@ -113,6 +115,7 @@ fun EditStoragePreview() {
         onCurrencyChange = {},
         onColorChange = {},
         onStatisticsChange = {},
-        onArchiveChange = {}
+        onArchiveChange = {},
+        onSaveColor = {}
     )
 }
