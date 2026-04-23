@@ -29,8 +29,7 @@ import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.ui.state.ColorUIState
-import com.example.lemonwallet.ui.state.EditStorageUiState
-import com.example.lemonwallet.ui.state.GlobalStorageUiState
+import com.example.lemonwallet.ui.state.DefaultStateDetailsStorage
 import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.AddColorDialog
 import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.ColorPickerRow
 
@@ -38,7 +37,7 @@ import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.ColorPicke
 @Composable
 fun GlobalDetailStorageContentPreview() {
     GlobalDetailStorageContent(
-        uiState = EditStorageUiState(
+        uiState = DefaultStateDetailsStorage(
             name = "Наличные",
             note = "В кошельке",
             isLoading = false,
@@ -61,7 +60,7 @@ fun GlobalDetailStorageContentPreview() {
 @Composable
 fun GlobalDetailStorageContent(
     modifier: Modifier = Modifier,
-    uiState: GlobalStorageUiState,
+    uiState: DefaultStateDetailsStorage,
     onNameChange: (String) -> Unit,
     onNoteChange: (String) -> Unit,
     onTypeChange: (TypeStorage) -> Unit,

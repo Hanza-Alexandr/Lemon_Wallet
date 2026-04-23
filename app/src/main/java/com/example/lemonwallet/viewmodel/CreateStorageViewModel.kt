@@ -11,7 +11,7 @@ import com.example.lemonwallet.model.service.ColorService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.ui.state.ColorUIState
-import com.example.lemonwallet.ui.state.CreateStorageUiState
+import com.example.lemonwallet.ui.state.DefaultStateDetailsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +24,8 @@ import javax.inject.Inject
 class CreateStorageViewModel @Inject constructor(
     private val storageService: StorageService,
     private val colorService: ColorService
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(CreateStorageUiState())
+) : ViewModel(), IEditStorage {
+    private val _uiState = MutableStateFlow(DefaultStateDetailsStorage())
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -36,7 +36,7 @@ class CreateStorageViewModel @Inject constructor(
         }
     }
 
-    fun onSaveColor(newColor: NewColor){
+    override fun onSaveColor(newColor: NewColor){
         viewModelScope.launch {
             val color = colorService.save(newColor)
             if (color!=null){
@@ -55,39 +55,39 @@ class CreateStorageViewModel @Inject constructor(
         }
     }
 
-    fun onNameChange(newName: String) {
+    override fun onNameChange(newName: String) {
         _uiState.update { it.copy(name = newName) }
     }
 
-    fun onNoteChange(newNote: String) {
+    override fun onNoteChange(newNote: String) {
         _uiState.update { it.copy(note = newNote) }
     }
 
-    fun onTypeChange(newType: TypeStorage) {
+    override fun onTypeChange(newType: TypeStorage) {
         _uiState.update { it.copy(typeStorage = newType) }
     }
 
-    fun onCurrencyChange(newCurrency: Currency) {
+    override fun onCurrencyChange(newCurrency: Currency) {
         _uiState.update { it.copy(currency = newCurrency) }
     }
 
-    fun onStatisticsChange(value: Boolean) {
+    override fun onStatisticsChange(value: Boolean) {
         _uiState.update { it.copy(isStatistics = value) }
     }
 
-    fun onArchiveChange(value: Boolean) {
+    override fun onArchiveChange(value: Boolean) {
         _uiState.update { it.copy(isArchive = value) }
     }
 
-    fun onColorChange(newColor: ColorUIState?) {
+    override fun onColorChange(newColor: ColorUIState?) {
         _uiState.update { it.copy(color = newColor) }
     }
 
-    fun toggleColorDeleteMode(enabled: Boolean) {
+    override fun toggleColorDeleteMode(enabled: Boolean) {
         _uiState.update { it.copy(isColorDeleteMode = enabled) }
     }
 
-    fun deleteColor(colorUiState: ColorUIState) {
+    override fun deleteColor(colorUiState: ColorUIState) {
         if (colorUiState is ColorUIState.DataBaseColor && colorUiState.color is UserColor) {
             viewModelScope.launch {
                 colorService.delete(colorUiState.color)
