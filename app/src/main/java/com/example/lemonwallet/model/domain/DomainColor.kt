@@ -3,7 +3,7 @@ package com.example.lemonwallet.model.domain
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
 import com.example.lemonwallet.model.roomdb.entities.ColorRoomEntity
-import com.example.lemonwallet.ui.view.state.ColorUIState
+import com.example.lemonwallet.ui.state.ColorUIState
 
 /**
 abstract class AppColor{

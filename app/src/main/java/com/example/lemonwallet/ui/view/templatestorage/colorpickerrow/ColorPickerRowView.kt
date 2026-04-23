@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.EnumColor
 import com.example.lemonwallet.model.domain.UserColor
-import com.example.lemonwallet.ui.view.state.ColorUIState
+import com.example.lemonwallet.ui.state.ColorUIState
 
 
 @Preview

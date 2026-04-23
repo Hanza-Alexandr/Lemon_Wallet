@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.sp
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.ui.view.state.ColorUIState
-import com.example.lemonwallet.ui.view.state.EditStorageUiState
-import com.example.lemonwallet.ui.view.state.GlobalStorageUiState
+import com.example.lemonwallet.ui.state.ColorUIState
+import com.example.lemonwallet.ui.state.EditStorageUiState
+import com.example.lemonwallet.ui.state.GlobalStorageUiState
 import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.AddColorDialog
 import com.example.lemonwallet.ui.view.templatestorage.colorpickerrow.ColorPickerRow
 

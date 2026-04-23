@@ -42,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.lemonwallet.model.domain.NewColor
-import com.example.lemonwallet.ui.view.state.ColorUIState
+import com.example.lemonwallet.ui.state.ColorUIState
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin

@@ -10,8 +10,8 @@ import com.example.lemonwallet.model.domain.UserColor
 import com.example.lemonwallet.model.service.ColorService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
-import com.example.lemonwallet.ui.view.state.ColorUIState
-import com.example.lemonwallet.ui.view.state.EditStorageUiState
+import com.example.lemonwallet.ui.state.ColorUIState
+import com.example.lemonwallet.ui.state.EditStorageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow

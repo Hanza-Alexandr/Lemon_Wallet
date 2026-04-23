@@ -1,4 +1,4 @@
-package com.example.lemonwallet.ui.view.state
+package com.example.lemonwallet.ui.state
 
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.EnumColor

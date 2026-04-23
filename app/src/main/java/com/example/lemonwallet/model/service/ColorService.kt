@@ -5,7 +5,7 @@ import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.UserColor
 import com.example.lemonwallet.model.repository.IColorRepository
-import com.example.lemonwallet.ui.view.state.ColorUIState
+import com.example.lemonwallet.ui.state.ColorUIState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
