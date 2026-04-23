@@ -7,6 +7,7 @@ import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
+import com.example.lemonwallet.model.domain.UserColor
 import com.example.lemonwallet.model.service.ColorService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
@@ -25,7 +26,6 @@ class CreateStorageViewModel @Inject constructor(
     private val storageService: StorageService,
     private val colorService: ColorService
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(CreateStorageUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -84,6 +84,22 @@ class CreateStorageViewModel @Inject constructor(
         _uiState.update { it.copy(color = newColor) }
     }
 
+    fun toggleColorDeleteMode(enabled: Boolean) {
+        _uiState.update { it.copy(isColorDeleteMode = enabled) }
+    }
+
+    fun deleteColor(colorUiState: ColorUIState) {
+        if (colorUiState is ColorUIState.DataBaseColor && colorUiState.color is UserColor) {
+            viewModelScope.launch {
+                colorService.delete(colorUiState.color)
+                _uiState.update {
+                    it.copy(
+                        availableColors = it.availableColors.filter { it != colorUiState }
+                    )
+                }
+            }
+        }
+    }
     fun saveNewStorage() {
         val currentState = _uiState.value
         if (currentState.name.isBlank()) {

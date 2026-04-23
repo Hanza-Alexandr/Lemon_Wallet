@@ -1,29 +1,13 @@
 package com.example.lemonwallet.ui.view.templatestorage
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.lemonwallet.R
-import com.example.lemonwallet.model.domain.Currency
-import com.example.lemonwallet.model.domain.ExistColor
-import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.ui.theme.MainDark
-import com.example.lemonwallet.ui.view.state.EditStorageUiState
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.lemonwallet.ui.view.topbars.TopBarEditStorage
 import com.example.lemonwallet.viewmodel.EditStorageViewModel
 
@@ -34,9 +18,6 @@ fun EditStorageView(
     viewModel: EditStorageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
 
     LaunchedEffect(storageId) {
         viewModel.loadStorage(storageId)
@@ -44,21 +25,21 @@ fun EditStorageView(
 
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
-            focusManager.clearFocus()
-            keyboardController?.hide()
             onBack()
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MainDark)
-    ) {
-
-        //TopBar нужен
-
+    Scaffold(
+        topBar = {
+            TopBarEditStorage(
+                onBack = onBack,
+                onSave = { viewModel.saveChanges() },
+                onDelete = { viewModel.deleteStorage() }
+            )
+        }
+    ) { padding ->
         GlobalDetailStorageContent(
+            modifier = Modifier.padding(padding),
             uiState = uiState,
             onNameChange = viewModel::onNameChange,
             onNoteChange = viewModel::onNoteChange,
@@ -67,55 +48,9 @@ fun EditStorageView(
             onColorChange = viewModel::onColorChange,
             onStatisticsChange = viewModel::onStatisticsChange,
             onArchiveChange = viewModel::onArchiveChange,
-            onSaveColor = viewModel::onSaveColor
+            onSaveColor = viewModel::onSaveColor,
+            onDeleteColor = viewModel::deleteColor,
+            onToggleDeleteMode = viewModel::toggleColorDeleteMode
         )
     }
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MainDark)
-    ) {
-
-        TopBarEditStorage(
-            onBack = onBack,
-            onDelete = viewModel::deleteStorage,
-            onSave = viewModel::saveChanges
-        )
-
-        GlobalDetailStorageContent(
-            uiState = uiState,
-            onNameChange = viewModel::onNameChange,
-            onNoteChange = viewModel::onNoteChange,
-            onTypeChange = viewModel::onTypeChange,
-            onCurrencyChange = viewModel::onCurrencyChange,
-            onColorChange = viewModel::onColorChange,
-            onStatisticsChange = viewModel::onStatisticsChange,
-            onArchiveChange = viewModel::onArchiveChange,
-            onSaveColor = viewModel::onSaveColor
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EditStoragePreview() {
-    GlobalDetailStorageContent(
-        uiState = EditStorageUiState(
-            name = "Наличные",
-            note = "В кошельке",
-            isLoading = false,
-            isStatistics = true,
-            isArchive = false,
-        ),
-        onNameChange = {},
-        onNoteChange = {},
-        onTypeChange = {},
-        onCurrencyChange = {},
-        onColorChange = {},
-        onStatisticsChange = {},
-        onArchiveChange = {},
-        onSaveColor = {}
-    )
 }

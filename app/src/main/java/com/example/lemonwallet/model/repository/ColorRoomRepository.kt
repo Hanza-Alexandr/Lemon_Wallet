@@ -64,6 +64,8 @@ class ColorRoomRepository @Inject constructor(private val colorDao: ColorDao, pr
     }
 
     override suspend fun delete(color: UserColor): UserColor? {
-        TODO("НЕ СДЕЛАЛ")
+        val entity = color.toRoomEntityColor()
+        colorDao.deleteColor(entity)
+        return color
     }
 }

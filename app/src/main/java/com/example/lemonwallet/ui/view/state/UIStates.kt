@@ -1,10 +1,7 @@
 package com.example.lemonwallet.ui.view.state
 
-import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.toColorInt
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.EnumColor
-import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 
@@ -23,6 +20,7 @@ abstract class GlobalStorageUiState{
     abstract val availableColors: List<ColorUIState>
     abstract val error: String?
     abstract val isSaved: Boolean
+    abstract val isColorDeleteMode: Boolean
 }
 
 data class CreateStorageUiState(
@@ -37,7 +35,8 @@ data class CreateStorageUiState(
     override val color: ColorUIState? = null,
     override val availableColors: List<ColorUIState> = EnumColor.entries.map { ColorUIState.LocalSystemColor(it) },
     override val error: String? = null,
-    override val isSaved: Boolean = false
+    override val isSaved: Boolean = false,
+    override val isColorDeleteMode: Boolean = false
 ): GlobalStorageUiState()
 
 data class EditStorageUiState(
@@ -52,5 +51,6 @@ data class EditStorageUiState(
     override val color: ColorUIState? = null,
     override val availableColors: List<ColorUIState> = EnumColor.entries.map { ColorUIState.LocalSystemColor(it) },
     override val error: String? = null,
-    override val isSaved: Boolean = false
+    override val isSaved: Boolean = false,
+    override val isColorDeleteMode: Boolean = false
 ): GlobalStorageUiState()

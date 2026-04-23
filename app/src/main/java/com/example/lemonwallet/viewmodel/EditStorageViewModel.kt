@@ -1,36 +1,25 @@
 package com.example.lemonwallet.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.NewColor
-import com.example.lemonwallet.model.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.model.repository.IStorageRepository
+import com.example.lemonwallet.model.domain.UserColor
 import com.example.lemonwallet.model.service.ColorService
 import com.example.lemonwallet.model.service.StorageService
 import com.example.lemonwallet.model.state.DomainState
 import com.example.lemonwallet.ui.view.state.ColorUIState
 import com.example.lemonwallet.ui.view.state.EditStorageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -121,6 +110,24 @@ class EditStorageViewModel @Inject constructor(
     fun onColorChange(newColor: ColorUIState?) {
         _uiState.update { it.copy(color = newColor) }
     }
+
+    fun toggleColorDeleteMode(enabled: Boolean) {
+        _uiState.update { it.copy(isColorDeleteMode = enabled) }
+    }
+
+    fun deleteColor(colorUiState: ColorUIState) {
+        if (colorUiState is ColorUIState.DataBaseColor && colorUiState.color is UserColor) {
+            viewModelScope.launch {
+                colorService.delete(colorUiState.color)
+            }
+        }
+        _uiState.update {
+            it.copy(
+                availableColors = it.availableColors.filter { it != colorUiState }
+            )
+        }
+    }
+
     fun saveChanges() {
         val currentState = _uiState.value
         if (currentState.name.isBlank()) {
