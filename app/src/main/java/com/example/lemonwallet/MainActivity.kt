@@ -6,10 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.lemonwallet.model.state.DataLoadingState
-import com.example.lemonwallet.ui.view.navigation.AppNavigation
+import com.example.lemonwallet.ui.common.AppNavigation
 import com.example.lemonwallet.ui.theme.LemonWalletTheme
-import com.example.lemonwallet.viewmodel.MainScreenViewModel
 import com.example.lemonwallet.viewmodel.StartScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
