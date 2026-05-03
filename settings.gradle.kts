@@ -24,3 +24,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Lemon Wallet"
 include(":app")
+include(":core:ui")
+include(":core:domain")
+include(":features:auth")
+include(":features:home-screen")
