@@ -1,7 +1,7 @@
 package com.example.lemonwallet.model.repository
 
-import com.example.lemonwallet.model.domain.NewStorage
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.NewStorage
+import com.example.domain.Storage
 import com.example.lemonwallet.model.roomdb.dao.StorageDao
 import com.example.lemonwallet.model.roomdb.entities.ColorRoomEntity
 import com.example.lemonwallet.model.roomdb.entities.StorageRoomEntity

@@ -3,7 +3,7 @@ package com.example.lemonwallet.viewmodel
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.ui.common.color.state.ColorUIState
+import com.example.ui.ColorUIState
 
 interface IEditStorage {
     fun onSaveColor(newColor: NewColor)

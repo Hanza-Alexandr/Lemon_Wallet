@@ -1,4 +1,4 @@
-package com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.storages.components
+package com.example.storage_block.ui.components.blocks.components.storages.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.Currency
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
 

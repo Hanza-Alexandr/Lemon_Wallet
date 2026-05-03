@@ -7,10 +7,11 @@ import com.example.lemonwallet.model.domain.ExistColor
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.domain.UserColor
+import com.example.lemonwallet.model.domain.toUiState
 import com.example.lemonwallet.model.service.ColorService
 import com.example.lemonwallet.model.service.StorageService
-import com.example.lemonwallet.model.state.DomainState
-import com.example.lemonwallet.ui.common.color.state.ColorUIState
+import com.example.domain.state.DomainState
+import com.example.ui.ColorUIState
 import com.example.lemonwallet.ui.common.storage.DefaultStateDetailsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel

@@ -1,4 +1,4 @@
-package com.example.lemonwallet.ui.features.mainscreen.components.blocks.common
+package com.example.storage_block.ui.components.blocks.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

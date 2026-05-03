@@ -2,9 +2,9 @@ package com.example.lemonwallet.ui.common.storage
 
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.EnumColor
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
-import com.example.lemonwallet.ui.common.color.state.ColorUIState
+import com.example.ui.ColorUIState
 
 data class DefaultStateDetailsStorage(
     val storage: Storage? = null,

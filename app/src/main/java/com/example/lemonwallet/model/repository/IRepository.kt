@@ -1,12 +1,11 @@
 package com.example.lemonwallet.model.repository
 
-import com.example.lemonwallet.model.domain.Category
-import com.example.lemonwallet.model.domain.DomainColor
+import com.example.domain.Category
 import com.example.lemonwallet.model.domain.ExistColor
-import com.example.lemonwallet.model.domain.NewCategory
+import com.example.domain.NewCategory
 import com.example.lemonwallet.model.domain.NewColor
-import com.example.lemonwallet.model.domain.NewStorage
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.NewStorage
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.UserColor
 import kotlinx.coroutines.flow.Flow
 

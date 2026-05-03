@@ -1,4 +1,4 @@
-package com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.storages.components
+package com.example.storage_block.ui.components.blocks.components.storages.components
 
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
@@ -34,9 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lemonwallet.R
 import com.example.lemonwallet.model.domain.Currency
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
+import com.example.lemonwallet.model.domain.toComposeColor
 import com.example.lemonwallet.ui.theme.MainDark
 import com.example.lemonwallet.ui.theme.MainLight
 import com.example.lemonwallet.ui.theme.SecondDark
@@ -103,7 +104,7 @@ fun StorageHorizontalCard(
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
-                .background(storage.color?.toColor() ?: MainLight)
+                .background(storage.color?.toComposeColor() ?: MainLight)
                 .padding(8.dp)
         ){
             Icon(

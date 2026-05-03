@@ -2,18 +2,13 @@ package com.example.lemonwallet.model.service
 
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
-import com.example.lemonwallet.model.domain.NewStorage
-import com.example.lemonwallet.model.state.DomainState
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.NewStorage
+import com.example.domain.state.DomainState
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.model.repository.IStorageRepository
 import com.example.lemonwallet.model.repository.PreferencesDataStore
-import com.example.lemonwallet.model.repository.StorageRoomRepository
-import com.example.lemonwallet.model.state.AuthorizationState
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.example.domain.state.AuthorizationState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first

@@ -12,7 +12,7 @@ import androidx.navigation.toRoute
 import com.example.lemonwallet.ui.features.authorization.AuthorizationScreen
 import com.example.lemonwallet.ui.features.mainscreen.MainScreenView
 import com.example.lemonwallet.ui.features.onboarding.StartScreenView
-import com.example.lemonwallet.model.state.AuthorizationState
+import com.example.domain.state.AuthorizationState
 import com.example.lemonwallet.ui.common.storage.manage.create.CreateStorageScreen
 import com.example.lemonwallet.ui.common.storage.manage.edit.EditStorageScreen
 import com.example.lemonwallet.viewmodel.StartScreenViewModel

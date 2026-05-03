@@ -1,4 +1,4 @@
-package com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.storages.components
+package com.example.storage_block.ui.components.blocks.components.storages.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

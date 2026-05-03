@@ -1,9 +1,10 @@
 package com.example.lemonwallet.model.repository
 
 import android.util.Log
-import com.example.lemonwallet.model.domain.Category
-import com.example.lemonwallet.model.domain.CategoryStructure
-import com.example.lemonwallet.model.domain.NewCategory
+import com.example.domain.Category
+import com.example.domain.CategoryStructure
+import com.example.domain.NewCategory
+import com.example.domain.Owner
 import com.example.lemonwallet.model.roomdb.dao.CategoryDao
 import com.example.lemonwallet.model.roomdb.entities.CategoryRoomEntity
 import com.example.lemonwallet.model.roomdb.entities.ColorRoomEntity
@@ -77,7 +78,7 @@ class CategoryRoomRepository @Inject constructor(
             pathIcon = category.icon,
             need = category.need.name,
             isHide = category.isHidden,
-            userId = category.owner.let { if (it is com.example.lemonwallet.model.domain.Owner.User) it.userId else null },
+            userId = category.owner.let { if (it is Owner.User) it.userId else null },
             parentCategoryId = (category.structure as? CategoryStructure.Child)?.parentId
         )
 
@@ -124,7 +125,7 @@ class CategoryRoomRepository @Inject constructor(
             pathIcon = category.icon,
             need = category.need.name,
             isHide = category.isHidden,
-            userId = category.owner.let { if (it is com.example.lemonwallet.model.domain.Owner.User) it.userId else null },
+            userId = category.owner.let { if (it is Owner.User) it.userId else null },
             parentCategoryId = (category.structure as? CategoryStructure.Child)?.parentId
         )
         try {

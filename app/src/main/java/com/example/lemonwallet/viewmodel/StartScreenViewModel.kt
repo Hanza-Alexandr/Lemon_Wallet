@@ -3,7 +3,7 @@ package com.example.lemonwallet.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lemonwallet.model.service.StartScreenService
-import com.example.lemonwallet.model.state.DataLoadingState
+import com.example.domain.state.DataLoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine

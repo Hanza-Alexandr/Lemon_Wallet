@@ -44,9 +44,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
+
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.compose.runtime)
     ksp(libs.hilt.android.compiler)
     //Иконки Material
     implementation(libs.androidx.compose.material.icons.extended)

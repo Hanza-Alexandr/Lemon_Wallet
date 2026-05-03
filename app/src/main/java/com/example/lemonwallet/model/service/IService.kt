@@ -2,8 +2,8 @@ package com.example.lemonwallet.model.service
 
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.ExistColor
-import com.example.lemonwallet.model.state.DomainState
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.state.DomainState
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.TypeStorage
 import kotlinx.coroutines.flow.Flow
 

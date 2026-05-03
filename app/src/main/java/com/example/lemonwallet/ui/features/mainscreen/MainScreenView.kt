@@ -20,13 +20,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.cashflowgraffics.CashFlowGraffias
-import com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.lastoperations.LastOperationBlock
-import com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.storages.StorageBlock
-import com.example.lemonwallet.ui.features.mainscreen.components.mainbutton.MainButton
 import com.example.lemonwallet.ui.common.topbars.TopBarMainScreen
+import com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.cashflowgraffics.CashFlowGraffias
+import com.example.lemonwallet.ui.features.mainscreen.components.mainbutton.MainButton
 import com.example.lemonwallet.ui.theme.MainDark
 import com.example.lemonwallet.viewmodel.MainScreenViewModel
+import com.example.storage_block.ui.components.blocks.components.lastoperations.LastOperationBlock
+import com.example.storage_block.ui.components.blocks.components.storages.StorageBlock
 
 @Composable
 fun MainScreenView(

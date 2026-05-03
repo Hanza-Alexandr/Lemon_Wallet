@@ -1,17 +1,17 @@
-package com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.storages
+package com.example.storage_block.ui.components.blocks.components.storages
 
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.lemonwallet.model.domain.Currency
 import com.example.lemonwallet.model.domain.EnumColor
-import com.example.lemonwallet.model.domain.Storage
+import com.example.domain.Storage
 import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.TypeStorage
 import com.example.lemonwallet.ui.features.mainscreen.components.blocks.common.BottomBarStorageBlock
-import com.example.lemonwallet.ui.features.mainscreen.components.blocks.common.TemplateMainsBlock
-import com.example.lemonwallet.ui.features.mainscreen.components.blocks.common.TopBarStorageBlock
-import com.example.lemonwallet.ui.features.mainscreen.components.blocks.components.storages.components.StorageList
+import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
+import com.example.storage_block.ui.components.blocks.common.TopBarStorageBlock
+import com.example.storage_block.ui.components.blocks.components.storages.components.StorageList
 
 @Preview
 @Composable
