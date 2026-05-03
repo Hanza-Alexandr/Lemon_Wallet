@@ -1,8 +1,8 @@
 package com.example.lemonwallet.model.domain
 
-import android.icu.math.BigDecimal
 import com.example.lemonwallet.model.domain.Operation.Companion.isValidAmount
 import com.example.lemonwallet.model.state.DomainState
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalTime
 

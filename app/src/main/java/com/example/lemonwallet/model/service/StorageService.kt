@@ -21,8 +21,6 @@ import javax.inject.Inject
 
 
 class StorageService @Inject constructor(private val storageRepo: IStorageRepository, private val dataStorePref: PreferencesDataStore, private val accountService: AccountService): IStorageService {
-
-
     // Поток остается таким же — он просто наблюдает
     val stateSelectedStorages= combine(
         storageRepo.getAll(),

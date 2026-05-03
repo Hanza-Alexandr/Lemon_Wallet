@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lemonwallet.model.domain.EnumColor
+import com.example.lemonwallet.model.domain.SystemColor
 import com.example.lemonwallet.model.domain.UserColor
 import com.example.lemonwallet.ui.common.color.state.ColorUIState
 
@@ -24,13 +25,13 @@ import com.example.lemonwallet.ui.common.color.state.ColorUIState
 fun ColorPickerRowPreview() {
     val availableColors = listOf(
         ColorUIState.LocalSystemColor(EnumColor.BLUE) ,
-        ColorUIState.LocalSystemColor(EnumColor.GREEN)
+        ColorUIState.DataBaseColor(SystemColor(1, "#FF0000"))
 
     )
     ColorPickerRow(
         availableColors = availableColors,
         selectedColor = ColorUIState.LocalSystemColor(EnumColor.BLUE) ,
-        isDeleteMode = false,
+        isDeleteMode = true,
         onColorSelected = {},
         onAddNewColorClick = {},
         onDeleteColor = {},
@@ -76,8 +77,11 @@ fun ColorPickerRow(
 
             // 2. Цвета из БД
             items(availableColors) { colorUiState ->
-                val canBeDeleted = colorUiState is ColorUIState.DataBaseColor && colorUiState.color is UserColor
-                
+                val canBeDeleted = when(colorUiState){
+                    is ColorUIState.LocalSystemColor -> false
+                    is ColorUIState.DataBaseColor -> colorUiState.color is UserColor
+                }
+
                 ColorCircle(
                     color = colorUiState.toColor(),
                     isSelected = selectedColor?.toColor() == colorUiState.toColor(),

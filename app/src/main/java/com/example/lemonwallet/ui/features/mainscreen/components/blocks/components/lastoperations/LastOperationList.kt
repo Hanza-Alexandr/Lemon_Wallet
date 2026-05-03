@@ -12,6 +12,7 @@ fun LastOperationList(
     operations: List<Operation> = emptyList(),
     onOperationClick: (index: Int) -> Unit = {}
 ){
+    // Генерация спика и применение фильтров происходит отдельно
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {

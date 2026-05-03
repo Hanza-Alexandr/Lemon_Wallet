@@ -1,7 +1,9 @@
 package com.example.lemonwallet.model.repository
 
+import com.example.lemonwallet.model.domain.Category
 import com.example.lemonwallet.model.domain.DomainColor
 import com.example.lemonwallet.model.domain.ExistColor
+import com.example.lemonwallet.model.domain.NewCategory
 import com.example.lemonwallet.model.domain.NewColor
 import com.example.lemonwallet.model.domain.NewStorage
 import com.example.lemonwallet.model.domain.Storage
@@ -22,6 +24,16 @@ interface IColorRepository {
     suspend fun update(color: UserColor): UserColor?
     suspend fun save(color: NewColor): ExistColor?
     suspend fun delete(color: UserColor): UserColor?
+}
+
+interface ICategoryRepository {
+    fun getAllFlow(): Flow<List<Category>>
+    suspend fun getById(id: Long): Category?
+    fun getChildrenByParentFlow(parentId: Long): Flow<List<Category>>
+    fun getRootCategoriesFlow(): Flow<List<Category>>
+    suspend fun save(category: Category): Category?
+    suspend fun save(category: NewCategory): Category?
+    suspend fun delete(category: Category): Category?
 }
 /**
 interface IOperationRepository{

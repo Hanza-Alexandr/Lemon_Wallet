@@ -17,7 +17,7 @@ import com.example.lemonwallet.model.domain.TypeStorage
             entity = ColorRoomEntity::class,
             parentColumns = ["id"],
             childColumns = ["color_id"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.SET_DEFAULT
         )
     ],
     indices = [Index(value = ["color_id"])]

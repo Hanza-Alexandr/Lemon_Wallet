@@ -53,7 +53,7 @@ fun TopBarStorageBlock(contentHorizontalPadding: Dp){
             fontWeight = FontWeight.Bold
         )
         IconButton(onClick = { TODO("NOT IMPLEMENT") }) {
-            Icon(painterResource(R.drawable.toc), contentDescription = "Settings")
+            Icon(painterResource(R.drawable.reorder), contentDescription = "Settings")
         }
     }
 }
@@ -66,12 +66,7 @@ fun TopBarLastOperationsBlock(contentHorizontalPadding: Dp){
             fontWeight = FontWeight.Bold
         )
         IconButton(onClick = { TODO("NOT IMPLEMENT") }) {
-            Icon(
-                modifier = Modifier.size(iconSize),
-                painter = painterResource(R.drawable.filter_list),
-                contentDescription = "Settings"
-            )
+            Icon(painter = painterResource(R.drawable.filter_list), contentDescription = "Settings")
         }
-
     }
 }
