@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.domain.IUserSettingsRepository
+import com.example.domain.settings.authorization.ISettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -22,7 +22,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "ca
 
 class PreferencesDataStore @Inject constructor(
     @ApplicationContext private val context: Context
-) : IUserSettingsRepository {
+) : ISettingsRepository {
 
     private object Keys {
         val IS_FIRST_OPENING_APP = booleanPreferencesKey("is_first_opening_app")

@@ -28,12 +28,3 @@ interface ICategoryRepository {
     suspend fun delete(category: Category): Category?
 }
 
-interface IUserSettingsRepository {
-    val userIdFlow: Flow<Int?>
-    val isFirstOpeningApp: Flow<Boolean>
-    val indexesSelectedStorageFlow: Flow<Set<Int>>
-    suspend fun logIn(id: Int)
-    suspend fun logOut()
-    suspend fun markFirstAppOpeningCompleted()
-    suspend fun saveSelectedIds(indexes: Set<Int>)
-}

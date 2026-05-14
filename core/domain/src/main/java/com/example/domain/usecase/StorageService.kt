@@ -7,7 +7,7 @@ import com.example.domain.state.DomainState
 import com.example.domain.Storage
 import com.example.domain.TypeStorage
 import com.example.domain.IStorageRepository
-import com.example.domain.IUserSettingsRepository
+import com.example.domain.settings.authorization.ISettingsRepository
 import com.example.domain.state.AuthorizationState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class StorageService @Inject constructor(
     private val storageRepo: IStorageRepository,
-    private val userSettingsRepo: IUserSettingsRepository,
+    private val userSettingsRepo: ISettingsRepository,
     private val accountService: AccountService
 ) : IStorageService {
 

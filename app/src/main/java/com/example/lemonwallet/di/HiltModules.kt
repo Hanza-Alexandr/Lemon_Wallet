@@ -6,7 +6,7 @@ import com.example.datastore.PreferencesDataStore
 import com.example.domain.ICategoryRepository
 import com.example.domain.IColorRepository
 import com.example.domain.IStorageRepository
-import com.example.domain.IUserSettingsRepository
+import com.example.domain.settings.authorization.ISettingsRepository
 import com.example.room.dao.CategoryDao
 import com.example.room.dao.ColorDao
 import com.example.room.dao.StorageDao
@@ -48,7 +48,7 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindUserSettingsRepository(
         impl: PreferencesDataStore
-    ): IUserSettingsRepository
+    ): ISettingsRepository
 }
 
 @Module

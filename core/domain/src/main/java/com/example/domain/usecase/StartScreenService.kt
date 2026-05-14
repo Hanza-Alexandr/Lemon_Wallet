@@ -1,13 +1,13 @@
 package com.example.domain.usecase
 
-import com.example.domain.IUserSettingsRepository
+import com.example.domain.settings.authorization.ISettingsRepository
 import javax.inject.Inject
 
 /**
  * Класс бизнес логики для старта приложения.
  */
 
-class StartScreenService @Inject constructor(private val dataStorePreferences: IUserSettingsRepository, private val accountService: AccountService){
+class StartScreenService @Inject constructor(private val dataStorePreferences: ISettingsRepository, private val accountService: AccountService){
     val stateAuth = accountService.stateAuth
 
     val isFirstOpeningApp = dataStorePreferences.isFirstOpeningApp
