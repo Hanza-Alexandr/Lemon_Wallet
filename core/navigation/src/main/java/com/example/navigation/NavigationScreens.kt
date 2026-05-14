@@ -2,15 +2,15 @@ package com.example.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class ManagerScreens {
+sealed class NavigationRoute {
     @Serializable
-    data object OnBoarding: ManagerScreens()
+    data object OnBoarding: NavigationRoute()
     @Serializable
-    data object AuthorizationScreen: ManagerScreens()
+    data object AuthorizationScreen: NavigationRoute()
     @Serializable
-    data object MainManagerScreens: ManagerScreens()
+    data object MainScreen: NavigationRoute()
     @Serializable
-    data class EditStorage(val storageId: Long): ManagerScreens()
+    data class EditStorage(val storageId: Long): NavigationRoute()
     @Serializable
-    object CreateStorage: ManagerScreens()
+    object CreateStorage: NavigationRoute()
 }

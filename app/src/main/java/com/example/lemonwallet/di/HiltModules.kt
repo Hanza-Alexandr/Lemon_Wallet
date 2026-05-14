@@ -6,7 +6,9 @@ import com.example.datastore.PreferencesDataStore
 import com.example.domain.ICategoryRepository
 import com.example.domain.IColorRepository
 import com.example.domain.IStorageRepository
-import com.example.domain.settings.authorization.ISettingsRepository
+import com.example.domain.settings.ISettingsRepository
+import com.example.navigation.INavigator
+import com.example.lemonwallet.NavigatorImpl
 import com.example.room.dao.CategoryDao
 import com.example.room.dao.ColorDao
 import com.example.room.dao.StorageDao
@@ -74,4 +76,12 @@ object DatabaseModule {
 
     @Provides
     fun provideCategoryDao(db: AppDatabase): CategoryDao = db.getCategoryDao()
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class NavigationModule {
+    @Binds
+    @Singleton
+    abstract fun bindNavigator(impl: NavigatorImpl): INavigator
 }

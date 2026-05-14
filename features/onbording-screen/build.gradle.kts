@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
 
+    kotlin("plugin.serialization") 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
@@ -39,7 +40,14 @@ android {
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
 
+    //Сериализация
+    implementation(libs.kotlinx.serialization.json)
+    //Навигация
+    implementation(libs.androidx.navigation.compose)
+    //Навигация для Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.material)
     implementation(libs.androidx.material3)

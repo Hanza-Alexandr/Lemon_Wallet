@@ -1,6 +1,6 @@
 package com.example.domain.usecase
 
-import com.example.domain.settings.authorization.ISettingsRepository
+import com.example.domain.settings.ISettingsRepository
 import javax.inject.Inject
 
 /**

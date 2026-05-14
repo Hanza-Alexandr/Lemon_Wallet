@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.domain.settings.authorization.ISettingsRepository
+import com.example.domain.settings.ISettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -64,6 +64,12 @@ class PreferencesDataStore @Inject constructor(
     override suspend fun logIn(id: Int) {
         context.dataStore.edit { preferences ->
             preferences[Keys.USER_ID] = id
+        }
+    }
+
+    override suspend fun loginAsGuest() {
+        context.dataStore.edit { preferences ->
+            preferences[Keys.USER_ID] = -1
         }
     }
 

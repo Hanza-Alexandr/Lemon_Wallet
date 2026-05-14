@@ -44,6 +44,14 @@ dependencies {
 
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
+
+    //Сериализация
+    implementation(libs.kotlinx.serialization.json)
+    //Навигация
+    implementation(libs.androidx.navigation.compose)
+    //Навигация для Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
 
 
     implementation(libs.material)

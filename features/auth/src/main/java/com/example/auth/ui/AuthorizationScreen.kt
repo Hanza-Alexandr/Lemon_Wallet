@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.auth.ui.components.AuthButton
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+
 
 @Preview
 @Composable
-fun AuthorizationScreen(){
+fun AuthorizationScreen (authScreenViewModel: AuthorizationScreenViewModel = hiltViewModel()){
     AuthorizationScreenContent(
-        onContinueAsGuest = {
-            TODO()
-        }
+        onContinueAsGuest = authScreenViewModel::loginAsGuest
     )
 }
 

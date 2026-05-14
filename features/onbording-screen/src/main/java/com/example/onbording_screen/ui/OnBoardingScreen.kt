@@ -10,19 +10,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.onbording_screen.model.PreviewPageUiState
 import com.example.onbording_screen.ui.components.PagePart
 import com.example.onbording_screen.ui.components.SkipButton
 
+@Preview
 @Composable
-fun StartScreen(){
-    StartScreenContent {
-        TODO("Оп сути вызов навигации. + нужно подумать в каком месте начать сохранения в sharedPreferences")
-    }
+fun OnBoardingScreen(onBoardingViewModel: OnBoardingViewModel = hiltViewModel()){
+    OnBoardingScreenContent(
+        onFinished = onBoardingViewModel::onFinished
+    )
 }
-
 @Composable
-fun StartScreenContent(onFinished: () -> Unit){
+fun OnBoardingScreenContent(onFinished: () -> Unit){
     // Определяем страницы
     val pages = listOf(
         PreviewPageUiState(

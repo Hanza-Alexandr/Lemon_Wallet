@@ -1,5 +1,6 @@
 package com.example.domain.settings.authorization
 
+import com.example.domain.settings.ISettingsRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
