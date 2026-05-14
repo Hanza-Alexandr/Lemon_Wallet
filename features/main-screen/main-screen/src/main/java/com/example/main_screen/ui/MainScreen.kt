@@ -18,10 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.example.ui.them.MainDark
 
 @Composable
-fun MainScreen(){
+fun MainScreen(blockList: List<@Composable () -> Unit> = emptyList()){
     MainScreenContent(
         onEditStorageClick = {
             TODO()
@@ -29,7 +30,7 @@ fun MainScreen(){
         onCreateStorageClick = {
             TODO()
         },
-        blockList = listOf()
+        blockList = blockList
     )
 }
 

@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:domain"))
     implementation(project(":core:database:room"))
+    implementation(project(":core:navigation"))
 
     // Hilt
     implementation(libs.hilt.android)

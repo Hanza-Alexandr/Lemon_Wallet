@@ -12,6 +12,7 @@ import com.example.auth.ui.AuthorizationScreen
 import com.example.main_screen.ui.MainScreen
 import com.example.navigation.NavigationRoute
 import com.example.onbording_screen.ui.OnBoardingScreen
+import com.example.storage_block.ui.StorageBlock
 import com.example.ui.storage.CreateStorageScreen
 import com.example.ui.storage.EditStorageScreen
 import javax.inject.Inject
@@ -39,7 +40,13 @@ fun NavGraphBuilder.navigationManager (){
         AuthorizationScreen()
     }
     composable<NavigationRoute.MainScreen>{
-        MainScreen()
+        MainScreen(
+            blockList = listOf(
+                {
+                    StorageBlock()
+                }
+            )
+        )
     }
     composable<NavigationRoute.EditStorage>{
         EditStorageScreen()

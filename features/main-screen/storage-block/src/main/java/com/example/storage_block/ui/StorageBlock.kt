@@ -2,12 +2,16 @@ package com.example.storage_block.ui
 
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.domain.Currency
 import com.example.domain.EnumColor
 import com.example.domain.Storage
 import com.example.domain.SystemColor
 import com.example.domain.TypeStorage
+import com.example.storage_block.StorageBlockViewModel
 import com.example.storage_block.model.storagesLOCALTESTDATA
 import com.example.storage_block.ui.components.StorageList
 import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
@@ -16,20 +20,25 @@ import com.example.ui.BottomBarStorageBlock
 
 @Preview
 @Composable
-fun StorageBlockPreview(){
-    StorageBlock(
-        selectedList = setOf(0,1),
-        storages = storagesLOCALTESTDATA,
-        onEditStorageClick = { },
-        onStorageClick = { },
-        onStorageLongClick = { }
-    ) { }
+fun StorageBlock(storageBlockViewModel: StorageBlockViewModel = hiltViewModel()){
+    val storages by storageBlockViewModel.storageList.collectAsState()
+    val selectedList by storageBlockViewModel.storageBlockSelectState.collectAsState()
+
+    StorageBlockContent(
+        storages = storages?:emptyList(),
+        selectedList = selectedList,
+        onStorageClick = storageBlockViewModel::onStorageClick,
+        onStorageLongClick = storageBlockViewModel::onStorageLongClick,
+        onEditStorageClick = storageBlockViewModel::onEditStorageClick,
+        onAddStorageClick = storageBlockViewModel::onAddStorageClick
+    )
 }
+
 /**
  * Основной компонент блока счетов с пагинацией
  */
 @Composable
-fun StorageBlock(
+fun StorageBlockContent(
     storages: List<Storage>,
     selectedList: Set<Int>,
     onEditStorageClick: (storageId: Long) -> Unit,
