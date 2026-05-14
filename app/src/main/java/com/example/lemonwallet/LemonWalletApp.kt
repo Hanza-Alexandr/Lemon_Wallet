@@ -7,7 +7,5 @@ import dagger.hilt.android.HiltAndroidApp
 class LemonWalletApp : Application(){
     override fun onCreate() {
         super.onCreate()
-
-
     }
 }

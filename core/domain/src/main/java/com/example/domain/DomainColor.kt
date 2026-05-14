@@ -27,6 +27,10 @@ class UserColor(
 // Новые пользовательский цвет или новый для БД системный цвет
 class NewColor(override val hex: String): DomainColor()
 
+
+fun ExistColor.toUiState(): ColorUIState{
+    return ColorUIState.DataBaseColor(this)
+}
 /**
 abstract class DomainColor {
 abstract val hex: String

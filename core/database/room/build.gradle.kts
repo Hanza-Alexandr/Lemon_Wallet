@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     id("com.google.devtools.ksp") // Инструмент для кодогенирации вместо kapt
-
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -37,6 +37,9 @@ android {
 dependencies {
     implementation(project(":core:domain"))
     //Room
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
     ksp(libs.androidx.room.compiler) // Room Кодогенератор
     implementation(libs.androidx.room.ktx) // Доп для корутин и потоков
     implementation(libs.androidx.room.runtime)

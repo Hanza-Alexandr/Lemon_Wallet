@@ -1,6 +1,6 @@
 package com.example.domain
 
-import com.example.lemonwallet.model.state.DomainState
+import com.example.domain.state.DomainState
 
 
 abstract class BaseStorage{

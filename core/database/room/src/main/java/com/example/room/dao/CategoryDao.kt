@@ -1,6 +1,14 @@
 package com.example.room.dao
 
 import kotlinx.coroutines.flow.Flow
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import com.example.room.entity.CategoryRoomEntity
+import com.example.room.entity.CategoryWithColor
 
 @Dao
 interface CategoryDao {

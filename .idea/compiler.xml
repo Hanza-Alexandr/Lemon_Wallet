@@ -5,9 +5,10 @@
       <module name=":database" target="21" />
       <module name="Lemon_Wallet.app.features" target="21" />
       <module name="Lemon_Wallet.core.db.room" target="21" />
-      <module name="Lemon_Wallet.features.main-screen" target="21" />
+      <module name="Lemon_Wallet.features.chart-block" target="21" />
+      <module name="Lemon_Wallet.features.last-operation-block" target="21" />
       <module name="Lemon_Wallet.features.main-screen.start-screen" target="21" />
-      <module name="Lemon_Wallet.features.main-screen.storage-block" target="21" />
+      <module name="Lemon_Wallet.features.storage-block" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
