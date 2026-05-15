@@ -1,5 +1,6 @@
 package com.example.storage_block
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.Storage
@@ -7,6 +8,7 @@ import com.example.domain.usecase.StorageService
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -32,10 +34,14 @@ class StorageBlockViewModel @Inject constructor(
     )
 
     fun onStorageClick(index: Int){
-        TODO()
+        viewModelScope.launch {
+            storageService.onSelect(isLongClick = false, index)
+        }
     }
     fun onStorageLongClick(index: Int){
-        TODO()
+        viewModelScope.launch {
+            storageService.onSelect(isLongClick = true, index)
+        }
     }
     fun onEditStorageClick(storageId: Long){
         navigator.navigateTo(NavigationRoute.EditStorage(storageId))
@@ -44,10 +50,6 @@ class StorageBlockViewModel @Inject constructor(
         navigator.navigateTo(NavigationRoute.CreateStorage)
     }
 
-    private fun onSelect(isLongClick: Boolean, index: Int) {
-        viewModelScope.launch {
-            storageService.onSelect(isLongClick, index)
-        }
-    }
+
 
 }

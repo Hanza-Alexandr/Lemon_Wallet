@@ -1,7 +1,10 @@
 package com.example.ui.storage.editstorage
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigator
+import androidx.navigation.toRoute
 import com.example.domain.state.DomainState
 import com.example.domain.ColorUIState
 import com.example.domain.Currency
@@ -13,27 +16,38 @@ import com.example.domain.UserColor
 import com.example.domain.toUiState
 import com.example.domain.usecase.ColorService
 import com.example.domain.usecase.StorageService
-import com.example.ui.DefaultStateDetailsStorage
+import com.example.navigation.INavigator
+import com.example.navigation.NavigationRoute
+import com.example.ui.storage.DefaultStateDetailsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class EditStorageViewModel @Inject constructor(
+    private val navigator: INavigator,
     private val storageService: StorageService,
     private val colorService: ColorService,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(), IEditStorage {
-
+    private val storageId: Long = savedStateHandle.toRoute<NavigationRoute.EditStorage>().storageId
     //Состояние интерфейса
     private val _uiState = MutableStateFlow(DefaultStateDetailsStorage())
     val uiState: StateFlow<DefaultStateDetailsStorage> = _uiState.asStateFlow()
 
+    init {
+        loadStorage(storageId)
+    }
 
+    fun onBack(){
+        navigator.goBack()
+    }
     fun loadStorage(id: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }

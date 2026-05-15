@@ -7,42 +7,30 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.ui.GlobalDetailStorageContent
+import com.example.domain.Storage
+import com.example.ui.storage.GlobalDetailStorageContent
+
 
 @Composable
-fun EditStorageScreen(){
-    EditStorageScreenContent(
-        storageId = 1, //!!!!!! Бля а как передать ID не передавая ID
-        onBack = {
-            TODO()
-        }
-    )
-}
-@Composable
-fun EditStorageScreenContent(
-    storageId: Long,
-    onBack: () -> Unit,
-    viewModel: EditStorageViewModel = hiltViewModel()
+fun EditStorageScreen(
+    viewModel: EditStorageViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(storageId) {
-        viewModel.loadStorage(storageId)
-    }
-
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
-            onBack()
+            viewModel.onBack()
         }
     }
 
     Scaffold(
         topBar = {
             TopBarEditStorage(
-                onBack = onBack,
-                onSave = { viewModel.saveChanges() },
-                onDelete = { viewModel.deleteStorage() }
+                onBack = viewModel::onBack,
+                onSave =  viewModel::saveChanges ,
+                onDelete = viewModel::deleteStorage
             )
         }
     ) { padding ->

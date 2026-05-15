@@ -40,6 +40,8 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
+    implementation(project(":core:navigation"))
+
 
     // Hilt
     implementation(libs.androidx.hilt.navigation.compose)

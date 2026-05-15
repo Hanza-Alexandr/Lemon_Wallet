@@ -1,4 +1,4 @@
-package com.example.ui
+package com.example.ui.storage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +29,7 @@ import com.example.domain.ColorUIState
 import com.example.domain.Currency
 import com.example.domain.NewColor
 import com.example.domain.TypeStorage
+import com.example.ui.StorageExposedDropdown
 import com.example.ui.colorpikerrow.AddColorDialog
 import com.example.ui.colorpikerrow.ColorPickerRow
 

@@ -13,7 +13,8 @@ import com.example.domain.UserColor
 import com.example.domain.toUiState
 import com.example.domain.usecase.ColorService
 import com.example.domain.usecase.StorageService
-import com.example.ui.DefaultStateDetailsStorage
+import com.example.navigation.INavigator
+import com.example.ui.storage.DefaultStateDetailsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateStorageViewModel @Inject constructor(
+    private val navigator: INavigator,
     private val storageService: StorageService,
     private val colorService: ColorService
 ) : ViewModel(), IEditStorage {
@@ -36,6 +38,10 @@ class CreateStorageViewModel @Inject constructor(
                 _uiState.update { it.copy(availableColors = colors) }
             }
         }
+    }
+
+    fun onBack(){
+        navigator.goBack()
     }
 
     override fun onSaveColor(newColor: NewColor){

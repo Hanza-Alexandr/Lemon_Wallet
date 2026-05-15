@@ -1,4 +1,4 @@
-package com.example.ui
+package com.example.ui.storage
 
 import com.example.domain.ColorUIState
 import com.example.domain.Currency

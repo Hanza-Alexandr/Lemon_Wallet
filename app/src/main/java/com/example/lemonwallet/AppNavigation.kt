@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.example.auth.ui.AuthorizationScreen
 import com.example.main_screen.ui.MainScreen
 import com.example.navigation.NavigationRoute
