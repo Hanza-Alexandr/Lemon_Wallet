@@ -2,7 +2,7 @@ package com.example.storage_block.ui.components.blocks.components.lastoperations
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.last_operation_block.ui.LastOperationList
+import com.example.last_operation_block.ui.components.LastOperationList
 import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
 import com.example.storage_block.ui.components.blocks.common.TopBarLastOperationsBlock
 

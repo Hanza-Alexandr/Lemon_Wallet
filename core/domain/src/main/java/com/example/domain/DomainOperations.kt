@@ -15,6 +15,7 @@ sealed interface Operation{
     val date: LocalDate
     val time: LocalTime
     val status: StatusOperation
+    val note: String
 
     companion object{
         fun isValidAmount(amount: BigDecimal): Boolean{
@@ -49,7 +50,8 @@ data class CreditTransaction (
     override val amount: BigDecimal,
     override val time: LocalTime,
     override val date: LocalDate,
-    override val status: StatusOperation
+    override val status: StatusOperation,
+    override val note: String
 ): GeneralTransaction{
     override val typeOperation: TypeOperation = TypeOperation.CREDIT
     override fun changeStorage(newStorage: Storage): CreditTransaction =
@@ -82,7 +84,8 @@ data class DebitTransaction(
     override val amount: BigDecimal,
     override val time: LocalTime,
     override val date: LocalDate,
-    override val status: StatusOperation
+    override val status: StatusOperation,
+    override val note: String
 ): GeneralTransaction{
     override val typeOperation: TypeOperation = TypeOperation.DEBIT
     override fun changeStorage(newStorage: Storage): DebitTransaction =
@@ -115,13 +118,14 @@ data class NewGeneralOperation private constructor(
     override val time: LocalTime,
     override val date: LocalDate,
     override val status: StatusOperation,
+    override val note: String,
     val typeOperation: TypeOperation
 ): Operation, NewOperation{
     companion object{
         fun create(storage: Storage, category: Category, amount: BigDecimal, time: LocalTime, date: LocalDate, status: StatusOperation, typeOperation: TypeOperation): DomainState<NewGeneralOperation>{
             try {
                 if(!Operation.Companion.isValidAmount(amount)) throw IllegalArgumentException()
-                return DomainState.Success(NewGeneralOperation(storage, category,amount, time, date, status, typeOperation))
+                return DomainState.Success(NewGeneralOperation(storage, category,amount, time, date, status, "",typeOperation))
             }
             catch (e: IllegalArgumentException){
                 return DomainState.Error("❌Ошибка при создании new сущности")
@@ -137,7 +141,8 @@ data class NewTransferTransaction private constructor(
     override val amount: BigDecimal,
     override val time: LocalTime,
     override val date: LocalDate,
-    override val status: StatusOperation
+    override val status: StatusOperation,
+    override val note: String = ""
 ): Operation, NewOperation{
     companion object{
         fun create(fromStorage:Storage, toStorage: Storage, amount: BigDecimal, time: LocalTime, date: LocalDate, status: StatusOperation): DomainState<NewTransferTransaction>{
@@ -159,7 +164,8 @@ data class TransferTransaction(
     override val amount: BigDecimal,
     override val date: LocalDate,
     override val time: LocalTime,
-    override val status: StatusOperation
+    override val status: StatusOperation,
+    override val note: String = ""
 ): Operation{
     fun changeFromStorage(newStorage: Storage): TransferTransaction =
         copy(fromStorage= newStorage)

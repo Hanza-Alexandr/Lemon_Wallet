@@ -1,4 +1,4 @@
-package com.example.last_operation_block.ui
+package com.example.last_operation_block.ui.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -18,19 +18,9 @@ private fun LastOperationListItemPreview() {
 @Composable
 fun LastOperationListItem(operation: Operation) {
 
-
 }
 
-@Composable
-fun OperationItem(operation: Operation){
 
-}
 
-@Composable
-fun TransferOperation(transfer: TransferTransaction){
 
-}
-@Composable
-fun GeneralTransaction(generalTransaction: GeneralTransaction){
 
-}
