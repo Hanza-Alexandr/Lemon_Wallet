@@ -1,5 +1,6 @@
 package com.example.ui.storage.editstorage
 
+import androidx.core.text.color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,8 +23,10 @@ import com.example.ui.storage.DefaultStateDetailsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -39,12 +42,20 @@ class EditStorageViewModel @Inject constructor(
     private val storageId: Long = savedStateHandle.toRoute<NavigationRoute.EditStorage>().storageId
     //Состояние интерфейса
     private val _uiState = MutableStateFlow(DefaultStateDetailsStorage())
-    val uiState: StateFlow<DefaultStateDetailsStorage> = _uiState.asStateFlow()
+    val uiState: StateFlow<DefaultStateDetailsStorage> = combine(
+        _uiState,
+        colorService.colorListForPicker
+    ) { state, colors ->
+        state.copy(availableColors = colors)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = DefaultStateDetailsStorage()
+    )
 
     init {
         loadStorage(storageId)
     }
-
     fun onBack(){
         navigator.goBack()
     }
@@ -52,23 +63,23 @@ class EditStorageViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val storage = storageService.getStorage(id)
-            val colors = colorService.colorListForPicker.first()
-            when(storage){
-                is DomainState.Error -> {
-                    _uiState.update { it.copy(isLoading = false, error = "Storage not found") }
-                }
-                is DomainState.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            storage = storage.domain,
-                            name = storage.domain.name,
-                            note = storage.domain.note ?: "",
-                            typeStorage = storage.domain.typeStorage,
-                            availableColors = colors,
-                            currency = storage.domain.currency,
-                            isStatistics = storage.domain.isStatistics,
-                            isArchive = storage.domain.isArchive,
-                            color = storage.domain.color?.toUiState(),
+            _uiState.update { state ->
+                when (storage) {
+                    is DomainState.Error -> state.copy(
+                        isLoading = false,
+                        error = "Storage not found"
+                    )
+                    is DomainState.Success -> {
+                        val storage = storage.domain
+                        state.copy(
+                            storage = storage,
+                            name = storage.name,
+                            note = storage.note ?: "",
+                            typeStorage = storage.typeStorage,
+                            currency = storage.currency,
+                            isStatistics = storage.isStatistics,
+                            isArchive = storage.isArchive,
+                            color = storage.color?.toUiState(),
                             isLoading = false
                         )
                     }
@@ -81,9 +92,8 @@ class EditStorageViewModel @Inject constructor(
         viewModelScope.launch {
             val color = colorService.save(newColor)
             if (color!=null){
-                val uiColor = color.toUiState()
                 val newList = _uiState.value.availableColors.toMutableList()
-                newList.add(uiColor)
+                newList.add(color.toUiState())
                 _uiState.update {
                     it.copy(
                         availableColors = newList

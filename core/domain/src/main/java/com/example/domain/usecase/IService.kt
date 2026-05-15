@@ -1,5 +1,6 @@
 package com.example.domain.usecase
 
+import com.example.domain.ColorUIState
 import com.example.domain.Currency
 import com.example.domain.ExistColor
 import com.example.domain.state.DomainState
