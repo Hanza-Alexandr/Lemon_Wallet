@@ -1,4 +1,4 @@
-package com.example.ui.storage
+package com.example.ui.storage.createstorage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

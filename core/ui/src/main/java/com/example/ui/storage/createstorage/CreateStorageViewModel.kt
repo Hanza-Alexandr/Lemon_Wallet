@@ -1,4 +1,4 @@
-package com.example.ui.storage
+package com.example.ui.storage.createstorage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
