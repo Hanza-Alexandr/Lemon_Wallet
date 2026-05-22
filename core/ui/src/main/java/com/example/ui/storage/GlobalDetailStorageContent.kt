@@ -14,10 +14,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,65 +27,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.ColorUIState
 import com.example.domain.Currency
-import com.example.domain.NewColor
 import com.example.domain.TypeStorage
+import com.example.domain.domainmodel.DomainColor
+import com.example.domain.domainmodel.NewDomainColor
 import com.example.ui.StorageExposedDropdown
 import com.example.ui.colorpikerrow.AddColorDialog
 import com.example.ui.colorpikerrow.ColorPickerRow
 
-@Preview
-@Composable
-fun GlobalDetailStorageContentPreview() {
-    GlobalDetailStorageContent(
-        uiState = DefaultStateDetailsStorage(
-            name = "Наличные",
-            note = "В кошельке",
-            isLoading = false,
-            isStatistics = true,
-            isArchive = false,
-        ),
-        onNameChange = {},
-        onNoteChange = {},
-        onTypeChange = {},
-        onCurrencyChange = {},
-        onColorChange = {},
-        onStatisticsChange = {},
-        onArchiveChange = {},
-        onSaveColor = {},
-        onDeleteColor = {},
-        onToggleDeleteMode = {}
-    )
-}
-
 @Composable
 fun GlobalDetailStorageContent(
+    uiState: UIStatesDetailStorage,
     modifier: Modifier = Modifier,
-    uiState: DefaultStateDetailsStorage,
     onNameChange: (String) -> Unit,
     onNoteChange: (String) -> Unit,
     onTypeChange: (TypeStorage) -> Unit,
     onCurrencyChange: (Currency) -> Unit,
-    onColorChange: (ColorUIState?) -> Unit,
-    onStatisticsChange: (Boolean) -> Unit,
-    onArchiveChange: (Boolean) -> Unit,
-    onSaveColor: (NewColor) -> Unit,
-    onDeleteColor: (ColorUIState) -> Unit,
-    onToggleDeleteMode: (Boolean) -> Unit
 ) {
-    var showColorPicker by remember { mutableStateOf(false) }
-
-    if (showColorPicker) {
-        AddColorDialog(
-            uiState.availableColors,
-            onDismiss = { showColorPicker = false },
-            onColorConfirmed = { color ->
-                onSaveColor(color)
-                showColorPicker = false
-            }
-        )
-    }
 
     Column(modifier = modifier) {
         if (uiState.isLoading) {
@@ -99,14 +59,23 @@ fun GlobalDetailStorageContent(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 OutlinedTextField(
-                    value = uiState.name,
+                    value = uiState.name?:"",
                     onValueChange = onNameChange,
                     label = { Text("Название счета", color = Color.Gray) },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = Color.Gray,
-                        unfocusedLabelColor = Color.Gray
-                    )
+                    colors =
+                        if (uiState.name == null){
+                            OutlinedTextFieldDefaults.colors(
+                                unfocusedBorderColor = Color.Red,
+                                unfocusedLabelColor = Color.Red
+                            )
+                        }
+                    else{
+                            OutlinedTextFieldDefaults.colors(
+                                unfocusedBorderColor = Color.Gray,
+                                unfocusedLabelColor = Color.Gray
+                            )
+                        }
                 )
 
                 OutlinedTextField(
@@ -124,69 +93,23 @@ fun GlobalDetailStorageContent(
                     label = "Тип счета",
                     options = TypeStorage.entries,
                     selectedOption = uiState.typeStorage,
+                    color = if (uiState.typeStorage == null) Color.Red else Color.Gray,
                     onOptionSelected = onTypeChange,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 StorageExposedDropdown(
                     label = "Валюта",
                     options = Currency.entries,
                     selectedOption = uiState.currency,
+                    color = if (uiState.currency == null) Color.Red else Color.Gray,
                     onOptionSelected = onCurrencyChange,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // Секция выбора цвета
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Цвет счета", color = Color.Gray, fontSize = 14.sp)
-                    ColorPickerRow(
-                        availableColors = uiState.availableColors,
-                        selectedColor = uiState.color,
-                        isDeleteMode = uiState.isColorDeleteMode,
-                        onColorSelected = onColorChange,
-                        onAddNewColorClick = { showColorPicker = true },
-                        onDeleteColor = onDeleteColor,
-                        onToggleDeleteMode = onToggleDeleteMode
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text("Учитывать в статистике", fontSize = 16.sp)
-                        Text(
-                            "Данные будут влиять на общую статистику",
-                            color = Color.Gray,
-                            fontSize = 12.sp
-                        )
-                    }
-                    Switch(
-                        checked = uiState.isStatistics,
-                        onCheckedChange = onStatisticsChange
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text("В архиве", fontSize = 16.sp)
-                        Text("Скрыть счет из основного списка", color = Color.Gray, fontSize = 12.sp)
-                    }
-                    Switch(
-                        checked = uiState.isArchive,
-                        onCheckedChange = onArchiveChange
-                    )
-                }
-
                 if (uiState.error != null) {
                     Text(
-                        text = uiState.error!!,
+                        text = uiState.error,
                         color = Color.Red,
                         modifier = Modifier.padding(top = 8.dp)
                     )

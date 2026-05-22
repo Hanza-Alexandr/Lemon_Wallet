@@ -1,23 +1,17 @@
 package com.example.ui.storage
 
-import com.example.domain.ColorUIState
 import com.example.domain.Currency
-import com.example.domain.EnumColor
-import com.example.domain.Storage
 import com.example.domain.TypeStorage
+import com.example.domain.domainmodel.DomainColor
+import com.example.domain.domainmodel.DomainStorage
 
-data class DefaultStateDetailsStorage(
-    val storage: Storage? = null,
-    val isLoading: Boolean = false,
-    val name: String = "",
+data class UIStatesDetailStorage(
+    val name: String?= null,
     val note: String? = null,
-    val typeStorage: TypeStorage = TypeStorage.GENERAL,
-    val currency: Currency = Currency.RUB,
-    val isStatistics: Boolean = true,
-    val isArchive: Boolean = false,
-    val color: ColorUIState? = null,
-    val availableColors: List<ColorUIState> = EnumColor.entries.map { ColorUIState.LocalSystemColor(it) },
+    val typeStorage: TypeStorage? = null,
+    val currency: Currency? = null,
+    val color: DomainColor? = null,
+    val availableColors: List<DomainColor> = emptyList(),
     val error: String? = null,
-    val isSaved: Boolean = false,
-    val isColorDeleteMode: Boolean = false
+    val isLoading: Boolean = false,
 )

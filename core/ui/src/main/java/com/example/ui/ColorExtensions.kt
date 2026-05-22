@@ -2,7 +2,7 @@ package com.example.ui
 
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
-import com.example.domain.DomainColor
+import com.example.domain.domainmodel.DomainColor
 
 
 fun DomainColor.toComposeColor(): Color {

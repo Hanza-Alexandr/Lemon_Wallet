@@ -1,15 +1,15 @@
 package com.example.last_operation_block.ui.components.items
 
 import androidx.compose.runtime.Composable
-import com.example.domain.GeneralTransaction
-import com.example.domain.Operation
-import com.example.domain.TransferTransaction
+import com.example.domain.domainmodel.DomainOperation
+import com.example.domain.domainmodel.GeneralOperation
+import com.example.domain.domainmodel.TransferOperation
 
 @Composable
-fun OperationItem(operation: Operation){
+fun OperationItem(operation: DomainOperation){
     when(operation){
-        is GeneralTransaction -> GeneralTransaction(operation)
-        is TransferTransaction -> TransferOperation(operation)
+        is GeneralOperation -> GeneralTransaction(operation)
+        is TransferOperation -> TransferOperation(operation)
         else -> {
 
         }

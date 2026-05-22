@@ -3,12 +3,12 @@ package com.example.domain.settings
 import kotlinx.coroutines.flow.Flow
 
 interface ISettingsRepository {
-    val userIdFlow: Flow<Int?>
+    val userIdFlow: Flow<String?>
     val isFirstOpeningApp: Flow<Boolean>
-    val indexesSelectedStorageFlow: Flow<Set<Int>>
-    suspend fun logIn(id: Int)
+    val idSelectedStorageFlow: Flow<Set<String>>
+    suspend fun logIn(id: String)
     suspend fun loginAsGuest()
     suspend fun logOut()
     suspend fun markFirstAppOpeningCompleted()
-    suspend fun saveSelectedIds(indexes: Set<Int>)
+    suspend fun saveSelectedIds(id: Set<String>)
 }

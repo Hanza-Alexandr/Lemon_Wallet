@@ -7,22 +7,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.domain.Currency
+import com.example.domain.TypeStorage
 import com.example.ui.storage.GlobalDetailStorageContent
 import com.example.ui.them.MainDark
 
 @Composable
 fun CreateStorageScreen(
-    createStorageViewModel: CreateStorageViewModel = hiltViewModel(),
+    viewModel: CreateStorageViewModel = hiltViewModel(),
 ) {
-    val uiState by createStorageViewModel.uiState.collectAsState()
-
-    LaunchedEffect(uiState.isSaved) {
-        if (uiState.isSaved) {
-            createStorageViewModel.onBack()
-        }
-    }
+    val name: String? by rememberSaveable() { mutableStateOf(null)}
+    val note: String? by rememberSaveable() { mutableStateOf(null)}
+    val typeStorage: TypeStorage? by rememberSaveable() { mutableStateOf(null)}
+    val currency: Currency? by rememberSaveable() { mutableStateOf(null)}
+    val error: String? by rememberSaveable() { mutableStateOf(null)}
 
     Column(
         modifier = Modifier
@@ -31,22 +34,16 @@ fun CreateStorageScreen(
     ) {
 
         TopBarCreateStorage(
-            onBack = createStorageViewModel::onBack,
-            onSave = createStorageViewModel::saveNewStorage
+            onBack = viewModel::onBack,
+            onSave = viewModel::onSaveNewStorage
         )
 
         GlobalDetailStorageContent(
-            uiState = uiState,
-            onNameChange = createStorageViewModel::onNameChange,
-            onNoteChange = createStorageViewModel::onNoteChange,
-            onTypeChange = createStorageViewModel::onTypeChange,
-            onCurrencyChange = createStorageViewModel::onCurrencyChange,
-            onColorChange = createStorageViewModel::onColorChange,
-            onStatisticsChange = createStorageViewModel::onStatisticsChange,
-            onArchiveChange = createStorageViewModel::onArchiveChange,
-            onSaveColor = createStorageViewModel::onSaveColor,
-            onDeleteColor = createStorageViewModel::deleteColor,
-            onToggleDeleteMode = createStorageViewModel::toggleColorDeleteMode
+            uiState = viewModel.uiState.collectAsState().value,
+            onNameChange = viewModel::onNameChange,
+            onNoteChange = viewModel::onNameChange,
+            onTypeChange = viewModel::onTypeChange,
+            onCurrencyChange = viewModel::onCurrencyChange
         )
     }
 }

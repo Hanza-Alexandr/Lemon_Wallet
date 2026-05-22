@@ -20,8 +20,9 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun <T> StorageExposedDropdown(
     label: String,
+    color: Color,
     options: List<T>,
-    selectedOption: T,
+    selectedOption: T?,
     onOptionSelected: (T) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -31,6 +32,7 @@ fun <T> StorageExposedDropdown(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
         modifier = modifier
+
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -44,8 +46,8 @@ fun <T> StorageExposedDropdown(
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Gray,
-                unfocusedLabelColor = Color.Gray,
+                unfocusedBorderColor = color,
+                unfocusedLabelColor = color,
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
             )

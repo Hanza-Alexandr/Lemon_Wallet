@@ -32,37 +32,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.Currency
-import com.example.domain.Storage
-import com.example.domain.SystemColor
-import com.example.domain.TypeStorage
-import com.example.storage_block.model.storageLOCALTESTDATA
+import com.example.domain.domainmodel.DomainStorage
+import com.example.storage_block.model.UiForStorageBlock
 import com.example.ui.them.*
 import com.example.ui.R
 import com.example.ui.toComposeColor
 
-@Preview
-@Composable
-fun StorageHorizontalCardPreview(){
-    StorageHorizontalCard(
-        storage = storageLOCALTESTDATA,
-        cardHeight = 60,
-        isSelected = true,
-        isSelectedMode = false,
-        onEditStorageClick = {},
-        onStorageClick = {},
-        onStorageLongClick = {}
-    )
-}
 @Composable
 fun StorageHorizontalCard(
-    storage: Storage,
+    storage: UiForStorageBlock,
     isSelected: Boolean,
     isSelectedMode: Boolean,
     cardHeight: Int,
     round: Int = 6,
     sizeCof: Float = 1f,
-    onEditStorageClick: (storageId: Long) -> Unit,
+    onEditStorageClick: (storageId: String) -> Unit,
     onStorageClick: () -> Unit,
     onStorageLongClick: ()-> Unit
 ) {
@@ -92,7 +76,7 @@ fun StorageHorizontalCard(
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
-                .background(storage.color?.toComposeColor() ?: MainLight)
+                .background(storage.storage.color?.toComposeColor() ?: MainLight)
                 .padding(8.dp)
         ){
             Icon(
@@ -113,7 +97,7 @@ fun StorageHorizontalCard(
                 color = SecondDark
             )
             Text(
-                text = storage.name,
+                text = storage.storage.name,
                 fontSize = (14 * sizeCof).sp,
                 color = SecondLight,
                 maxLines = 1,
@@ -123,7 +107,7 @@ fun StorageHorizontalCard(
         if (isSelected && !isSelectedMode) {
             IconButton(
                 onClick = {
-                    onEditStorageClick(storage.id)
+                    onEditStorageClick(storage.storage.id)
                     Log.d("StorageHorizontalCard", "onClick")
                 },
                 modifier = Modifier.size((40 * sizeCof).dp)

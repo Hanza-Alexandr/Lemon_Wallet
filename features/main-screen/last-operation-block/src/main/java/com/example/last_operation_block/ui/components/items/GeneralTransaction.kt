@@ -25,35 +25,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.domain.CreditTransaction
-import com.example.domain.DebitTransaction
-import com.example.domain.GeneralTransaction
-import com.example.domain.toUiState
+import com.example.domain.domainmodel.CreditOperation
+import com.example.domain.domainmodel.DebitOperation
+import com.example.domain.domainmodel.GeneralOperation
 import com.example.last_operation_block.ui.components.TestData
-import com.example.ui.them.MainDark
 import com.example.ui.them.SecondDark
-import com.example.ui.toColor
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun GeneralTransactionPreview() {
-    Column() {
-        GeneralTransaction(TestData.creditTransaction)
-        GeneralTransaction(TestData.debitTransaction)
-    }
 
 
-}
 
 @Composable
-fun GeneralTransaction(generalTransaction: GeneralTransaction) {
+fun GeneralTransaction(generalTransaction: GeneralOperation) {
     OperationBaseItem(
         iconBlock = {
             Box(
                 modifier = Modifier
                     .size(56.dp)
-                    .background(generalTransaction.category.color.toUiState().toColor(), CircleShape),
+                    .background(Color.White, CircleShape), //TODO
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -88,7 +75,7 @@ fun GeneralTransaction(generalTransaction: GeneralTransaction) {
             }
 
             // Подзаголовок 2: Заметка (если есть)
-            if (generalTransaction.note.isNotEmpty()) {
+            if (generalTransaction.comment != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Outlined.ChatBubbleOutline,
@@ -98,7 +85,7 @@ fun GeneralTransaction(generalTransaction: GeneralTransaction) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = generalTransaction.note,
+                        text = generalTransaction.comment!!,
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -111,13 +98,15 @@ fun GeneralTransaction(generalTransaction: GeneralTransaction) {
             // Сумма: -2399р
             Text(
                 text = when(generalTransaction){
-                    is DebitTransaction -> "+${generalTransaction.amount}"
-                    is CreditTransaction -> "-${generalTransaction.amount}"
+                    is DebitOperation -> "+${generalTransaction.amount}"
+                    is CreditOperation -> "-${generalTransaction.amount}"
+                    else -> ""
                 },
                 style = MaterialTheme.typography.titleLarge,
                 color = when(generalTransaction){
-                    is DebitTransaction -> Color(0xFF81C784)
-                    is CreditTransaction -> Color(0xFFE57373)
+                    is DebitOperation -> Color(0xFF81C784)
+                    is CreditOperation -> Color(0xFFE57373)
+                    else -> Color(0xFFE57373)
                 }
             )
         }

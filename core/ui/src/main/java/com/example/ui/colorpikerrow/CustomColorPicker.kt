@@ -41,25 +41,19 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.domain.ColorUIState
-import com.example.domain.NewColor
-import com.example.ui.toColor
+import com.example.domain.domainmodel.DomainColor
+import com.example.domain.domainmodel.NewDomainColor
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-@Preview
-@Composable
-fun AddColorDialogPreview() {
-    AddColorDialog(onDismiss = {}, onColorConfirmed = {}, availableColors = listOf())
-}
-
 @Composable
 fun AddColorDialog(
-    availableColors: List<ColorUIState>,
+    availableColors: List<DomainColor>,
     onDismiss: () -> Unit,
-    onColorConfirmed: (NewColor) -> Unit
+    onColorConfirmed: (NewDomainColor) -> Unit
 ) {
+    /**
     var hue by remember { mutableFloatStateOf(0f) }
     var alpha by remember { mutableFloatStateOf(1f) }
     val saturation = 0.8f
@@ -173,6 +167,7 @@ fun AddColorDialog(
             }
         }
     }
+    */
 }
 
 @Composable

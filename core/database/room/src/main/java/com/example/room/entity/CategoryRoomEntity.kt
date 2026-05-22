@@ -5,87 +5,76 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.domain.Category
-import com.example.domain.CategoryStructure
-import com.example.domain.ExistColor
-import com.example.domain.NeedCategory
-import com.example.domain.Owner
-
+import com.example.domain.domainmodel.DomainCategory
+import com.example.domain.domainmodel.DomainColor
+import com.example.domain.domainmodel.NewDomainCategory
+import com.example.domain.utils.SynStatus
+import java.util.UUID
 
 @Entity(
-    tableName = "category",
+    tableName = "categories",
     foreignKeys = [
         ForeignKey(
             entity = ColorRoomEntity::class,
             parentColumns = ["id"],
             childColumns = ["color_id"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.SET_NULL
         ),
         ForeignKey(
             entity = CategoryRoomEntity::class,
             parentColumns = ["id"],
-            childColumns = ["parent_category_id"],
+            childColumns = ["parent_id"],
             onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [
-        Index("color_id"),
-        Index("parent_category_id")
+        Index(value = ["color_id"]),
+        Index(value = ["parent_id"]),
+        Index(value = ["user_id"])
+
     ]
 )
 data class CategoryRoomEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val name: String,
-    @ColumnInfo(name = "color_id")
-    val colorId: Long,
-    @ColumnInfo(name = "path_icon")
-    val pathIcon: String,
-    val need: String,
-    @ColumnInfo(name = "is_hide")
-    val isHide: Boolean,
-    @ColumnInfo(name = "user_id")
-    val userId: Long?, // NULL for system categories
-    @ColumnInfo(name = "parent_category_id")
-    val parentCategoryId: String? // NULL for root categories
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
+    @ColumnInfo(name = "user_id") val userId: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "icon") val icon: String,
+
+    @ColumnInfo(name = "color_id") val colorId: String?,
+    @ColumnInfo(name = "parent_id") val parentId: String?, // Self-reference
+    //Service Info
+    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean = false,
+    @ColumnInfo(name = "sync_status") val syncStatus: String = SynStatus.LOCAL_ONLY.toString()
 )
 
-data class CategoryWithColor(
-    @ColumnInfo(name = "id")
-    val id: Long,
-    @ColumnInfo(name = "name")
-    val name: String,
-    @ColumnInfo(name = "color_id")
-    val colorId: Long,
-    @ColumnInfo(name = "path_icon")
-    val pathIcon: String,
-    @ColumnInfo(name = "need")
-    val need: String,
-    @ColumnInfo(name = "is_hide")
-    val isHide: Boolean,
-    @ColumnInfo(name = "user_id")
-    val userId: Long?,
-    @ColumnInfo(name = "parent_category_id")
-    val parentCategoryId: String?,
-
-    // Fields from ColorRoomEntity
-    @ColumnInfo(name = "color_hex")
-    val colorHex: String?,
-    @ColumnInfo(name = "color_user_id")
-    val colorUserId: Long?
-) {
-    fun toDomain(color: ExistColor): Category {
-        val owner = if (userId == null) Owner.System else Owner.User(userId)
-        val structure = if (parentCategoryId == null) CategoryStructure.Root else CategoryStructure.Child(parentCategoryId)
-        return Category(
-            id = id,
-            name = name,
-            color = color,
-            icon = pathIcon,
-            need = NeedCategory.valueOf(need),
-            isHidden = isHide,
-            owner = owner,
-            structure = structure
-        )
-    }
+fun CategoryRoomEntity.toDomain(color: DomainColor?): DomainCategory{
+    return DomainCategory(
+        id= id,
+        userId = userId,
+        name= name,
+        color = color,
+        icon = icon,
+        parenId = parentId
+    )
 }
+fun NewDomainCategory.toRoomEntity(): CategoryRoomEntity{
+    return CategoryRoomEntity(
+        userId = userId,
+        name = name,
+        icon = icon,
+        colorId = color?.id,
+        parentId = parenId
+    )
+}
+fun DomainCategory.toRoomEntity(): CategoryRoomEntity {
+    return CategoryRoomEntity(
+        id = id,
+        userId = userId,
+        name = name,
+        icon = icon,
+        colorId = color?.id,
+        parentId = parenId
+    )
+}
+

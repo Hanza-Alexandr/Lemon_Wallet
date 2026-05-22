@@ -16,7 +16,7 @@ class StartScreenService @Inject constructor(private val dataStorePreferences: I
         dataStorePreferences.markFirstAppOpeningCompleted()
     }
 
-    suspend fun logIn(id: Int){
+    suspend fun logIn(id: String){
         dataStorePreferences.logIn(id)
 
     }

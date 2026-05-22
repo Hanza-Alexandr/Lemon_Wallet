@@ -14,42 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.domain.ColorUIState
 import com.example.domain.EnumColor
-import com.example.domain.SystemColor
-import com.example.domain.UserColor
-import com.example.ui.toColor
-
-
-@Preview
-@Composable
-fun ColorPickerRowPreview() {
-    val availableColors = listOf(
-        ColorUIState.LocalSystemColor(EnumColor.BLUE) ,
-        ColorUIState.DataBaseColor(SystemColor(1, "#FF0000"))
-
-    )
-    ColorPickerRow(
-        availableColors = availableColors,
-        selectedColor = ColorUIState.LocalSystemColor(EnumColor.BLUE) ,
-        isDeleteMode = true,
-        onColorSelected = {},
-        onAddNewColorClick = {},
-        onDeleteColor = {},
-        onToggleDeleteMode = {}
-    )
-}
+import com.example.domain.domainmodel.DomainColor
 
 @Composable
 fun ColorPickerRow(
-    availableColors: List<ColorUIState>,
-    selectedColor: ColorUIState?,
+    availableColors: List<DomainColor>,
+    selectedColor: DomainColor?,
     isDeleteMode: Boolean,
-    onColorSelected: (ColorUIState?) -> Unit,
+    onColorSelected: (DomainColor?) -> Unit,
     onAddNewColorClick: () -> Unit,
-    onDeleteColor: (ColorUIState) -> Unit,
+    onDeleteColor: (DomainColor) -> Unit,
     onToggleDeleteMode: (Boolean) -> Unit
 ) {
+    /*
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -104,4 +82,6 @@ fun ColorPickerRow(
             }
         }
     }
+
+     */
 }

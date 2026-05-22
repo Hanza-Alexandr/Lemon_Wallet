@@ -10,7 +10,7 @@ sealed class NavigationRoute {
     @Serializable
     data object MainScreen: NavigationRoute()
     @Serializable
-    data class EditStorage(val storageId: Long): NavigationRoute()
+    data class EditStorage(val storageId: String): NavigationRoute()
     @Serializable
     object CreateStorage: NavigationRoute()
 }

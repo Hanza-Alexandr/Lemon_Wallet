@@ -6,13 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.domain.Currency
-import com.example.domain.EnumColor
-import com.example.domain.Storage
-import com.example.domain.SystemColor
-import com.example.domain.TypeStorage
 import com.example.storage_block.StorageBlockViewModel
-import com.example.storage_block.model.storagesLOCALTESTDATA
+import com.example.storage_block.model.UiForStorageBlock
 import com.example.storage_block.ui.components.StorageList
 import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
 import com.example.storage_block.ui.components.blocks.common.TopBarStorageBlock
@@ -21,12 +16,9 @@ import com.example.ui.BottomBarStorageBlock
 @Preview
 @Composable
 fun StorageBlock(storageBlockViewModel: StorageBlockViewModel = hiltViewModel()){
-    val storages by storageBlockViewModel.storageList.collectAsState()
-    val selectedList by storageBlockViewModel.storageBlockSelectState.collectAsState()
-
+    val storages by storageBlockViewModel.storageUIList.collectAsState()
     StorageBlockContent(
         storages = storages?:emptyList(),
-        selectedList = selectedList,
         onStorageClick = storageBlockViewModel::onStorageClick,
         onStorageLongClick = storageBlockViewModel::onStorageLongClick,
         onEditStorageClick = storageBlockViewModel::onEditStorageClick,
@@ -39,11 +31,10 @@ fun StorageBlock(storageBlockViewModel: StorageBlockViewModel = hiltViewModel())
  */
 @Composable
 fun StorageBlockContent(
-    storages: List<Storage>,
-    selectedList: Set<Int>,
-    onEditStorageClick: (storageId: Long) -> Unit,
-    onStorageClick: (index: Int) -> Unit,
-    onStorageLongClick: (index: Int) -> Unit,
+    storages: List<UiForStorageBlock>,
+    onEditStorageClick: (storageId: String) -> Unit,
+    onStorageClick: (id: String) -> Unit,
+    onStorageLongClick: (id: String) -> Unit,
     onAddStorageClick: () -> Unit
 ) {
 
@@ -57,14 +48,13 @@ fun StorageBlockContent(
         bottomBar = ::BottomBarStorageBlock
     ) {
         StorageList(
-            selectedList = selectedList,
             pagerState = pagerState,
             storages = storages,
             itemsPerPage = itemsPerPage,
             onStorageClick = onStorageClick,
             onEditStorageClick = onEditStorageClick,
             onAddStorageClick = onAddStorageClick,
-            onStorageLongClick = onStorageLongClick
+            onStorageLongClick = onStorageLongClick,
         )
     }
 }

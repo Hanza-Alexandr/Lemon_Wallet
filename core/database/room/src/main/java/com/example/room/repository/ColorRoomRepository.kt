@@ -1,72 +1,51 @@
 package com.example.room.repository
 
-import com.example.domain.ExistColor
-import com.example.domain.IColorRepository
-import com.example.domain.NewColor
-import com.example.domain.UserColor
+import com.example.domain.domainmodel.DomainColor
+import com.example.domain.domainmodel.NewDomainColor
+import com.example.domain.reposytory.IColorRepository
 import com.example.domain.state.AuthorizationState
 import com.example.domain.usecase.AccountService
+import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.ColorDao
-import com.example.room.entity.toRoomEntityColor
+import com.example.room.entity.toDomain
+import com.example.room.entity.toRoomEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ColorRoomRepository @Inject constructor(private val colorDao: ColorDao, private val accountService: AccountService) :
-    IColorRepository {
-
-
-    override fun getAllFlow(): Flow<List<ExistColor>> {
-        return colorDao.getAllColorsFlow().map { list ->
+class ColorRoomRepository @Inject constructor(private val colorDao: ColorDao) :IColorRepository {
+    override fun getAllColorsFlow(userId: String): Flow<List<DomainColor>> {
+        return colorDao.getAllColorsFlow(userId).map { list ->
             list.map { it.toDomain() }
         }
     }
 
-    override suspend fun getById(id: Long): ExistColor? {
-        return colorDao.getColorById(id)?.toDomain()
+    override suspend fun getColorById(colorId: String): DomainColor? {
+        return colorDao.getColorById(colorId)?.toDomain()
     }
 
-    override suspend fun update(color: UserColor): UserColor?{
-        val userId = accountService.stateAuth.first().let {
-            when(it){
-                is AuthorizationState.Authorization -> it.id.toLong()
-                else -> -1L
-            }
-        }
-        val entity = color.toRoomEntityColor(userId)
-        colorDao.insertColor(entity)
-        try {
-            return getById(color.id) as UserColor?
-        }
-        catch (e: IllegalArgumentException)
-        {
-            //На случай если из бд вдруг придет цвет с некорректным userId
-            throw IllegalArgumentException("❌Ошибка. Пришел некорректны ответ от БД: ${e.message}")
-        }
+    override suspend fun saveColor(color: NewDomainColor) {
+        colorDao.insertColor(color.toRoomEntity())
     }
 
-    override suspend fun save(color: NewColor): ExistColor?{
-        val userId = accountService.stateAuth.first().let {
-            when(it){
-                is AuthorizationState.Authorization -> it.id.toLong()
-                else -> -1L
-            }
-        }
-        val entity = color.toRoomEntityColor(userId)
-        val newId = colorDao.insertColor(entity)
-        try {
-            return getById(newId) as UserColor?
-        }
-        catch (e: IllegalArgumentException){
-            //На случай если из бд вдруг придет цвет с некорректным userId
-            throw IllegalArgumentException("❌Ошибка. Пришел некорректны ответ от БД: ${e.message}")
+    override suspend fun updateColor(color: DomainColor) {
+        colorDao.updateColorHex(
+            colorId = color.id,
+            newHex = color.hex
+        )
+    }
+
+    override suspend fun deleteColor(colorId: String): Boolean {
+        try{
+            colorDao.softDeleteColor(colorId)
+            return true
+        }catch (e: Exception){
+            return false
         }
     }
 
-    override suspend fun delete(color: UserColor): UserColor? {
-        val entity = color.toRoomEntityColor(color.userId)
-        colorDao.deleteColor(entity)
-        return color
+    override suspend fun migrateGuestColors(newUserId: String) {
+        TODO("Not yet implemented")
     }
 }

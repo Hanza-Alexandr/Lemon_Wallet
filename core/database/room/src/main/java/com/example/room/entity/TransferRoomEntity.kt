@@ -1,0 +1,59 @@
+package com.example.room.entity
+import androidx.room.Entity
+import androidx.room.ColumnInfo
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.example.domain.domainmodel.DomainStorage
+import com.example.domain.domainmodel.TransferOperation
+import com.example.domain.utils.SynStatus
+import com.example.domain.utils.toDomainDateTime
+import java.util.UUID
+
+@Entity(
+    tableName = "transfers",
+    foreignKeys = [
+        ForeignKey(
+            entity = StorageRoomEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["from_storage_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = StorageRoomEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["to_storage_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [
+        Index(value = ["from_storage_id"]),
+        Index(value = ["to_storage_id"]),
+        Index(value = ["userId", "dateTime"])
+    ]
+)
+data class TransferRoomEntity(
+    @PrimaryKey
+    val id: String = UUID.randomUUID().toString(),
+    @ColumnInfo(name = "user_id") val userId: String,
+    @ColumnInfo(name = "from_storage_id") val fromStorageId: String,
+    @ColumnInfo(name = "to_storage_id") val toStorageId: String,
+    @ColumnInfo(name = "amount") val amount: Long, // Хранение в копейках (10000 = 100.00)
+    @ColumnInfo(name = "date_time") val dateTime: Long,
+    //Service Info
+    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean = false,
+    @ColumnInfo(name = "sync_status") val syncStatus: String = SynStatus.LOCAL_ONLY.toString()
+)
+
+fun TransferRoomEntity.toDomain(fromStorage: DomainStorage, toStorage: DomainStorage): TransferOperation {
+    return TransferOperation(
+        id = id,
+        userId = userId,
+        fromStorage = fromStorage,
+        toStorage = toStorage,
+        amount = amount,
+        date = dateTime.toDomainDateTime().date,
+        time = dateTime.toDomainDateTime().time
+    )
+}

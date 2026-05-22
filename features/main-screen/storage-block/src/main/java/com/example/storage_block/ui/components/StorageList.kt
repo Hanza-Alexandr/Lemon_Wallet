@@ -14,40 +14,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.domain.Currency
-import com.example.domain.Storage
-import com.example.domain.SystemColor
-import com.example.domain.TypeStorage
-import com.example.storage_block.model.storagesLOCALTESTDATA
+import com.example.storage_block.model.UiForStorageBlock
 import com.example.storage_block.ui.components.blocks.components.storages.components.AccountHorizontalAddCard
 import com.example.storage_block.ui.components.blocks.components.storages.components.StorageHorizontalCard
 
-
-@Preview
-@Composable
-fun StorageListPreview(){
-    StorageList(
-        selectedList = setOf(0,1),
-        pagerState = rememberPagerState(pageCount = { 2 }),
-        storages = storagesLOCALTESTDATA,
-        itemsPerPage = 3,
-        onEditStorageClick = {  },
-        onStorageClick = {  },
-        onAddStorageClick = {  },
-        onStorageLongClick = { }
-    )
-}
-
 @Composable
 fun StorageList(
-    selectedList: Set<Int>,
     pagerState: PagerState,
-    storages: List<Storage>,
+    storages: List<UiForStorageBlock>,
     itemsPerPage: Int,
     elementHeight: Int = 65, //Высота плиток, для того что бы плашка карты, плашка карты добавления и пустые элементы были одной высоты
-    onEditStorageClick: (storageId: Long) -> Unit,
-    onStorageClick: (index: Int) -> Unit,
-    onStorageLongClick: (index: Int) -> Unit,
+    onEditStorageClick: (storageId: String) -> Unit,
+    onStorageClick: (id: String) -> Unit,
+    onStorageLongClick: (id: String) -> Unit,
     onAddStorageClick: () -> Unit,
     ){
 
@@ -66,18 +45,17 @@ fun StorageList(
                 Box {
                     when {
                         itemIndex < storages.size -> {
-                            val isSelected = selectedList.contains(itemIndex)
                             StorageHorizontalCard(
-                                isSelected = isSelected,
-                                isSelectedMode = selectedList.size > 1,
+                                isSelected = storages[itemIndex].isSelected,
+                                isSelectedMode = storages.count { it.isSelected } > 1,
                                 cardHeight = elementHeight,
                                 storage = storages[itemIndex],
                                 onEditStorageClick = onEditStorageClick,
                                 onStorageClick = {
-                                    onStorageClick(itemIndex)
+                                    onStorageClick(storages[itemIndex].storage.id)
                                 },
                                 onStorageLongClick = {
-                                    onStorageLongClick(itemIndex)
+                                    onStorageLongClick(storages[itemIndex].storage.id)
                                 }
                             )
                         }

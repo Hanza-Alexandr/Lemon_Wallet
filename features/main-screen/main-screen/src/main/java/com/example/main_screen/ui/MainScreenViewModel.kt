@@ -1,18 +1,11 @@
 package com.example.main_screen.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.domain.Storage
-import com.example.domain.usecase.StorageService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(private val storageService: StorageService): ViewModel() {
+class MainScreenViewModel @Inject constructor(): ViewModel() {
 
     /*
 

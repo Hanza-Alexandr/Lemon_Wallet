@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.domain.settings.ISettingsRepository
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "cache")
@@ -26,27 +28,29 @@ class PreferencesDataStore @Inject constructor(
 
     private object Keys {
         val IS_FIRST_OPENING_APP = booleanPreferencesKey("is_first_opening_app")
-        val USER_ID = intPreferencesKey("user_id")
-        val INDEXES_SELECTED_STORAGE = stringSetPreferencesKey("indexes_selected_storage")
+        val USER_ID = stringPreferencesKey("user_id")
+        val IS_GUEST = booleanPreferencesKey("is_guest")
+        val ID_SELECTED_STORAGE = stringSetPreferencesKey("id_selected_storage")
     }
 
-    override val indexesSelectedStorageFlow: Flow<Set<Int>> = context.dataStore.data
-        .catch { exception ->
-            if (exception is IOException) emit(emptyPreferences())
-            else throw exception
-        }
-        .map { preferences ->
-            preferences[Keys.INDEXES_SELECTED_STORAGE]?.map { it.toInt() }?.toSet() ?: emptySet()
-        }
-        .distinctUntilChanged()
+    override val idSelectedStorageFlow: Flow<Set<String>> =
+        context.dataStore.data
+            .catch { exception ->
+                if (exception is IOException) emit(emptyPreferences())
+                else throw exception
+            }
+            .map { preferences ->
+                preferences[Keys.ID_SELECTED_STORAGE] ?: emptySet()
+            }
 
-    override suspend fun saveSelectedIds(indexes: Set<Int>) {
+
+    override suspend fun saveSelectedIds(id: Set<String>) {
         context.dataStore.edit { preferences ->
-            preferences[Keys.INDEXES_SELECTED_STORAGE] = indexes.map { it.toString() }.toSet()
+            preferences[Keys.ID_SELECTED_STORAGE] = id.map { it }.toSet()
         }
     }
 
-    override val userIdFlow: Flow<Int?> = context.dataStore.data
+    override val userIdFlow: Flow<String?> = context.dataStore.data
         .catch { exception ->
             if (exception is IOException) emit(emptyPreferences())
             else throw exception
@@ -61,7 +65,7 @@ class PreferencesDataStore @Inject constructor(
         }
     }
 
-    override suspend fun logIn(id: Int) {
+    override suspend fun logIn(id: String) {
         context.dataStore.edit { preferences ->
             preferences[Keys.USER_ID] = id
         }
@@ -69,7 +73,7 @@ class PreferencesDataStore @Inject constructor(
 
     override suspend fun loginAsGuest() {
         context.dataStore.edit { preferences ->
-            preferences[Keys.USER_ID] = -1
+            preferences[Keys.USER_ID] = UUID.randomUUID().toString()
         }
     }
 

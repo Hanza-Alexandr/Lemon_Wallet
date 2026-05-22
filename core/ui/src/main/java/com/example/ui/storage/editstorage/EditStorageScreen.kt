@@ -1,5 +1,8 @@
 package com.example.ui.storage.editstorage
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -7,46 +10,34 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.domain.Storage
 import com.example.ui.storage.GlobalDetailStorageContent
+import com.example.ui.storage.createstorage.TopBarCreateStorage
+import com.example.ui.them.MainDark
 
 
 @Composable
 fun EditStorageScreen(
     viewModel: EditStorageViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MainDark)
+    ) {
 
-    LaunchedEffect(uiState.isSaved) {
-        if (uiState.isSaved) {
-            viewModel.onBack()
-        }
-    }
+        TopBarEditStorage(
+            onBack = viewModel::onBack,
+            onSave =  viewModel::onSaveChangesStorage ,
+            onDelete = viewModel::onDelete
+        )
 
-    Scaffold(
-        topBar = {
-            TopBarEditStorage(
-                onBack = viewModel::onBack,
-                onSave =  viewModel::saveChanges ,
-                onDelete = viewModel::deleteStorage
-            )
-        }
-    ) { padding ->
         GlobalDetailStorageContent(
-            modifier = Modifier.padding(padding),
-            uiState = uiState,
+            uiState = viewModel.uiState.collectAsState().value,
             onNameChange = viewModel::onNameChange,
-            onNoteChange = viewModel::onNoteChange,
+            onNoteChange = viewModel::onNameChange,
             onTypeChange = viewModel::onTypeChange,
-            onCurrencyChange = viewModel::onCurrencyChange,
-            onColorChange = viewModel::onColorChange,
-            onStatisticsChange = viewModel::onStatisticsChange,
-            onArchiveChange = viewModel::onArchiveChange,
-            onSaveColor = viewModel::onSaveColor,
-            onDeleteColor = viewModel::deleteColor,
-            onToggleDeleteMode = viewModel::toggleColorDeleteMode
+            onCurrencyChange = viewModel::onCurrencyChange
         )
     }
 }

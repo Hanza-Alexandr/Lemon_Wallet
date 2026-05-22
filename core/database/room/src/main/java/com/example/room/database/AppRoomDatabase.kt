@@ -10,7 +10,7 @@ import com.example.room.entity.ColorRoomEntity
 import com.example.room.entity.StorageRoomEntity
 
 @Database(
-    version = 6, // Incremented version since we added a new table
+    version = 9, // Incremented version since we added a new table
     entities = [
         StorageRoomEntity::class,
         ColorRoomEntity::class,
@@ -18,7 +18,7 @@ import com.example.room.entity.StorageRoomEntity
     ],
     exportSchema = false
 )
-abstract class AppDatabase : RoomDatabase() {
+abstract class AppRoomDatabase : RoomDatabase() {
     abstract fun getStorageDao(): StorageDao
     abstract fun getColorDao(): ColorDao
     abstract fun getCategoryDao(): CategoryDao

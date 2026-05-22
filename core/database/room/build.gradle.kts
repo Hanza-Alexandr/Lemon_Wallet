@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
+
     implementation(project(":core:domain"))
     //Room
     implementation(libs.hilt.android)
