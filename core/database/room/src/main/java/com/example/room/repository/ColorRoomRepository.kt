@@ -37,7 +37,7 @@ class ColorRoomRepository @Inject constructor(
     }
 
     override suspend fun saveColor(color: NewDomainColor) {
-        colorDao.insertColor(color.toRoomEntity())
+        colorDao.insertColor(color.toRoomEntity(getUserId.getId()))
     }
 
     override suspend fun updateColor(color: DomainColor) {

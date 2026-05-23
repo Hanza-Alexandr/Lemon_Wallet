@@ -37,7 +37,8 @@ fun EditStorageScreen(
             onNameChange = viewModel::onNameChange,
             onNoteChange = viewModel::onNoteChange,
             onTypeChange = viewModel::onTypeChange,
-            onCurrencyChange = viewModel::onCurrencyChange
+            onCurrencyChange = viewModel::onCurrencyChange,
+            onColorChange = viewModel::onColorChange
         )
     }
 }

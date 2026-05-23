@@ -53,7 +53,6 @@ fun AddColorDialog(
     onDismiss: () -> Unit,
     onColorConfirmed: (NewDomainColor) -> Unit
 ) {
-    /**
     var hue by remember { mutableFloatStateOf(0f) }
     var alpha by remember { mutableFloatStateOf(1f) }
     val saturation = 0.8f
@@ -158,7 +157,10 @@ fun AddColorDialog(
                     Spacer(Modifier.width(8.dp))
                     Button(
                         enabled = !isColorAlreadyExists,
-                        onClick = { onColorConfirmed(NewColor(hexInput)) },
+                        onClick = {
+                            onColorConfirmed(NewDomainColor(hexInput))
+                            onDismiss()
+                                  },
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Добавить")
@@ -167,7 +169,6 @@ fun AddColorDialog(
             }
         }
     }
-    */
 }
 
 @Composable

@@ -10,6 +10,5 @@ data class DomainColor(
 )
 
 data class NewDomainColor(
-    val userId: String,
     val hex: String,
 )

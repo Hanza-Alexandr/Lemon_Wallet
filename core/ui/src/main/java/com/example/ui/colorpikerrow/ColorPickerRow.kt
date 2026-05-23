@@ -9,25 +9,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.domain.EnumColor
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.domain.domainmodel.DomainColor
 
 @Composable
 fun ColorPickerRow(
-    availableColors: List<DomainColor>,
+    viewModel: ColorPickerRowViewModel = hiltViewModel(),
     selectedColor: DomainColor?,
-    isDeleteMode: Boolean,
+    isDeleteMode: Boolean = false,
     onColorSelected: (DomainColor?) -> Unit,
-    onAddNewColorClick: () -> Unit,
-    onDeleteColor: (DomainColor) -> Unit,
-    onToggleDeleteMode: (Boolean) -> Unit
+    onAddNewColorClick: () -> Unit = viewModel::onAddNewColorClick,
+    onDeleteColor: (DomainColor) -> Unit = viewModel::onDeleteColor,
+    onToggleDeleteMode: (Boolean) -> Unit = viewModel::onToggleDeleteMode
 ) {
-    /*
+    val availableColors: List<DomainColor> by viewModel.availableColors.collectAsStateWithLifecycle()
+    val showAddDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,22 +58,17 @@ fun ColorPickerRow(
             }
 
             // 2. Цвета из БД
-            items(availableColors) { colorUiState ->
-                val canBeDeleted = when(colorUiState){
-                    is ColorUIState.LocalSystemColor -> false
-                    is ColorUIState.DataBaseColor -> colorUiState.color is UserColor
-                }
+            items(availableColors) { domainColor ->
 
                 ColorCircle(
-                    color = colorUiState.toColor(),
-                    isSelected = selectedColor?.toColor() == colorUiState.toColor(),
+                    color = domainColor.toColor(),
+                    isSelected = selectedColor?.toColor() == domainColor.toColor(),
                     isDeleteMode = isDeleteMode,
-                    canBeDeleted = canBeDeleted,
-                    onColorSelectClick = { onColorSelected(colorUiState) },
+                    onColorSelectClick = { onColorSelected(domainColor) },
                     onLongClick = {
-                        if (canBeDeleted) onToggleDeleteMode(true)
+                         onToggleDeleteMode(true)
                     },
-                    onDeleteClick = { onDeleteColor(colorUiState) }
+                    onDeleteClick = { onDeleteColor(domainColor) }
                 )
             }
             // 3. Последний элемент - Создание цвета
@@ -81,7 +79,27 @@ fun ColorPickerRow(
                 }
             }
         }
+        if (showAddDialog) {
+            AddColorDialog(
+                availableColors = availableColors,
+                onDismiss = viewModel::hideAddDialog,
+                onColorConfirmed = viewModel::createNewColor
+            )
+        }
     }
+}
 
-     */
+fun DomainColor.toColor(): Color {
+    return try {
+        // Убираем символ # если он есть, и парсим Long
+        val colorString = hex.removePrefix("#")
+        val colorLong = when (colorString.length) {
+            6 -> "FF$colorString".toLong(16) // Добавляем альфа-канал, если его нет
+            8 -> colorString.toLong(16)      // Используем как есть (AARRGGBB)
+            else -> 0xFF000000               // Черный по умолчанию при ошибке длины
+        }
+        Color(colorLong)
+    } catch (e: Exception) {
+        Color.Gray // Фолбэк цвет в случае ошибки парсинга
+    }
 }

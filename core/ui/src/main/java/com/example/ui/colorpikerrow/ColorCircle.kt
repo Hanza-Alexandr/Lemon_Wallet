@@ -38,7 +38,7 @@ fun ColorCircle(
     color: Color?,
     isSelected: Boolean,
     isDeleteMode: Boolean = false,
-    canBeDeleted: Boolean = false,
+    canBeDeleted: Boolean = true,
     onColorSelectClick: () -> Unit,
     onLongClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {}

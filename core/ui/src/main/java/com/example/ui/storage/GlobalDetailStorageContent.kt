@@ -41,6 +41,7 @@ fun GlobalDetailStorageContent(
     modifier: Modifier = Modifier,
     onNameChange: (String) -> Unit,
     onNoteChange: (String) -> Unit,
+    onColorChange: (DomainColor?) -> Unit,
     onTypeChange: (TypeStorage) -> Unit,
     onCurrencyChange: (Currency) -> Unit,
 ) {
@@ -105,6 +106,10 @@ fun GlobalDetailStorageContent(
                     color = if (uiState.currency == null) Color.Red else Color.Gray,
                     onOptionSelected = onCurrencyChange,
                     modifier = Modifier.fillMaxWidth()
+                )
+                ColorPickerRow(
+                    selectedColor = uiState.color,
+                    onColorSelected = onColorChange
                 )
 
                 if (uiState.error != null) {

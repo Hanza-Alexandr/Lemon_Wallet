@@ -27,7 +27,7 @@ fun ColorRoomEntity.toDomain(): DomainColor {
     )
 }
 
-fun NewDomainColor.toRoomEntity(): ColorRoomEntity {
+fun NewDomainColor.toRoomEntity(userId: String): ColorRoomEntity {
     return ColorRoomEntity(
         userId = userId,
         hexCode = hex,

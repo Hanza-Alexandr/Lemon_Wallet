@@ -27,7 +27,7 @@ class RoomDataBaseCallBack @Inject constructor(
         scope.launch(Dispatchers.IO) {
             try {
                 // Получаем userId (например, "GUEST") для инициализации
-                val userId = getUserIdUseCase.invoke()
+                val userId = getUserIdUseCase.getId()
                 if (userId.contains("GUEST")) {
                     val colorDao = colorDaoProvider.get()
                     val categoryDao = categoryDaoProvider.get()
