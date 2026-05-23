@@ -48,7 +48,7 @@ class EditStorageViewModel @Inject constructor(
                     typeStorage = storage.typeStorage,
                     currency = storage.currency,
                     color = storage.color,
-                    availableColors = colorRepo.getAllColorsFlow(settings.userIdFlow.first()!!).first())
+                    availableColors = colorRepo.getAllColorsFlow().first())
             }
         }
     }

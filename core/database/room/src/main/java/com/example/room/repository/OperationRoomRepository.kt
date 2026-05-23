@@ -6,18 +6,21 @@ import com.example.domain.domainmodel.NewGeneralOperation
 import com.example.domain.domainmodel.NewTransferOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
+import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.OperationDao
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class OperationRoomRepository @Inject constructor(private val operationDao: OperationDao) :
+class OperationRoomRepository @Inject constructor(
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val operationDao: OperationDao
+) :
     IOperationRepository {
-    override fun getAllTransactionsFlow(userId: String): Flow<List<DomainOperation>> {
+    override suspend fun getAllTransactionsFlow(): Flow<List<DomainOperation>> {
         TODO("Not yet implemented")
     }
 
-    override fun getTransactionsByStorageFlow(
-        userId: String,
+    override suspend fun getTransactionsByStorageFlow(
         storageId: String
     ): Flow<List<DomainOperation>> {
         TODO("Not yet implemented")

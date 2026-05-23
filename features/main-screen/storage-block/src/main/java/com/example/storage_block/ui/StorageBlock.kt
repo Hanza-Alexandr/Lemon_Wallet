@@ -13,7 +13,6 @@ import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
 import com.example.storage_block.ui.components.blocks.common.TopBarStorageBlock
 import com.example.ui.BottomBarStorageBlock
 
-@Preview
 @Composable
 fun StorageBlock(storageBlockViewModel: StorageBlockViewModel = hiltViewModel()){
     val storages by storageBlockViewModel.storageUIList.collectAsState()

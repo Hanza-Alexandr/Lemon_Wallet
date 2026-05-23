@@ -20,7 +20,7 @@ class GetFlowUiForStorageBlockUseCase @Inject constructor(
 
             // 2. Комбинируем поток всех стораджей и список выбранных ID
             combine(
-                repo.getAllStoragesFlow(userId),
+                repo.getAllStoragesFlow(),
                 settings.idSelectedStorageFlow
             ) { storages, selectedIds ->
                 // 3. Маппим список стораджей в UI-модели

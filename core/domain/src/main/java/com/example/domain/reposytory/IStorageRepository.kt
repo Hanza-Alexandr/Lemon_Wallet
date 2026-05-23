@@ -9,7 +9,7 @@ interface IStorageRepository {
      * Получить поток всех активных счетов пользователя.
      * Автоматически обновляется при любых изменениях в БД.
      */
-    fun getAllStoragesFlow(userId: String): Flow<List<DomainStorage>>
+    suspend fun getAllStoragesFlow(): Flow<List<DomainStorage>>
 
     /**
      * Получить конкретный счет по ID.

@@ -33,7 +33,7 @@ class CreateStorageViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
     init {
          viewModelScope.launch {
-             _uiState.update { it.copy(availableColors = colorRepo.getAllColorsFlow(settings.userIdFlow.first()!!).first()) }
+             _uiState.update { it.copy(availableColors = colorRepo.getAllColorsFlow().first()) }
          }
     }
 

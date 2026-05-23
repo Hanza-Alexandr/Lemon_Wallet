@@ -5,7 +5,7 @@ import com.example.domain.domainmodel.NewDomainColor
 import kotlinx.coroutines.flow.Flow
 
 interface IColorRepository {
-    fun getAllColorsFlow(userId: String): Flow<List<DomainColor>>
+    suspend fun getAllColorsFlow(): Flow<List<DomainColor>>
 
     /**
      * Получить конкретный цвет по его уникальному идентификатору (UUID).

@@ -14,9 +14,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ColorRoomRepository @Inject constructor(private val colorDao: ColorDao) :IColorRepository {
-    override fun getAllColorsFlow(userId: String): Flow<List<DomainColor>> {
-        return colorDao.getAllColorsFlow(userId).map { list ->
+class ColorRoomRepository @Inject constructor(
+    private val colorDao: ColorDao,
+    private val getUserId: GetUserIdUseCase
+) :IColorRepository {
+    override suspend fun getAllColorsFlow(): Flow<List<DomainColor>> {
+        return colorDao.getAllColorsFlow(getUserId.invoke()).map { list ->
             list.map { it.toDomain() }
         }
     }

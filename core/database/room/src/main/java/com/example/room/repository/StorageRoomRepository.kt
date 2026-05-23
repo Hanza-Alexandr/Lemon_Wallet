@@ -3,6 +3,7 @@ package com.example.room.repository
 import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.NewDomainStorage
 import com.example.domain.reposytory.IStorageRepository
+import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.StorageDao
 import com.example.room.entity.toDomain
 import com.example.room.entity.toRoomEntity
@@ -12,10 +13,13 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class StorageRoomRepository @Inject constructor(private val storageDao: StorageDao) :
+class StorageRoomRepository @Inject constructor(
+    private val storageDao: StorageDao,
+    private val getUserId: GetUserIdUseCase
+) :
     IStorageRepository {
-    override fun getAllStoragesFlow(userId: String): Flow<List<DomainStorage>> {
-        return storageDao.getAllStoragesWithColorFlow(userId).map { list ->
+    override suspend fun getAllStoragesFlow(): Flow<List<DomainStorage>> {
+        return storageDao.getAllStoragesWithColorFlow(getUserId.invoke()).map { list ->
             list.map { it.toDomain()}
         }
     }

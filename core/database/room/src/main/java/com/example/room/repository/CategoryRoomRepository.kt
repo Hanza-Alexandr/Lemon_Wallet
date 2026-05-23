@@ -3,6 +3,7 @@ package com.example.room.repository
 import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.reposytory.ICategoryRepository
 import com.example.domain.domainmodel.NewDomainCategory
+import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.CategoryDao
 import com.example.room.entity.toRoomEntity
 import com.example.room.model.toDomain
@@ -11,10 +12,11 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CategoryRoomRepository @Inject constructor(
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    private val getUserId: GetUserIdUseCase
 ) : ICategoryRepository {
-    override fun getAllCategoriesFlow(userId: String): Flow<List<DomainCategory>> {
-        return categoryDao.getAllWithColorFlow(userId).map { list ->
+    override suspend fun getAllCategoriesFlow(): Flow<List<DomainCategory>> {
+        return categoryDao.getAllWithColorFlow(getUserId.invoke()).map { list ->
             list.map { it.toDomain() }
         }
     }
@@ -23,8 +25,8 @@ class CategoryRoomRepository @Inject constructor(
         return categoryDao.getWithColorById(id)?.toDomain()
     }
 
-    override fun getRootCategoriesFlow(userId: String): Flow<List<DomainCategory>> {
-        return categoryDao.getRootWithColorFlow(userId).map { list ->
+    override suspend fun getRootCategoriesFlow(): Flow<List<DomainCategory>> {
+        return categoryDao.getRootWithColorFlow(getUserId.invoke()).map { list ->
             list.map { it.toDomain() }
         }
     }
