@@ -29,7 +29,6 @@ class PreferencesDataStore @Inject constructor(
     private object Keys {
         val IS_FIRST_OPENING_APP = booleanPreferencesKey("is_first_opening_app")
         val USER_ID = stringPreferencesKey("user_id")
-        val IS_GUEST = booleanPreferencesKey("is_guest")
         val ID_SELECTED_STORAGE = stringSetPreferencesKey("id_selected_storage")
     }
 
@@ -50,13 +49,13 @@ class PreferencesDataStore @Inject constructor(
         }
     }
 
-    override val userIdFlow: Flow<String?> = context.dataStore.data
+    override val userIdFlow: Flow<String> = context.dataStore.data
         .catch { exception ->
             if (exception is IOException) emit(emptyPreferences())
             else throw exception
         }
         .map { preferences ->
-            preferences[Keys.USER_ID]
+            preferences[Keys.USER_ID] ?: "GUEST"
         }
 
     override suspend fun logOut() {
