@@ -29,7 +29,7 @@ import java.util.UUID
     indices = [
         Index(value = ["from_storage_id"]),
         Index(value = ["to_storage_id"]),
-        Index(value = ["userId", "dateTime"])
+        Index(value = ["user_id", "date_time"])
     ]
 )
 data class TransferRoomEntity(

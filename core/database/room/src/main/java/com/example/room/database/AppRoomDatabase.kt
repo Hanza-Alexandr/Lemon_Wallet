@@ -11,6 +11,7 @@ import com.example.room.entity.CategoryRoomEntity
 import com.example.room.entity.ColorRoomEntity
 import com.example.room.entity.OperationRoomEntity
 import com.example.room.entity.StorageRoomEntity
+import com.example.room.entity.TransferRoomEntity
 
 @Database(
     version = 10, // Incremented version since we added a new table
@@ -18,7 +19,8 @@ import com.example.room.entity.StorageRoomEntity
         StorageRoomEntity::class,
         ColorRoomEntity::class,
         CategoryRoomEntity::class,
-        OperationRoomEntity::class
+        OperationRoomEntity::class,
+        TransferRoomEntity::class
     ],
     exportSchema = false
 )

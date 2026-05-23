@@ -15,6 +15,7 @@ import com.example.main_screen.ui.MainScreen
 import com.example.navigation.NavigationRoute
 import com.example.onbording_screen.ui.OnBoardingScreen
 import com.example.storage_block.ui.StorageBlock
+import com.example.storage_block.ui.components.blocks.components.lastoperations.LastOperationBlock
 import com.example.ui.storage.createstorage.CreateStorageScreen
 import com.example.ui.storage.editstorage.EditStorageScreen
 
@@ -45,6 +46,7 @@ fun NavGraphBuilder.navigationManager (){
             blockList = listOf(
                 {
                     StorageBlock()
+                    LastOperationBlock()
                 }
             )
         )

@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.domain.utils.SynStatus
-import com.example.room.entity.OperationEntity
+import com.example.room.entity.OperationRoomEntity
 import com.example.room.model.OperationWithDetails
 import kotlinx.coroutines.flow.Flow
 
@@ -35,10 +35,10 @@ interface OperationDao {
     // --- CREATE & UPDATE (СОЗДАНИЕ И ОБНОВЛЕНИЕ) ---
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOperation(operation: OperationEntity)
+    suspend fun insertOperation(operation: OperationRoomEntity)
 
     @Update
-    suspend fun updateOperation(operation: OperationEntity)
+    suspend fun updateOperation(operation: OperationRoomEntity)
 
     @Query("""
         UPDATE operations 

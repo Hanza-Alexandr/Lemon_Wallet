@@ -1,10 +1,7 @@
 package com.example.last_operation_block.ui.components.items
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -23,18 +20,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.GeneralOperation
-import com.example.last_operation_block.ui.components.TestData
 import com.example.ui.them.SecondDark
 
 
 
 @Composable
-fun GeneralTransaction(generalTransaction: GeneralOperation) {
+fun GeneralOperationItem(generalTransaction: GeneralOperation) {
     OperationBaseItem(
         iconBlock = {
             Box(
