@@ -1,5 +1,6 @@
 package com.example.room.repository
 
+import com.example.domain.domainmodel.DomainColor
 import com.example.domain.domainmodel.DomainOperation
 import com.example.domain.domainmodel.GeneralOperation
 import com.example.domain.domainmodel.NewGeneralOperation
@@ -8,15 +9,39 @@ import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.OperationDao
+import com.example.room.dao.TransferDao
+import com.example.room.entity.toDomain
+import com.example.room.model.toDomain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.collections.map
 
 class OperationRoomRepository @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val operationDao: OperationDao
+    private val operationDao: OperationDao,
+    private val transferDao: TransferDao,
 ) : IOperationRepository {
     override fun getAllTransactionsFlow(): Flow<List<DomainOperation>> {
-        TODO("Not yet implemented")
+        val generalOperation =  getUserIdUseCase.getIfFLow().flatMapLatest { userId ->
+            operationDao.getAllOperationsWithDetailsFlow(userId).map { operations ->
+                operations.map { it.toDomain() }
+            }
+        }
+
+        val transferOperation =  getUserIdUseCase.getIfFLow().flatMapLatest { userId ->
+            transferDao.getAllTransfersWithDetailsFlow(userId).map { operations ->
+                operations.map { it.toDomain() }
+            }
+        }
+
+        return generalOperation.combine(transferOperation) { general, transfer ->
+            general + transfer
+        }
+
     }
 
     override suspend fun getTransactionsByStorageFlow(
