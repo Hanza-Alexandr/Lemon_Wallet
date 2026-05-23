@@ -37,14 +37,14 @@ android {
 }
 
 dependencies {
-    // Hilt
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.runtime)
-    ksp(libs.hilt.android.compiler)
-
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
 
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.material)
     implementation(libs.androidx.material3)

@@ -13,4 +13,6 @@ sealed class NavigationRoute {
     data class EditStorage(val storageId: String): NavigationRoute()
     @Serializable
     object CreateStorage: NavigationRoute()
+    @Serializable
+    object CreateOperation: NavigationRoute()
 }

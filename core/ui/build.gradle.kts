@@ -42,6 +42,8 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:navigation"))
 
+    implementation(libs.kotlinx.datetime) // Use the latest version
+
 
     // Hilt
     implementation(libs.androidx.hilt.navigation.compose)

@@ -1,12 +1,18 @@
 package com.example.main_screen.ui
 
 import androidx.lifecycle.ViewModel
+import com.example.navigation.INavigator
+import com.example.navigation.NavigationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(): ViewModel() {
-
+class MainScreenViewModel @Inject constructor(
+    private val navigator: INavigator
+): ViewModel() {
+    fun onMainBottomClick(){
+        navigator.navigateTo(NavigationRoute.CreateOperation)
+    }
     /*
 
     val storageList: StateFlow<List<Storage>?> = storageService.getFlowStorageList()
