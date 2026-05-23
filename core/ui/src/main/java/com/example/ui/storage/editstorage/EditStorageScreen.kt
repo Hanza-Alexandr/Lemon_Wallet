@@ -35,7 +35,7 @@ fun EditStorageScreen(
         GlobalDetailStorageContent(
             uiState = viewModel.uiState.collectAsState().value,
             onNameChange = viewModel::onNameChange,
-            onNoteChange = viewModel::onNameChange,
+            onNoteChange = viewModel::onNoteChange,
             onTypeChange = viewModel::onTypeChange,
             onCurrencyChange = viewModel::onCurrencyChange
         )

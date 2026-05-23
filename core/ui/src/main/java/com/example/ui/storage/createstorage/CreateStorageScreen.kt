@@ -21,12 +21,6 @@ import com.example.ui.them.MainDark
 fun CreateStorageScreen(
     viewModel: CreateStorageViewModel = hiltViewModel(),
 ) {
-    val name: String? by rememberSaveable() { mutableStateOf(null)}
-    val note: String? by rememberSaveable() { mutableStateOf(null)}
-    val typeStorage: TypeStorage? by rememberSaveable() { mutableStateOf(null)}
-    val currency: Currency? by rememberSaveable() { mutableStateOf(null)}
-    val error: String? by rememberSaveable() { mutableStateOf(null)}
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +35,7 @@ fun CreateStorageScreen(
         GlobalDetailStorageContent(
             uiState = viewModel.uiState.collectAsState().value,
             onNameChange = viewModel::onNameChange,
-            onNoteChange = viewModel::onNameChange,
+            onNoteChange = viewModel::onNoteChange,
             onTypeChange = viewModel::onTypeChange,
             onCurrencyChange = viewModel::onCurrencyChange
         )
