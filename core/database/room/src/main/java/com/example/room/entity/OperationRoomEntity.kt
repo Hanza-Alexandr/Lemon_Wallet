@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainCategory
-import com.example.domain.domainmodel.DomainOperation
 import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.GeneralOperation
 import com.example.domain.utils.SynStatus
@@ -34,10 +33,10 @@ import java.util.UUID
     indices = [
         Index(value = ["storage_id"]),
         Index(value = ["category_id"]),
-        Index(value = ["user_id", "dateTime"])
+        Index(value = ["user_id", "date_time"])
     ]
 )
-data class OperationEntity(
+data class OperationRoomEntity(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "user_id") val userId: String,
@@ -53,7 +52,7 @@ data class OperationEntity(
     @ColumnInfo(name = "sync_status") val syncStatus: String = SynStatus.LOCAL_ONLY.toString()
 )
 
-fun OperationEntity.toDomain(storage: DomainStorage, category: DomainCategory): GeneralOperation {
+fun OperationRoomEntity.toDomain(storage: DomainStorage, category: DomainCategory): GeneralOperation {
 
     if (isDebit) {
         return DebitOperation(
