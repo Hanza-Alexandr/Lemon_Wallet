@@ -5,12 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,15 +64,51 @@ fun TopBarStorageBlock(contentHorizontalPadding: Dp){
     }
 }
 
+
 @Composable
-fun TopBarLastOperationsBlock(contentHorizontalPadding: Dp){
+fun TopBarLastOperationsBlock(
+    contentHorizontalPadding: Dp,
+    filterName: String = "1 day", // Текст по центру
+    onFilterClick: () -> Unit = {},
+    onViewMoreClick: () -> Unit = {}
+) {
     TemplateTobBarMainBlocks(contentHorizontalPadding) { iconSize ->
+        // 1. Левая часть: Иконка фильтра
+        IconButton(onClick = onFilterClick) {
+            Icon(
+                painter = painterResource(R.drawable.filter_list),
+                contentDescription = "Filter",
+                modifier = Modifier.size(iconSize)
+            )
+        }
+
+        // 2. Центральная часть: Текст фильтра
         Text(
-            text = "Последние операции",
-            fontWeight = FontWeight.Bold
+            text = filterName,
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(onClick = { TODO("NOT IMPLEMENT") }) {
-            Icon(painter = painterResource(R.drawable.filter_list), contentDescription = "Settings")
+
+        // 3. Правая часть: Кнопка "VIEW MORE" с иконкой
+        TextButton(
+            onClick = onViewMoreClick,
+            // Убираем лишние отступы внутри кнопки, чтобы она плотнее прилегала к краю
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "VIEW MORE",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Normal
+                )
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = Color.Gray
+                )
+            }
         }
     }
 }

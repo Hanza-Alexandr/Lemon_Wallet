@@ -8,11 +8,7 @@ import com.example.domain.domainmodel.TransferOperation
 @Composable
 fun OperationItem(operation: DomainOperation){
     when(operation){
-        is GeneralOperation -> GeneralTransaction(operation)
         is TransferOperation -> TransferOperation(operation)
-        else -> {
-
-        }
+        is GeneralOperation -> GeneralOperationItem(operation)
     }
-
 }
