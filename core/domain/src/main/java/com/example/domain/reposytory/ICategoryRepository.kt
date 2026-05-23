@@ -5,7 +5,7 @@ import com.example.domain.domainmodel.NewDomainCategory
 import kotlinx.coroutines.flow.Flow
 
 interface ICategoryRepository {
-    suspend fun getAllCategoriesFlow(): Flow<List<DomainCategory>>
+    fun getAllCategoriesFlow(): Flow<List<DomainCategory>>
 
     /**
      * Получить категорию по ID.
@@ -15,7 +15,7 @@ interface ICategoryRepository {
     /**
      * Получить только корневые категории (у которых parentId == null).
      */
-    suspend fun getRootCategoriesFlow(): Flow<List<DomainCategory>>
+    fun getRootCategoriesFlow(): Flow<List<DomainCategory>>
 
     /**
      * Получить список подкатегорий для конкретного родителя.

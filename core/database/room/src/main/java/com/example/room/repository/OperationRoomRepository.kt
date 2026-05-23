@@ -14,9 +14,8 @@ import javax.inject.Inject
 class OperationRoomRepository @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val operationDao: OperationDao
-) :
-    IOperationRepository {
-    override suspend fun getAllTransactionsFlow(): Flow<List<DomainOperation>> {
+) : IOperationRepository {
+    override fun getAllTransactionsFlow(): Flow<List<DomainOperation>> {
         TODO("Not yet implemented")
     }
 

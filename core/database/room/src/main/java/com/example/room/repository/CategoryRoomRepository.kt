@@ -8,6 +8,7 @@ import com.example.room.dao.CategoryDao
 import com.example.room.entity.toRoomEntity
 import com.example.room.model.toDomain
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -15,9 +16,13 @@ class CategoryRoomRepository @Inject constructor(
     private val categoryDao: CategoryDao,
     private val getUserId: GetUserIdUseCase
 ) : ICategoryRepository {
-    override suspend fun getAllCategoriesFlow(): Flow<List<DomainCategory>> {
-        return categoryDao.getAllWithColorFlow(getUserId.invoke()).map { list ->
-            list.map { it.toDomain() }
+    override fun getAllCategoriesFlow(): Flow<List<DomainCategory>> {
+        return getUserId.getIfFLow().flatMapLatest { userId->
+            categoryDao.getAllWithColorFlow(userId).map { list->
+                list.map {
+                    it.toDomain()
+                }
+            }
         }
     }
 
@@ -25,15 +30,23 @@ class CategoryRoomRepository @Inject constructor(
         return categoryDao.getWithColorById(id)?.toDomain()
     }
 
-    override suspend fun getRootCategoriesFlow(): Flow<List<DomainCategory>> {
-        return categoryDao.getRootWithColorFlow(getUserId.invoke()).map { list ->
-            list.map { it.toDomain() }
+    override fun getRootCategoriesFlow(): Flow<List<DomainCategory>> {
+        return getUserId.getIfFLow().flatMapLatest(){ userId ->
+            categoryDao.getRootWithColorFlow(userId).map { list->
+                list.map {
+                    it.toDomain()
+                }
+            }
         }
     }
 
     override fun getChildrenByParentFlow(parentId: String): Flow<List<DomainCategory>> {
-        return categoryDao.getChildrenWithColorFlow(parentId).map { list ->
-            list.map { it.toDomain() }
+        return getUserId.getIfFLow().flatMapLatest(){ userId ->
+            categoryDao.getChildrenWithColorFlow(userId).map { list->
+                list.map {
+                    it.toDomain()
+                }
+            }
         }
     }
 

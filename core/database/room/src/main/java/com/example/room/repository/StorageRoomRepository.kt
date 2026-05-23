@@ -5,25 +5,27 @@ import com.example.domain.domainmodel.NewDomainStorage
 import com.example.domain.reposytory.IStorageRepository
 import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.StorageDao
-import com.example.room.entity.toDomain
 import com.example.room.entity.toRoomEntity
 import com.example.room.model.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class StorageRoomRepository @Inject constructor(
     private val storageDao: StorageDao,
     private val getUserId: GetUserIdUseCase
-) :
-    IStorageRepository {
-    override suspend fun getAllStoragesFlow(): Flow<List<DomainStorage>> {
-        return storageDao.getAllStoragesWithColorFlow(getUserId.invoke()).map { list ->
-            list.map { it.toDomain()}
+) : IStorageRepository {
+    override fun getAllStoragesFlow(): Flow<List<DomainStorage>> {
+        return getUserId.getIfFLow().flatMapLatest{ userId ->
+            storageDao.getAllStoragesWithColorFlow(userId).map { list->
+                list.map {
+                    it.toDomain()
+                }
+            }
         }
     }
-
     override suspend fun getStorageById(id: String): DomainStorage? {
         return storageDao.getStorageWithColorByIdFlow(id).firstOrNull()?.toDomain()
     }

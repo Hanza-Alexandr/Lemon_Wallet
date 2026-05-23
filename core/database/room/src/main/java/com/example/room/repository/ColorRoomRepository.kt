@@ -9,8 +9,10 @@ import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.ColorDao
 import com.example.room.entity.toDomain
 import com.example.room.entity.toRoomEntity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -18,11 +20,17 @@ class ColorRoomRepository @Inject constructor(
     private val colorDao: ColorDao,
     private val getUserId: GetUserIdUseCase
 ) :IColorRepository {
-    override suspend fun getAllColorsFlow(): Flow<List<DomainColor>> {
-        return colorDao.getAllColorsFlow(getUserId.invoke()).map { list ->
-            list.map { it.toDomain() }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getAllColorsFlow(): Flow<List<DomainColor>> {
+        return getUserId.getIfFLow().flatMapLatest { userId ->
+            colorDao.getAllColorsFlow(userId).map { list ->
+                list.map {
+                    it.toDomain()
+                }
+            }
         }
     }
+
 
     override suspend fun getColorById(colorId: String): DomainColor? {
         return colorDao.getColorById(colorId)?.toDomain()

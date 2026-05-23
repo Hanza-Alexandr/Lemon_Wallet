@@ -9,7 +9,7 @@ interface IOperationRepository {
      * Получить общий поток ВСЕХ транзакций (доходы, расходы и переводы).
      * Возвращает List<DomainOperation>, который можно легко сортировать по дате.
      */
-    suspend fun getAllTransactionsFlow(): Flow<List<DomainOperation>>
+    fun getAllTransactionsFlow(): Flow<List<DomainOperation>>
 
     /**
      * Получить историю действий для конкретного счета (Storage).
