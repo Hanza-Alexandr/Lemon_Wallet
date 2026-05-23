@@ -5,17 +5,21 @@ import androidx.room.Room
 import com.example.datastore.PreferencesDataStore
 import com.example.domain.reposytory.ICategoryRepository
 import com.example.domain.reposytory.IColorRepository
+import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.reposytory.IStorageRepository
 import com.example.domain.settings.ISettingsRepository
 import com.example.navigation.INavigator
 import com.example.lemonwallet.NavigatorImpl
 import com.example.room.dao.CategoryDao
 import com.example.room.dao.ColorDao
+import com.example.room.dao.OperationDao
 import com.example.room.dao.StorageDao
+import com.example.room.dao.TransferDao
 import com.example.room.database.AppRoomDatabase
 import com.example.room.database.RoomDataBaseCallBack
 import com.example.room.repository.CategoryRoomRepository
 import com.example.room.repository.ColorRoomRepository
+import com.example.room.repository.OperationRoomRepository
 import com.example.room.repository.StorageRoomRepository
 import dagger.Binds
 import dagger.Module
@@ -60,6 +64,12 @@ abstract class RepositoryModule {
     abstract fun bindUserSettingsRepository(
         impl: PreferencesDataStore
     ): ISettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOperationRepository(
+        impl: OperationRoomRepository
+    ): IOperationRepository
 }
 
 @Module
@@ -97,6 +107,13 @@ object DatabaseModule {
 
     @Provides
     fun provideCategoryDao(db: AppRoomDatabase): CategoryDao = db.getCategoryDao()
+
+    @Provides
+    fun provideOperationDao(db: AppRoomDatabase): OperationDao = db.getOperationDao()
+
+    @Provides
+    fun provideTransferDao(db: AppRoomDatabase): TransferDao = db.getTransferDao()
+
 }
 
 @Module
