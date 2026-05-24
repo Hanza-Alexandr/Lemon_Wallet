@@ -10,8 +10,12 @@ import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.GeneralOperation
+import com.example.domain.domainmodel.NewGeneralOperation
 import com.example.domain.utils.SynStatus
+import com.example.domain.utils.dateTimeToEpoch
 import com.example.domain.utils.toDomainDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 
 @Entity(
@@ -79,3 +83,22 @@ fun OperationRoomEntity.toDomain(storage: DomainStorage, category: DomainCategor
         )
     }
 }
+fun NewGeneralOperation.toRoomEntity(): OperationRoomEntity {
+    // Конвертируем дату и время из домена обратно в Long (Unix timestamp)
+    // Если у вас нет готового метода, можно использовать:
+    // LocalDateTime(date, time).toInstant(TimeZone.UTC).toEpochMilliseconds()
+    val timestamp = dateTimeToEpoch(this.date, this.time)
+
+    return OperationRoomEntity(
+        userId = this.userId,
+        storageId = this.storageId,   // Берем ID из объекта storage
+        categoryId = this.categoryId, // Берем ID из объекта category
+        amount = this.amount,
+        isDebit = this is DebitOperation, // Определяем тип операции по классу
+        dateTime = timestamp,
+        comment = this.comment,
+        updatedAt = System.currentTimeMillis(),
+        syncStatus = SynStatus.LOCAL_ONLY.toString() // По умолчанию для новых/измененных
+    )
+}
+

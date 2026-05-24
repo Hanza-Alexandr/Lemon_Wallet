@@ -11,6 +11,7 @@ import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.OperationDao
 import com.example.room.dao.TransferDao
 import com.example.room.entity.toDomain
+import com.example.room.entity.toRoomEntity
 import com.example.room.model.toDomain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -59,11 +60,11 @@ class OperationRoomRepository @Inject constructor(
     }
 
     override suspend fun saveGeneralOperation(operation: NewGeneralOperation) {
-        TODO("Not yet implemented")
+        operationDao.insertOperation(operation.toRoomEntity())
     }
 
     override suspend fun saveTransfer(transfer: NewTransferOperation) {
-        TODO("Not yet implemented")
+        transferDao.insertTransfer(transfer.toRoomEntity())
     }
 
     override suspend fun updateGeneralOperation(operation: GeneralOperation) {

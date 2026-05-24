@@ -27,12 +27,8 @@ fun CreateOperationScreen(
             .background(MainDark)
     ) {
         TopBarCreateOperation (
-            onBack = {
-
-            },
-            onSave = {
-
-            }
+            onBack = viewModel::onBack,
+            onSave = viewModel::onSave
         )
 
         GlobalDetailsOperationContent(

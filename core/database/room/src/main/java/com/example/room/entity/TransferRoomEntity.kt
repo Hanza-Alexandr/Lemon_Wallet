@@ -5,8 +5,10 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.domain.domainmodel.DomainStorage
+import com.example.domain.domainmodel.NewTransferOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.utils.SynStatus
+import com.example.domain.utils.dateTimeToEpoch
 import com.example.domain.utils.toDomainDateTime
 import java.util.UUID
 
@@ -55,5 +57,21 @@ fun TransferRoomEntity.toDomain(fromStorage: DomainStorage, toStorage: DomainSto
         amount = amount,
         date = dateTime.toDomainDateTime().date,
         time = dateTime.toDomainDateTime().time
+    )
+}
+
+fun NewTransferOperation.toRoomEntity(): TransferRoomEntity {
+    // Конвертируем дату и время в Long timestamp
+    val timestamp = dateTimeToEpoch(this.date, this.time)
+
+    return TransferRoomEntity(
+        userId = this.userId,
+        fromStorageId = this.fromStorageId, // ID кошелька списания
+        toStorageId = this.toStorageId,     // ID кошелька зачисления
+        amount = this.amount,
+        dateTime = timestamp,
+        updatedAt = System.currentTimeMillis(),
+        isDeleted = false,
+        syncStatus = SynStatus.LOCAL_ONLY.toString()
     )
 }

@@ -1,6 +1,9 @@
 package com.example.ui.oeration.components
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,20 +29,34 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainCategory
+import com.example.domain.domainmodel.DomainStorage
+import com.example.domain.usecase.GetStorageBalanceUseCase
 import com.example.ui.colorpikerrow.toColor
+import javax.inject.Inject
 
 // Модель данных для категории
+data class UiModelCategory(
+    val category: DomainCategory,
+    val isSelect: Boolean,
+)
 
+class ConvertDomainCategoryToUiModel @Inject constructor(){
+    suspend operator fun invoke(category: DomainCategory): UiModelCategory {
+        return UiModelCategory(
+            category = category,
+            isSelect = false
+        )
+    }
+}
 
 @Composable
 fun CategoriesSection(
     modifier: Modifier = Modifier,
-    topCategories: List<DomainCategory>, //TODO нужен useCase для выдачи топа категорий
-    onCategorySelected: (DomainCategory) -> Unit
+    topCategories: List<UiModelCategory>, //TODO нужен useCase для выдачи топа категорий
+    onCategorySelected: (UiModelCategory) -> Unit
 ) {
     // Тестовые данные (на скриншоте 3 одинаковых категории и кнопка "еще")
 
@@ -58,7 +75,7 @@ fun CategoriesSection(
             contentPadding = PaddingValues(end = 16.dp)
         ) {
             items(topCategories) { category ->
-                CategoryItem(category)
+                CategoryItem(category, onCategorySelected)
             }
 
             // Кнопка "Еще" (...)
@@ -70,17 +87,37 @@ fun CategoriesSection(
 }
 
 @Composable
-fun CategoryItem(category: DomainCategory) {
+fun CategoryItem(
+    categoryUIModel: UiModelCategory,
+    onCategorySelected: (UiModelCategory) -> Unit
+)
+{
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(72.dp)
+        modifier = Modifier
+            .width(72.dp)
+            .clickable(onClick = {
+                onCategorySelected(categoryUIModel)
+            }
+            ),
     ) {
         // Круглый плейсхолдер для иконки
         Box(
             modifier = Modifier
                 .size(64.dp)
                 .clip(CircleShape)
-                .background(category.color?.toColor()?: Color.White),
+                .then(
+                    if (categoryUIModel.isSelect) {
+                        Modifier.border(
+                            width = 3.dp,
+                            color = Color(0xFF1D2126), // Темный цвет для акцента
+                            shape = CircleShape
+                        )
+                    } else {
+                        Modifier
+                    }
+                )
+                .background(categoryUIModel.category.color?.toColor() ?: Color.White),
             contentAlignment = Alignment.Center
         ) {
             // Здесь будет иконка категории
@@ -89,7 +126,7 @@ fun CategoryItem(category: DomainCategory) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = category.name,
+            text = categoryUIModel.category.name,
             style = MaterialTheme.typography.labelSmall.copy(
                 fontSize = 11.sp,
                 lineHeight = 14.sp,

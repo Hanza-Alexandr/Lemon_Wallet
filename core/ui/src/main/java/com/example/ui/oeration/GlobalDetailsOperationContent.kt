@@ -17,6 +17,7 @@ import com.example.ui.oeration.components.CalculatorKeyboard
 import com.example.ui.oeration.components.CategoriesSection
 import com.example.ui.oeration.components.StorageUiModel
 import com.example.ui.oeration.components.TransactionTypeSelector
+import com.example.ui.oeration.components.UiModelCategory
 import kotlin.reflect.KClass
 
 
@@ -26,7 +27,7 @@ fun GlobalDetailsOperationContent(
     onChangeTypeOperation:  (KClass<out DomainOperation>) -> Unit,
     onFromStorageSelected: (StorageUiModel) -> Unit,
     onToStorageSelected: (StorageUiModel) -> Unit,
-    onCategorySelected: (DomainCategory) -> Unit,
+    onCategorySelected: (UiModelCategory) -> Unit,
     onKeyClick: (String) -> Unit
 
 ){

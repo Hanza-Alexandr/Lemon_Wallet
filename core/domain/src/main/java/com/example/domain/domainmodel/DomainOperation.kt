@@ -3,12 +3,14 @@ package com.example.domain.domainmodel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
-sealed class DomainOperation{
-    abstract val id: String
+sealed class NewDomainOperation{
     abstract val userId: String
     abstract val amount: Long
     abstract val date: LocalDate
     abstract val time: LocalTime
+}
+ sealed class DomainOperation: NewDomainOperation(){
+    abstract val id: String
 }
 abstract class GeneralOperation: DomainOperation(){
     abstract val storage: DomainStorage
@@ -51,21 +53,21 @@ data class TransferOperation(
 ): DomainOperation()
 
 data class NewGeneralOperation(
-    val userId: String,
+    override val userId: String,
     val storageId: String,
     val categoryId: String,
-    val amount: Long,
+    override val amount: Long,
     val isDebit: Boolean,
-    val date: LocalDate,
-    val time: LocalTime,
+    override val date: LocalDate,
+    override val time: LocalTime,
     val comment: String?
-)
+): NewDomainOperation()
 
 data class NewTransferOperation(
-    val userId: String,
+    override val userId: String,
     val fromStorageId: String,
     val toStorageId: String,
-    val amount: Long,
-    val date: LocalDate,
-    val time: LocalTime
-)
+    override val amount: Long,
+    override val date: LocalDate,
+    override val time: LocalTime
+): NewDomainOperation()

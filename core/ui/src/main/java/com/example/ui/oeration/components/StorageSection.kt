@@ -32,8 +32,7 @@ import javax.inject.Inject
 
 // Модель данных для счета
 data class StorageUiModel(
-    val id: String,
-    val name: String,
+    val storage: DomainStorage,
     val balance: String,
     val isSelected: Boolean = false
 )
@@ -43,8 +42,7 @@ class ConvertDomainStorageToUiModel @Inject constructor(
 ){
     suspend operator fun invoke(storage: DomainStorage): StorageUiModel {
         return StorageUiModel(
-            id = storage.id,
-            name = storage.name,
+            storage = storage,
             balance = getStorageBalanceUseCase.invoke(storage).toString()
         )
     }
@@ -107,7 +105,7 @@ fun StorageItem(
                 )
         ) {
             Text(
-                text = storage.name,
+                text = storage.storage.name,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black

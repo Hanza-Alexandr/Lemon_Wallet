@@ -8,7 +8,10 @@ import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.domainmodel.DomainOperation
+import com.example.domain.domainmodel.NewGeneralOperation
+import com.example.domain.domainmodel.NewTransferOperation
 import com.example.domain.domainmodel.TransferOperation
+import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.reposytory.IStorageRepository
 import com.example.domain.usecase.CalculateExpressionUseCase
 import com.example.domain.usecase.GetTopCategoriesUseCase
@@ -16,8 +19,11 @@ import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute
 import com.example.ui.oeration.UIStatesDetailGeneralOperations
 import com.example.ui.oeration.UiStateTypeOperation
+import com.example.ui.oeration.components.ConvertDomainCategoryToUiModel
 import com.example.ui.oeration.components.ConvertDomainStorageToUiModel
 import com.example.ui.oeration.components.StorageUiModel
+import com.example.ui.oeration.components.UiModelCategory
+import com.example.ui.oeration.toNewDomainOperation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +37,9 @@ import kotlin.reflect.KClass
 class CreateOperationViewModel @Inject constructor(
     private val navigator: INavigator,
     private val storageRepo: IStorageRepository,
+    private val operationRepo: IOperationRepository,
     private val getTopCategoriesUseCase: GetTopCategoriesUseCase,
+    private val covertDomainCategoryToUiModel: ConvertDomainCategoryToUiModel,
     private val covertDomainStorageToUiModel: ConvertDomainStorageToUiModel,
     private val stateHandle: SavedStateHandle,
     private val calculateExpressionUseCase: CalculateExpressionUseCase
@@ -48,20 +56,43 @@ class CreateOperationViewModel @Inject constructor(
                 it.copy(
                 uiStateTypeOperation = UiStateTypeOperation.GeneralOperationUiStateTypeOperation(
                     isDebit = true,
-                    categories = categories,
+                    categories = categories.map {
+                        covertDomainCategoryToUiModel.invoke(it)
+                    },
                     storageList = storages.map {
                         covertDomainStorageToUiModel.invoke(it)
                     }.map {
-                        if (it.id == storageId) it.copy(isSelected = true) else it
+                        if (it.storage.id == storageId) it.copy(isSelected = true) else it
                     },
                 ),
             ) }
         }
     }
 
-    fun onSetSelectCategories(){
-
+    fun onBack(){
+        viewModelScope.launch {
+            navigator.goBack()
+        }
     }
+
+    fun onSave(){
+        viewModelScope.launch {
+            try {
+                val newOp = _uiState.value.toNewDomainOperation()
+                when(newOp){
+                    is NewGeneralOperation -> operationRepo.saveGeneralOperation(newOp)
+                    is NewTransferOperation -> operationRepo.saveTransfer(newOp)
+                    else -> throw IllegalStateException("Неизвестный тип операции")
+                }
+                // Закрыть экран или очистить поля
+            } catch (e: IllegalStateException) {
+                // Показать ошибку пользователю
+                _uiState.update { it.copy(error = e.message) }
+            }
+        }
+        onBack()
+    }
+
     fun onChangeTypeOperation (type: KClass<out DomainOperation>){
         viewModelScope.launch {
             val storages= when(val type = _uiState.value.uiStateTypeOperation){
@@ -72,7 +103,7 @@ class CreateOperationViewModel @Inject constructor(
 
             val category = when(val type = _uiState.value.uiStateTypeOperation){
                 is UiStateTypeOperation.GeneralOperationUiStateTypeOperation -> type.categories
-                else -> getTopCategoriesUseCase.invoke()
+                else -> getTopCategoriesUseCase.invoke().map { covertDomainCategoryToUiModel.invoke(it) }
             }
             when(type){
                 DebitOperation::class ->{
@@ -145,8 +176,18 @@ class CreateOperationViewModel @Inject constructor(
             else -> {}
         }
     }
-    fun onCategorySelected(category: DomainCategory){
-
+    fun onCategorySelected(category: UiModelCategory){
+        val type = _uiState.value.uiStateTypeOperation
+        if (type is UiStateTypeOperation.GeneralOperationUiStateTypeOperation){
+            _uiState.update {
+                it.copy(uiStateTypeOperation = UiStateTypeOperation.GeneralOperationUiStateTypeOperation(
+                    type.isDebit,
+                    type.categories.map { it.copy(isSelect = false)}.map { if (it.category.id == category.category.id) it.copy(isSelect = true) else it},
+                    type.storageList
+                )
+                )
+            }
+        }
     }
     fun onKeyClick(key: String){
         _uiState.update { currentState ->
