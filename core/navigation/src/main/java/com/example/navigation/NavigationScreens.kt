@@ -14,5 +14,5 @@ sealed class NavigationRoute {
     @Serializable
     object CreateStorage: NavigationRoute()
     @Serializable
-    object CreateOperation: NavigationRoute()
+    data class CreateOperation(val storageId: String): NavigationRoute()
 }
