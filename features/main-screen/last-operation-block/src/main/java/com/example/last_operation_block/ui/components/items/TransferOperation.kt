@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.TransferOperation
+import com.example.domain.utils.formatAmount
 
 @Composable
 fun TransferOperation(
@@ -56,7 +57,7 @@ fun TransferOperation(
 
         // ПРАВАЯ ЧАСТЬ: Сумма
         Text(
-            text = "${transfer.amount}р", // Можно добавить форматирование валюты
+            text = "${transfer.amount.formatAmount()}р", // Можно добавить форматирование валюты
             style = MaterialTheme.typography.titleLarge.copy(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Light,

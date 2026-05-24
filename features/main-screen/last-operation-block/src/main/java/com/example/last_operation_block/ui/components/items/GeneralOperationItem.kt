@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.GeneralOperation
+import com.example.domain.utils.formatAmount
 import com.example.ui.them.SecondDark
 
 @Composable
@@ -103,8 +104,8 @@ fun GeneralOperationItem(generalTransaction: GeneralOperation) {
             // Сумма: -2399р
             Text(
                 text = when(generalTransaction){
-                    is DebitOperation -> "+${generalTransaction.amount}"
-                    is CreditOperation -> "-${generalTransaction.amount}"
+                    is DebitOperation -> "+${generalTransaction.amount.formatAmount()}"
+                    is CreditOperation -> "-${generalTransaction.amount.formatAmount()}"
                     else -> ""
                 },
                 style = MaterialTheme.typography.titleLarge,
