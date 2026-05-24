@@ -21,8 +21,8 @@ private fun AmountSectionPreview() {
 }
 @Composable
 fun AmountSection(
-    expression: String ,
-    result: String ,
+    expression: String?,
+    result: String?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -33,7 +33,7 @@ fun AmountSection(
     ) {
         // Главный результат с символом "="
         Text(
-            text = "=$result",
+            text = "=${result?:"0"}",
             style = MaterialTheme.typography.displayMedium.copy(
                 fontSize = 48.sp,
                 fontWeight = FontWeight.W500,
@@ -43,7 +43,7 @@ fun AmountSection(
 
         // Математическое выражение под результатом
         Text(
-            text = expression,
+            text = expression?:"0",
             style = MaterialTheme.typography.titleLarge.copy(
                 fontSize = 32.sp,
                 color = Color(0xFFB0B9C5) // Светло-серый цвет для формулы
