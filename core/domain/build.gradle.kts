@@ -15,6 +15,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.exp4j)
     implementation(libs.kotlinx.datetime) // Use the latest version
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)

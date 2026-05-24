@@ -10,9 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 @Preview
 @Composable
@@ -21,8 +24,8 @@ private fun AmountSectionPreview() {
 }
 @Composable
 fun AmountSection(
-    expression: String?,
-    result: String?,
+    expression: String,
+    result: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -33,7 +36,7 @@ fun AmountSection(
     ) {
         // Главный результат с символом "="
         Text(
-            text = "=${result?:"0"}",
+            text = "=${result.let { it.ifEmpty { "0" } }.formatAmount()}",
             style = MaterialTheme.typography.displayMedium.copy(
                 fontSize = 48.sp,
                 fontWeight = FontWeight.W500,
@@ -43,11 +46,28 @@ fun AmountSection(
 
         // Математическое выражение под результатом
         Text(
-            text = expression?:"0",
+            text = expression.let { it.ifEmpty { "0" } }.formatAmount(),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontSize = 32.sp,
                 color = Color(0xFFB0B9C5) // Светло-серый цвет для формулы
             )
         )
+    }
+}
+
+fun String.formatAmount(): String {
+    if (this.isEmpty() || this == "0") return "0"
+
+    return try {
+        val symbols = DecimalFormatSymbols().apply {
+            groupingSeparator = ' ' // Разделитель тысяч — пробел
+            decimalSeparator = ','  // Разделитель копеек — запятая
+        }
+        // Шаблон: разделять тысячи, выводить до 2 знаков после запятой, если они есть
+        val formatter = DecimalFormat("#,##0.##", symbols)
+        val number = this.replace(",", ".").toDouble()
+        formatter.format(number)
+    } catch (e: Exception) {
+        this // Если это выражение (с плюсами и минусами), возвращаем как есть
     }
 }

@@ -12,6 +12,7 @@ import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.GeneralOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IStorageRepository
+import com.example.domain.usecase.CalculateExpressionUseCase
 import com.example.domain.usecase.GetTopCategoriesUseCase
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute
@@ -35,6 +36,7 @@ class CreateOperationViewModel @Inject constructor(
     private val getTopCategoriesUseCase: GetTopCategoriesUseCase,
     private val covertDomainStorageToUiModel: ConvertDomainStorageToUiModel,
     private val stateHandle: SavedStateHandle,
+    private val calculateExpressionUseCase: CalculateExpressionUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UIStatesDetailGeneralOperations())
     val uiState = _uiState.asStateFlow()
@@ -149,6 +151,16 @@ class CreateOperationViewModel @Inject constructor(
 
     }
     fun onKeyClick(key: String){
+        _uiState.update { currentState ->
+            val result = calculateExpressionUseCase.execute(
+                currentExpression = currentState.expression,
+                keyPressed = key
+            )
 
+            currentState.copy(
+                expression = result.expression,
+                result = result.evaluatedResult
+            )
+        }
     }
 }
