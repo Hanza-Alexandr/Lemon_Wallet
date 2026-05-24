@@ -1,5 +1,6 @@
 package com.example.room.repository
 
+import android.util.Log
 import com.example.domain.domainmodel.DomainColor
 import com.example.domain.domainmodel.DomainOperation
 import com.example.domain.domainmodel.GeneralOperation
@@ -38,11 +39,13 @@ class OperationRoomRepository @Inject constructor(
                 operations.map { it.toDomain() }
             }
         }
-
         return generalOperation.combine(transferOperation) { general, transfer ->
-            general + transfer
+            // Объединяем списки и сортируем
+            (general + transfer).sortedWith(
+                compareByDescending<DomainOperation> { it.date }
+                    .thenByDescending { it.time }
+            )
         }
-
     }
 
     override suspend fun getTransactionsByStorageFlow(
