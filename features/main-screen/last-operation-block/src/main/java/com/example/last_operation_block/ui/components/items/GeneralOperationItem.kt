@@ -14,9 +14,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,10 +28,18 @@ import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.GeneralOperation
 import com.example.ui.them.SecondDark
 
-
-
 @Composable
 fun GeneralOperationItem(generalTransaction: GeneralOperation) {
+    val context = LocalContext.current
+    val iconResId = remember(generalTransaction.category.icon) {
+        val id = context.resources.getIdentifier(
+            generalTransaction.category.icon,
+            "drawable",
+            context.packageName
+        )
+        if (id != 0) id else com.example.ui.R.drawable.block
+    }
+
     OperationBaseItem(
         iconBlock = {
             Box(
@@ -39,7 +49,7 @@ fun GeneralOperationItem(generalTransaction: GeneralOperation) {
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(id = generalTransaction.category.icon.toInt()),
+                    painter = painterResource(id = iconResId),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
                     tint = Color.Black // Иконки на скрине черные
