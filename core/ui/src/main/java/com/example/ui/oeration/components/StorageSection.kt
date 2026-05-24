@@ -95,14 +95,18 @@ fun AccountItem(account: AccountUiModel) {
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
-                )
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = account.balance,
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color(0xFF7F8A99),
                     fontSize = 12.sp
-                )
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
