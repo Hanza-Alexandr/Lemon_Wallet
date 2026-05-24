@@ -1,5 +1,6 @@
 package com.example.ui.oeration.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,37 +22,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainStorage
+import com.example.domain.usecase.GetStorageBalanceUseCase
+import javax.inject.Inject
 
 // Модель данных для счета
-data class AccountUiModel(
+data class StorageUiModel(
     val id: String,
     val name: String,
     val balance: String,
     val isSelected: Boolean = false
 )
 
-@Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)
-@Composable
-fun AccountsSectionPreview() {
-    val accounts = listOf(
-        AccountUiModel("1", "Сбер", "1232,12p"),
-        AccountUiModel("2", "Наличка", "5 452,00p", isSelected = true)
-    )
-    AccountsSection(
-        modifier = Modifier.padding(16.dp),
-        storages =accounts,
-        onSelected = {}
-    )
+class ConvertDomainStorageToUiModel @Inject constructor(
+    private val getStorageBalanceUseCase: GetStorageBalanceUseCase
+){
+    suspend operator fun invoke(storage: DomainStorage): StorageUiModel {
+        return StorageUiModel(
+            id = storage.id,
+            name = storage.name,
+            balance = getStorageBalanceUseCase.invoke(storage).toString()
+        )
+    }
 }
+
+
 @Composable
-fun AccountsSection(
+fun StorageSection(
     modifier: Modifier = Modifier,
-    storages: List<AccountUiModel>,
-    onSelected: (DomainStorage) -> Unit
+    storages: List<StorageUiModel>,
+    onStorageSelected: (StorageUiModel) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -68,7 +72,10 @@ fun AccountsSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             items(storages) { storage ->
-                AccountItem(storage)
+                StorageItem(
+                    storage,
+                    onStorageSelected
+                )
             }
 
             // Кнопка добавления нового счета
@@ -80,18 +87,27 @@ fun AccountsSection(
 }
 
 @Composable
-fun AccountItem(account: AccountUiModel) {
+fun StorageItem(
+    storage: StorageUiModel,
+    onStorageSelected: (StorageUiModel) -> Unit)
+{
     Surface(
         shape = RoundedCornerShape(8.dp),
-        color = if (account.isSelected) Color(0xFFDDE1E9) else Color.White,
-        shadowElevation = if (account.isSelected) 0.dp else 2.dp,
+        color = if (storage.isSelected) Color(0xFFDDE1E9) else Color.White,
+        shadowElevation = if (storage.isSelected) 0.dp else 2.dp,
         modifier = Modifier.width(130.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier
+                .padding(12.dp)
+                .clickable(
+                    onClick = {
+                        onStorageSelected(storage)
+                    }
+                )
         ) {
             Text(
-                text = account.name,
+                text = storage.name,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -100,7 +116,7 @@ fun AccountItem(account: AccountUiModel) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = account.balance,
+                text = storage.balance,
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color(0xFF7F8A99),
                     fontSize = 12.sp

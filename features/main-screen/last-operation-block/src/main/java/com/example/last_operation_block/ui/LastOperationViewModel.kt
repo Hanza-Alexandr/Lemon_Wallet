@@ -7,7 +7,6 @@ import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.settings.ISettingsRepository
 import com.example.last_operation_block.GetOperationsUseCase
-import com.example.last_operation_block.GetSelectStorageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

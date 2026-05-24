@@ -30,35 +30,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainCategory
+import com.example.ui.colorpikerrow.toColor
 
 // Модель данных для категории
-data class CategoryUiModel(
-    val id: String,
-    val name: String,
-    val color: Color = Color(0xFFE0E0E0) // Светло-серый плейсхолдер
-)
 
-@Preview
-@Composable
-private fun CategorySectionPreview() {
-    val categories = listOf(
-        CategoryUiModel("1", "Еда и\nнапитки"),
-        CategoryUiModel("2", "Еда и\nнапитки"),
-        CategoryUiModel("3", "Еда и\nнапитки"),
-        CategoryUiModel("4", "Еда и\nнапитки"),
-        CategoryUiModel("5", "Еда и\nнапитки"),
-    )
-    CategoriesSection(
-        topCategories = categories,
-        onSelect = {}
-    )
-}
 
 @Composable
 fun CategoriesSection(
     modifier: Modifier = Modifier,
-    topCategories: List<CategoryUiModel>, //TODO нужен useCase для выдачи топа категорий
-    onSelect: (DomainCategory) -> Unit
+    topCategories: List<DomainCategory>, //TODO нужен useCase для выдачи топа категорий
+    onCategorySelected: (DomainCategory) -> Unit
 ) {
     // Тестовые данные (на скриншоте 3 одинаковых категории и кнопка "еще")
 
@@ -89,7 +70,7 @@ fun CategoriesSection(
 }
 
 @Composable
-fun CategoryItem(category: CategoryUiModel) {
+fun CategoryItem(category: DomainCategory) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(72.dp)
@@ -99,7 +80,7 @@ fun CategoryItem(category: CategoryUiModel) {
             modifier = Modifier
                 .size(64.dp)
                 .clip(CircleShape)
-                .background(category.color),
+                .background(category.color?.toColor()?: Color.White),
             contentAlignment = Alignment.Center
         ) {
             // Здесь будет иконка категории
