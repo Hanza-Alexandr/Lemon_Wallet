@@ -8,8 +8,6 @@ import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.domainmodel.DomainOperation
-import com.example.domain.domainmodel.DomainStorage
-import com.example.domain.domainmodel.GeneralOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IStorageRepository
 import com.example.domain.usecase.CalculateExpressionUseCase
@@ -159,7 +157,7 @@ class CreateOperationViewModel @Inject constructor(
 
             currentState.copy(
                 expression = result.expression,
-                result = result.evaluatedResult
+                result = result.amount
             )
         }
     }

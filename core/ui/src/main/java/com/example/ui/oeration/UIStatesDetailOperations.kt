@@ -10,7 +10,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
 data class UIStatesDetailGeneralOperations(
-    val result: String= "",
+    val result: Long = 0,
     val expression: String ="",
     val uiStateTypeOperation: UiStateTypeOperation?= null,
     val date: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,

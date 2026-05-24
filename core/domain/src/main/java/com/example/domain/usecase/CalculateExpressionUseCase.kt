@@ -10,12 +10,27 @@ class CalculateExpressionUseCase @Inject constructor() {
             "AC" -> ""
             "⌫" -> if (currentExpression.isNotEmpty()) currentExpression.dropLast(1) else ""
             "( )" -> handleParentheses(currentExpression)
-            "=" -> evaluate(currentExpression)
-            else -> appendKey(currentExpression, keyPressed)         }
+            "=" -> {
+                val res = evaluateToLong(currentExpression)
+                if (res != 0L) {
+                    // Преобразуем Long (копейки) обратно в строку для поля ввода
+                    val integerPart = res / 100
+                    val fractionalPart = res % 100
+                    if (fractionalPart == 0L) {
+                        integerPart.toString()
+                    } else {
+                        // Формируем дробную часть, убирая лишние нули в конце (например, 1.50 -> 1.5)
+                        val fractionStr = fractionalPart.toString().padStart(2, '0').trimEnd('0')
+                        "$integerPart.$fractionStr"
+                    }
+                } else currentExpression
+            }
+            else -> appendKey(currentExpression, keyPressed)
+        }
 
         return CalculatorResult(
             expression = newExpression,
-            evaluatedResult = if (newExpression.isEmpty()) "0" else evaluate(newExpression)
+            amount = evaluateToLong(newExpression)
         )
     }
 
@@ -25,8 +40,9 @@ class CalculateExpressionUseCase @Inject constructor() {
 
         // 1. Если строка пустая
         if (current.isEmpty()) {
-            if (key in operators || key == ".") return "0$key" // Если начали с +, будет 0+
-            if (key == "0") return "0" // Не даем ставить много нулей в начале
+            if (key in operators) return "0$key"
+            if (key == ".") return "0." // Нажали точку в начале -> "0."
+            if (key == "0") return "0"
             return key
         }
 
@@ -43,20 +59,25 @@ class CalculateExpressionUseCase @Inject constructor() {
         // 3. Если вводим точку
         if (key == ".") {
             if (lastChar == ".") return current
-            // Проверяем, есть ли уже точка в последнем числе
-            val lastNumber = current.split(*operators.toTypedArray()).last()
+            // Ищем последнее число в строке (может быть после оператора или скобки)
+            val lastNumber = current.split(*operators.toTypedArray(), "(", ")").last()
             if (lastNumber.contains(".")) return current
-            return current + key
+            if (lastNumber.isEmpty()) return current + "0." // Если нажали точку после оператора -> "0."
+            return "$current."
         }
-        // 4. Если вводим ноль
-        if (key == "0") {
-            // Если текущее число "0", не даем вводить еще нули
-            val lastNumber = current.split(*operators.toTypedArray()).last()
-            if (lastNumber == "0") return current
+        // 3. Если вводим точку
+        if (key == ".") {
+            if (lastChar == ".") return current
+            // Ищем последнее число в строке (может быть после оператора или скобки)
+            val lastNumber = current.split(*operators.toTypedArray(), "(", ")").last()
+            if (lastNumber.contains(".")) return current
+            if (lastNumber.isEmpty()) return current + "0." // Если нажали точку после оператора -> "0."
+            return current + "."
         }
 
-        // 5. Если текущее число "0" и вводится цифра (не точка) — заменяем 0 на эту цифру
-        val lastNumber = current.split(*operators.toTypedArray()).last()
+        // 4. Ограничение нулей
+        // 5. Замена одиночного нуля на цифру
+        val lastNumber = current.split(*operators.toTypedArray(), "(", ")").last()
         if (lastNumber == "0" && key != ".") {
             return current.dropLast(1) + key
         }
@@ -81,34 +102,27 @@ class CalculateExpressionUseCase @Inject constructor() {
             else -> current + "×(" // В остальных случаях подразумеваем умножение
         }
     }
-    private fun evaluate(expression: String): String {
-        if (expression.isEmpty()) return ""
+    private fun evaluateToLong(expression: String): Long {
+        if (expression.isEmpty()) return 0L
 
         return try {
-            // Подготовка строки для exp4j
             val prepared = expression
                 .replace("×", "*")
                 .replace("÷", "/")
                 .replace("−", "-")
-                .replace(",", ".")
 
             val e = ExpressionBuilder(prepared).build()
             val res = e.evaluate()
 
-            // Форматирование: убираем .0 у целых чисел
-            if (res % 1.0 == 0.0) {
-                res.toLong().toString()
-            } else {
-                "%.2f".format(res).replace(",", ".")
-            }
+            // Переводим в копейки: 1.2345 -> 123.45 -> 123
+            (res * 100).toLong()
         } catch (e: Exception) {
-            // Если выражение неполное (например "5+"), возвращаем пусто или ошибку
-            ""
+            0L
         }
     }
 }
 
 data class CalculatorResult(
     val expression: String,
-    val evaluatedResult: String
+    val amount: Long
 )

@@ -20,12 +20,12 @@ import java.text.DecimalFormatSymbols
 @Preview
 @Composable
 private fun AmountSectionPreview() {
-    AmountSection("5000+123-(123-123)","5 123")
+    AmountSection("5000+123-(123-123)",512300)
 }
 @Composable
 fun AmountSection(
     expression: String,
-    result: String,
+    result: Long,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -36,7 +36,7 @@ fun AmountSection(
     ) {
         // Главный результат с символом "="
         Text(
-            text = "=${result.let { it.ifEmpty { "0" } }.formatAmount()}",
+            text = "=${result.formatAmount()}",
             style = MaterialTheme.typography.displayMedium.copy(
                 fontSize = 48.sp,
                 fontWeight = FontWeight.W500,
@@ -70,4 +70,17 @@ fun String.formatAmount(): String {
     } catch (e: Exception) {
         this // Если это выражение (с плюсами и минусами), возвращаем как есть
     }
+}
+
+fun Long.formatAmount(): String {
+    val symbols = DecimalFormatSymbols().apply {
+        groupingSeparator = ' ' // Разделитель тысяч
+        decimalSeparator = ','  // Разделитель копеек
+    }
+
+    // Формат #,##0.00 заставляет всегда показывать две цифры копеек (банковский стандарт)
+    // Если копейки не нужны, если они .00, используйте "#,##0.##"
+    val formatter = DecimalFormat("#,##0.##", symbols)
+
+    return formatter.format(this / 100.0)
 }
