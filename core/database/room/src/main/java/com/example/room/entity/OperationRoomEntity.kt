@@ -94,7 +94,7 @@ fun NewGeneralOperation.toRoomEntity(): OperationRoomEntity {
         storageId = this.storageId,   // Берем ID из объекта storage
         categoryId = this.categoryId, // Берем ID из объекта category
         amount = this.amount,
-        isDebit = this is DebitOperation, // Определяем тип операции по классу
+        isDebit = this.isDebit, // Определяем тип операции по классу
         dateTime = timestamp,
         comment = this.comment,
         updatedAt = System.currentTimeMillis(),
