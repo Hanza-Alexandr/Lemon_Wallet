@@ -14,7 +14,7 @@ import com.example.room.entity.StorageRoomEntity
 import com.example.room.entity.TransferRoomEntity
 
 @Database(
-    version = 10, // Incremented version since we added a new table
+    version = 11, // Incremented version since we added a new table
     entities = [
         StorageRoomEntity::class,
         ColorRoomEntity::class,

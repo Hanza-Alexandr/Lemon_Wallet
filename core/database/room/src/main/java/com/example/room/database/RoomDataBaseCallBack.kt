@@ -28,29 +28,16 @@ class RoomDataBaseCallBack @Inject constructor(
             try {
                 // Получаем userId (например, "GUEST") для инициализации
                 val userId = getUserIdUseCase.getId()
-                if (userId.contains("GUEST")) {
-                    val colorDao = colorDaoProvider.get()
-                    val categoryDao = categoryDaoProvider.get()
-
-                    // 3. Загружаем предустановленные данные
-                    val defaultColors = DefaultData.getColorItems(userId)
-                    val defaultCategories = DefaultData.getCategoryItems(userId)
-                    defaultColors.forEach {
-                        colorDao.insertColor(it)
-                    }
-                    defaultCategories.forEach {
-                        categoryDao.insertCategory(it)
-                    }
-                    // Здесь же можно добавить дефолтный кошелек или категории, если нужно:
-                    // storageDaoProvider.get().insert(DefaultStorage.get(userId))
-                }
-
                 // Получаем DAO из провайдера
                 val colorDao = colorDaoProvider.get()
+                val categoryDao = categoryDaoProvider.get()
 
                 // Вставляем дефолтные цвета
                 DefaultData.getColorItems(userId).forEach { color ->
                     colorDao.insertColor(color)
+                }
+                DefaultData.getCategoryItems(userId).forEach { category ->
+                    categoryDao.insertCategory(category)
                 }
             } catch (e: Exception) {
                 // Логируем ошибку, если что-то пошло не так при первичной вставке
