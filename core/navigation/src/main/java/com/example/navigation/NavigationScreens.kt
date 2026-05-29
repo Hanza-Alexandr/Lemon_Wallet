@@ -17,4 +17,6 @@ sealed class NavigationRoute {
     data class CreateOperation(val storageId: String): NavigationRoute()
     @Serializable
     data class EditOperation(val operationId: String, val isTransfer: Boolean): NavigationRoute()
+    @Serializable
+    object CategorySelectScreen: NavigationRoute()
 }

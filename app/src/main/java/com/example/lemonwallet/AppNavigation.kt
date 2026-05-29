@@ -16,6 +16,7 @@ import com.example.navigation.NavigationRoute
 import com.example.onbording_screen.ui.OnBoardingScreen
 import com.example.storage_block.ui.StorageBlock
 import com.example.storage_block.ui.components.blocks.components.lastoperations.LastOperationBlock
+import com.example.ui.category.CategorySelectScreen
 import com.example.ui.oeration.createoperation.CreateOperationScreen
 import com.example.ui.oeration.editoperation.EditOperationScreen
 import com.example.ui.storage.createstorage.CreateStorageScreen
@@ -123,5 +124,8 @@ fun NavGraphBuilder.navigationManager (){
 
     composable<NavigationRoute.EditOperation> {
         EditOperationScreen()
+    }
+    composable<NavigationRoute.CategorySelectScreen>{
+        CategorySelectScreen()
     }
 }
