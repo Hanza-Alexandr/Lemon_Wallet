@@ -61,6 +61,7 @@ fun TransferWithDetails.toDomain(): TransferOperation{
             )else null
         ),
         amount = transfer.amount,
+        comment = transfer.comment,
         date = transfer.dateTime.toDomainDateTime().date,
         time = transfer.dateTime.toDomainDateTime().time
     )

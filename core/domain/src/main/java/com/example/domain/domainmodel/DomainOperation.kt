@@ -8,6 +8,7 @@ sealed class NewDomainOperation{
     abstract val amount: Long
     abstract val date: LocalDate
     abstract val time: LocalTime
+    abstract val comment: String?
 }
  sealed class DomainOperation: NewDomainOperation(){
     abstract val id: String
@@ -15,8 +16,6 @@ sealed class NewDomainOperation{
 abstract class GeneralOperation: DomainOperation(){
     abstract val storage: DomainStorage
     abstract val category: DomainCategory
-    abstract val comment: String?
-
 }
 data class CreditOperation(
     override val id: String,
@@ -48,6 +47,7 @@ data class TransferOperation(
     val fromStorage: DomainStorage,
     val toStorage: DomainStorage,
     override val amount: Long,
+    override val comment: String?,
     override val date: LocalDate,
     override val time: LocalTime
 ): DomainOperation()
@@ -58,9 +58,9 @@ data class NewGeneralOperation(
     val categoryId: String,
     override val amount: Long,
     val isDebit: Boolean,
+    override val comment: String?,
     override val date: LocalDate,
     override val time: LocalTime,
-    val comment: String?
 ): NewDomainOperation()
 
 data class NewTransferOperation(
@@ -68,6 +68,7 @@ data class NewTransferOperation(
     val fromStorageId: String,
     val toStorageId: String,
     override val amount: Long,
+    override val comment: String?,
     override val date: LocalDate,
     override val time: LocalTime
 ): NewDomainOperation()

@@ -88,6 +88,7 @@ fun UIStatesDetailGeneralOperations.toNewDomainOperation(): NewDomainOperation {
                 fromStorageId = fromStorage.id,
                 toStorageId = toStorage.id,
                 amount = this.result,
+                comment = this.note,
                 date = this.date,
                 time = this.time
             )

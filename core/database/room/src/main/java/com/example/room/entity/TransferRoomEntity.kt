@@ -41,6 +41,7 @@ data class TransferRoomEntity(
     @ColumnInfo(name = "from_storage_id") val fromStorageId: String,
     @ColumnInfo(name = "to_storage_id") val toStorageId: String,
     @ColumnInfo(name = "amount") val amount: Long, // Хранение в копейках (10000 = 100.00)
+    @ColumnInfo(name = "comment") val comment: String?,
     @ColumnInfo(name = "date_time") val dateTime: Long,
     //Service Info
     @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis(),
@@ -55,6 +56,7 @@ fun TransferRoomEntity.toDomain(fromStorage: DomainStorage, toStorage: DomainSto
         fromStorage = fromStorage,
         toStorage = toStorage,
         amount = amount,
+        comment = comment,
         date = dateTime.toDomainDateTime().date,
         time = dateTime.toDomainDateTime().time
     )
@@ -69,6 +71,25 @@ fun NewTransferOperation.toRoomEntity(): TransferRoomEntity {
         fromStorageId = this.fromStorageId, // ID кошелька списания
         toStorageId = this.toStorageId,     // ID кошелька зачисления
         amount = this.amount,
+        comment = this.comment,
+        dateTime = timestamp,
+        updatedAt = System.currentTimeMillis(),
+        isDeleted = false,
+        syncStatus = SynStatus.LOCAL_ONLY.toString()
+    )
+}
+
+fun TransferOperation.toRoomEntity(): TransferRoomEntity{
+    // Конвертируем дату и время в Long timestamp
+    val timestamp = dateTimeToEpoch(this.date, this.time)
+
+    return TransferRoomEntity(
+        id = this.id,
+        userId = this.userId,
+        fromStorageId = this.fromStorage.id, // ID кошелька списания
+        toStorageId = this.fromStorage.id,     // ID кошелька зачисления
+        amount = this.amount,
+        comment = this.comment,
         dateTime = timestamp,
         updatedAt = System.currentTimeMillis(),
         isDeleted = false,
