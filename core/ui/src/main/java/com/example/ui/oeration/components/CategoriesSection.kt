@@ -56,7 +56,8 @@ class ConvertDomainCategoryToUiModel @Inject constructor(){
 fun CategoriesSection(
     modifier: Modifier = Modifier,
     topCategories: List<UiModelCategory>, //TODO нужен useCase для выдачи топа категорий
-    onCategorySelected: (UiModelCategory) -> Unit
+    onCategorySelected: (UiModelCategory) -> Unit,
+    onCategoryAdded: ()-> Unit
 ) {
     // Тестовые данные (на скриншоте 3 одинаковых категории и кнопка "еще")
 
@@ -80,7 +81,7 @@ fun CategoriesSection(
 
             // Кнопка "Еще" (...)
             item {
-                MoreCategoryItem()
+                MoreCategoryItem(onCategoryAdded)
             }
         }
     }
@@ -139,10 +140,10 @@ fun CategoryItem(
 }
 
 @Composable
-fun MoreCategoryItem() {
+fun MoreCategoryItem(onCategoryAdded: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(72.dp)
+        modifier = Modifier.width(72.dp).clickable(onClick = onCategoryAdded)
     ) {
         Box(
             modifier = Modifier

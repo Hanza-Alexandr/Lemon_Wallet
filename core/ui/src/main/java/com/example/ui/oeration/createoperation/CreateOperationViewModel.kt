@@ -75,6 +75,14 @@ class CreateOperationViewModel @Inject constructor(
         }
     }
 
+    fun onCategoryAdded(){
+
+    }
+
+    fun onStorageAdded(){
+
+    }
+
     fun onSave(){
         viewModelScope.launch {
             try {

@@ -37,7 +37,9 @@ fun CreateOperationScreen(
             onFromStorageSelected = viewModel::onFromStorageSelected,
             onToStorageSelected = viewModel::onToStorageSelected,
             onCategorySelected = viewModel::onCategorySelected,
-            onKeyClick = viewModel::onKeyClick
+            onKeyClick = viewModel::onKeyClick,
+            onStorageAdded = viewModel::onStorageAdded,
+            onCategoryAdded = viewModel::onCategoryAdded
         )
 
     }

@@ -54,7 +54,8 @@ class ConvertDomainStorageToUiModel @Inject constructor(
 fun StorageSection(
     modifier: Modifier = Modifier,
     storages: List<StorageUiModel>,
-    onStorageSelected: (StorageUiModel) -> Unit
+    onStorageSelected: (StorageUiModel) -> Unit,
+    onStorageAdded: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(

@@ -121,6 +121,14 @@ class EditOperationViewModel @Inject constructor(
         }
     }
 
+    fun onCategoryAdded(){
+
+    }
+
+    fun onStorageAdded(){
+
+    }
+
     fun onUpdate(){
         viewModelScope.launch {
             val operationId = stateHandle.toRoute<NavigationRoute.EditOperation>().operationId

@@ -28,6 +28,8 @@ fun GlobalDetailsOperationContent(
     onFromStorageSelected: (StorageUiModel) -> Unit,
     onToStorageSelected: (StorageUiModel) -> Unit,
     onCategorySelected: (UiModelCategory) -> Unit,
+    onStorageAdded: () -> Unit,
+    onCategoryAdded: () -> Unit,
     onKeyClick: (String) -> Unit
 
 ){
@@ -57,11 +59,13 @@ fun GlobalDetailsOperationContent(
                     Column() {
                         StorageSection(
                             storages = uiState.uiStateTypeOperation.fromStorageList,
-                            onStorageSelected = onFromStorageSelected
+                            onStorageSelected = onFromStorageSelected,
+                            onStorageAdded = onStorageAdded
                         )
                         StorageSection(
                             storages = uiState.uiStateTypeOperation.toStorageList,
-                            onStorageSelected = onToStorageSelected
+                            onStorageSelected = onToStorageSelected,
+                            onStorageAdded = onStorageAdded
                         )
                     }
                 }
@@ -69,11 +73,13 @@ fun GlobalDetailsOperationContent(
                     Column() {
                         CategoriesSection(
                             topCategories = uiState.uiStateTypeOperation.categories,
-                            onCategorySelected = onCategorySelected
+                            onCategorySelected = onCategorySelected,
+                            onCategoryAdded = onCategoryAdded
                         )
                         StorageSection(
                             storages = uiState.uiStateTypeOperation.storageList,
-                            onStorageSelected = onFromStorageSelected
+                            onStorageSelected = onFromStorageSelected,
+                            onStorageAdded = onStorageAdded
                         )
                     }
                 }
