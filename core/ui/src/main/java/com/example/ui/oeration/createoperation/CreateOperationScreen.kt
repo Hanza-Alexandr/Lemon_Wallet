@@ -10,8 +10,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.ui.oeration.GlobalDetailsOperationContent
-import com.example.ui.storage.GlobalDetailStorageContent
-import com.example.ui.storage.createstorage.TopBarCreateStorage
 import com.example.ui.them.MainDark
 
 @Composable
@@ -39,7 +37,7 @@ fun CreateOperationScreen(
             onCategorySelected = viewModel::onCategorySelected,
             onKeyClick = viewModel::onKeyClick,
             onStorageAdded = viewModel::onStorageAdded,
-            onCategoryAdded = viewModel::onCategoryAdded
+            onMoreCategory = viewModel::onMoreCategory
         )
 
     }

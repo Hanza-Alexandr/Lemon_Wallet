@@ -1,6 +1,5 @@
 package com.example.ui.oeration.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,8 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainCategory
-import com.example.domain.domainmodel.DomainStorage
-import com.example.domain.usecase.GetStorageBalanceUseCase
 import com.example.ui.colorpikerrow.toColor
 import javax.inject.Inject
 
@@ -57,7 +54,7 @@ fun CategoriesSection(
     modifier: Modifier = Modifier,
     topCategories: List<UiModelCategory>, //TODO нужен useCase для выдачи топа категорий
     onCategorySelected: (UiModelCategory) -> Unit,
-    onCategoryAdded: ()-> Unit
+    onMoreCategory: ()-> Unit
 ) {
     // Тестовые данные (на скриншоте 3 одинаковых категории и кнопка "еще")
 
@@ -81,7 +78,7 @@ fun CategoriesSection(
 
             // Кнопка "Еще" (...)
             item {
-                MoreCategoryItem(onCategoryAdded)
+                MoreCategoryItem(onMoreCategory)
             }
         }
     }
@@ -140,10 +137,10 @@ fun CategoryItem(
 }
 
 @Composable
-fun MoreCategoryItem(onCategoryAdded: () -> Unit) {
+fun MoreCategoryItem(onMoreCategory: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(72.dp).clickable(onClick = onCategoryAdded)
+        modifier = Modifier.width(72.dp).clickable(onClick = onMoreCategory)
     ) {
         Box(
             modifier = Modifier

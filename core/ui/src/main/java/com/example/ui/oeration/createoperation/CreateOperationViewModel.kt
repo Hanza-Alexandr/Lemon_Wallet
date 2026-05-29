@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
-import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.domainmodel.DomainOperation
 import com.example.domain.domainmodel.NewGeneralOperation
 import com.example.domain.domainmodel.NewTransferOperation
@@ -75,12 +74,12 @@ class CreateOperationViewModel @Inject constructor(
         }
     }
 
-    fun onCategoryAdded(){
-
+    fun onMoreCategory(){
+        navigator.navigateTo(NavigationRoute.CategorySelectScreen)
     }
 
     fun onStorageAdded(){
-
+        navigator.navigateTo(NavigationRoute.CreateStorage)
     }
 
     fun onSave(){

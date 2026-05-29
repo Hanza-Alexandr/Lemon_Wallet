@@ -32,7 +32,7 @@ fun EditOperationScreen(
             onToStorageSelected = viewModel::onToStorageSelected,
             onCategorySelected = viewModel::onCategorySelected,
             onKeyClick = viewModel::onKeyClick,
-            onCategoryAdded = viewModel::onCategoryAdded,
+            onMoreCategory = viewModel::onMoreCategory,
             onStorageAdded = viewModel::onStorageAdded
         )
 

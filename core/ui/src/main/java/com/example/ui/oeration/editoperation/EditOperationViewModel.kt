@@ -7,7 +7,6 @@ import androidx.navigation.toRoute
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainOperation
-import com.example.domain.domainmodel.GeneralOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.reposytory.IStorageRepository
@@ -121,12 +120,12 @@ class EditOperationViewModel @Inject constructor(
         }
     }
 
-    fun onCategoryAdded(){
-
+    fun onMoreCategory(){
+        navigator.navigateTo(NavigationRoute.CategorySelectScreen)
     }
 
     fun onStorageAdded(){
-
+        navigator.navigateTo(NavigationRoute.CreateStorage)
     }
 
     fun onUpdate(){

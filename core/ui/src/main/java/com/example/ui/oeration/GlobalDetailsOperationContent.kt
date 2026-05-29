@@ -8,9 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.domainmodel.DomainOperation
-import com.example.domain.domainmodel.DomainStorage
 import com.example.ui.oeration.components.StorageSection
 import com.example.ui.oeration.components.AmountSection
 import com.example.ui.oeration.components.CalculatorKeyboard
@@ -29,7 +27,7 @@ fun GlobalDetailsOperationContent(
     onToStorageSelected: (StorageUiModel) -> Unit,
     onCategorySelected: (UiModelCategory) -> Unit,
     onStorageAdded: () -> Unit,
-    onCategoryAdded: () -> Unit,
+    onMoreCategory: () -> Unit,
     onKeyClick: (String) -> Unit
 
 ){
@@ -74,7 +72,7 @@ fun GlobalDetailsOperationContent(
                         CategoriesSection(
                             topCategories = uiState.uiStateTypeOperation.categories,
                             onCategorySelected = onCategorySelected,
-                            onCategoryAdded = onCategoryAdded
+                            onMoreCategory = onMoreCategory
                         )
                         StorageSection(
                             storages = uiState.uiStateTypeOperation.storageList,

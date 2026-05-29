@@ -80,7 +80,7 @@ fun StorageSection(
 
             // Кнопка добавления нового счета
             item {
-                AddAccountButton()
+                AddAccountButton(onStorageAdded)
             }
         }
     }
@@ -129,12 +129,12 @@ fun StorageItem(
 }
 
 @Composable
-fun AddAccountButton() {
+fun AddAccountButton(onStorageAdded: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(8.dp),
         color = Color.White,
         shadowElevation = 2.dp,
-        modifier = Modifier.size(width = 56.dp, height = 56.dp)
+        modifier = Modifier.size(width = 56.dp, height = 56.dp).clickable(onClick = onStorageAdded)
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
