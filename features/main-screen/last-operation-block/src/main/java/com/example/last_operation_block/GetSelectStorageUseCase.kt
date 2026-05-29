@@ -1,5 +1,6 @@
 package com.example.last_operation_block
 
+import android.util.Log
 import com.example.domain.domainmodel.DomainOperation
 import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.GeneralOperation
@@ -17,23 +18,20 @@ class GetOperationsUseCase @Inject constructor(
     private val selectStorageUseCase: GetSelectStorageUseCase,
     private val operationRepository: IOperationRepository,
 ) {
-    operator fun invoke(): Flow<List<DomainOperation>>{
-        val selectStorage = selectStorageUseCase.invoke()
-        val allOperations = operationRepository.getAllTransactionsFlow()
+    operator fun invoke(): Flow<List<DomainOperation>> =
+        operationRepository.getAllTransactionsFlow()
+            .combine(selectStorageUseCase()) { operations, selectedStorages ->
+                val selectedIds = selectedStorages.map { it.id }.toSet()
 
-        return allOperations.combine(selectStorage) { operations, storages ->
-            operations.filter { operation ->
-                storages.any { storage ->
-                    when(operation){
-                        is GeneralOperation -> {
-                            operation.storage.id == storage.id
-                        }
-                        is TransferOperation -> {
-                            operation.fromStorage.id == storage.id || operation.toStorage.id == storage.id
-                        }
+                operations.filter { operation ->
+                    when (operation) {
+                        is GeneralOperation ->
+                            operation.storage.id in selectedIds
+
+                        is TransferOperation ->
+                            operation.fromStorage.id in selectedIds ||
+                                    operation.toStorage.id in selectedIds
                     }
                 }
             }
-        }
-    }
 }

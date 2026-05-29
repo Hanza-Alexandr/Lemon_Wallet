@@ -40,38 +40,44 @@ fun GlobalDetailsOperationContent(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
         ) {
-            AmountSection(
-                expression = uiState.expression,
-                result = uiState.result
-            )
-            TransactionTypeSelector(
-                onChangeType = onChangeTypeOperation
-            )
-            if (uiState.uiStateTypeOperation is UiStateTypeOperation.TransferUiStateTypeOperation){
-                Column() {
-                    StorageSection(
-                        storages = uiState.uiStateTypeOperation.fromStorageList,
-                        onStorageSelected = onFromStorageSelected
-                    )
-                    StorageSection(
-                        storages = uiState.uiStateTypeOperation.toStorageList,
-                        onStorageSelected = onToStorageSelected
-                    )
+            if (uiState.uiStateTypeOperation !==null){
+                AmountSection(
+                    expression = uiState.expression,
+                    result = uiState.result
+                )
+                TransactionTypeSelector(
+                    selectIndex = when(uiState.uiStateTypeOperation){
+                        is UiStateTypeOperation.GeneralOperationUiStateTypeOperation -> if (uiState.uiStateTypeOperation.isDebit) 0 else 1
+                        is UiStateTypeOperation.TransferUiStateTypeOperation -> 2
+                        else -> 0
+                    },
+                    onChangeType = onChangeTypeOperation
+                )
+                if (uiState.uiStateTypeOperation is UiStateTypeOperation.TransferUiStateTypeOperation){
+                    Column() {
+                        StorageSection(
+                            storages = uiState.uiStateTypeOperation.fromStorageList,
+                            onStorageSelected = onFromStorageSelected
+                        )
+                        StorageSection(
+                            storages = uiState.uiStateTypeOperation.toStorageList,
+                            onStorageSelected = onToStorageSelected
+                        )
+                    }
+                }
+                else if(uiState.uiStateTypeOperation is UiStateTypeOperation.GeneralOperationUiStateTypeOperation){
+                    Column() {
+                        CategoriesSection(
+                            topCategories = uiState.uiStateTypeOperation.categories,
+                            onCategorySelected = onCategorySelected
+                        )
+                        StorageSection(
+                            storages = uiState.uiStateTypeOperation.storageList,
+                            onStorageSelected = onFromStorageSelected
+                        )
+                    }
                 }
             }
-            else if(uiState.uiStateTypeOperation is UiStateTypeOperation.GeneralOperationUiStateTypeOperation){
-                Column() {
-                    CategoriesSection(
-                        topCategories = uiState.uiStateTypeOperation.categories,
-                        onCategorySelected = onCategorySelected
-                    )
-                    StorageSection(
-                        storages = uiState.uiStateTypeOperation.storageList,
-                        onStorageSelected = onFromStorageSelected
-                    )
-                }
-            }
-
 
         }
         CalculatorKeyboard(

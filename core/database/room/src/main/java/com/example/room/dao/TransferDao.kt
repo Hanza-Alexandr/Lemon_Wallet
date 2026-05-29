@@ -1,6 +1,7 @@
 package com.example.room.dao
 
 import androidx.room.*
+import com.example.domain.utils.SynStatus
 import com.example.room.entity.TransferRoomEntity
 import com.example.room.model.TransferWithDetails
 // Предполагаю, что SyncStatus находится в этом пакете, либо замените на String, если Enum еще не создан
@@ -67,7 +68,7 @@ interface TransferDao {
     suspend fun softDeleteTransfer(
         transferId: String,
         timestamp: Long = System.currentTimeMillis(),
-        syncStatus: String
+        syncStatus: SynStatus = SynStatus.PENDING
     )
 
 

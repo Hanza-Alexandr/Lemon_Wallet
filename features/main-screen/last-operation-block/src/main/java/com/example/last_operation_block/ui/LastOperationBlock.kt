@@ -1,5 +1,6 @@
 package com.example.storage_block.ui.components.blocks.components.lastoperations
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,12 +22,13 @@ fun LastOperationBlock(
     viewModel: LastOperationViewModel = hiltViewModel(),
 ){
     val lastOperations by viewModel.lastOperation.collectAsStateWithLifecycle()
-
+    Log.d ("LastOperationBlock", "lastOperations: ${lastOperations.size}")
     TemplateMainsBlock(
         topBar = ::TopBarLastOperationsBlock,
     ) {
         LastOperationList(
-            operations = lastOperations
+            operations = lastOperations,
+            onOperationClick = viewModel::onOperationClick,
         )
     }
 }

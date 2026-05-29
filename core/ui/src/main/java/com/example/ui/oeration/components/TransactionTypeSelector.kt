@@ -31,11 +31,12 @@ import kotlin.reflect.KClass
 @Composable
 fun TransactionTypeSelector(
     modifier: Modifier = Modifier,
+    selectIndex: Int,
     onChangeType: (KClass<out DomainOperation>) -> Unit
 ) {
 
     // Состояние выбранного индекса (0 - Доход, 1 - Расход, 2 - Перевод)
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(selectIndex) }
     val options = listOf("Доход", "Расход", "Перевод")
 
     SingleChoiceSegmentedButtonRow(

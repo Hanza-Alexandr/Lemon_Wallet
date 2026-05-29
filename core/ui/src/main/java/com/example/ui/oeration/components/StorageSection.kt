@@ -28,12 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.usecase.GetStorageBalanceUseCase
+import com.example.domain.utils.formatAmount
 import javax.inject.Inject
 
 // Модель данных для счета
 data class StorageUiModel(
     val storage: DomainStorage,
-    val balance: String,
+    val balance: Long,
     val isSelected: Boolean = false
 )
 
@@ -43,7 +44,7 @@ class ConvertDomainStorageToUiModel @Inject constructor(
     suspend operator fun invoke(storage: DomainStorage): StorageUiModel {
         return StorageUiModel(
             storage = storage,
-            balance = getStorageBalanceUseCase.invoke(storage).toString()
+            balance = getStorageBalanceUseCase.invoke(storage)
         )
     }
 }
@@ -114,7 +115,7 @@ fun StorageItem(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = storage.balance,
+                text = storage.balance.formatAmount(),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color(0xFF7F8A99),
                     fontSize = 12.sp

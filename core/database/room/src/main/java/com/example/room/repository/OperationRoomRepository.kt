@@ -17,6 +17,7 @@ import com.example.room.model.toDomain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -51,15 +52,33 @@ class OperationRoomRepository @Inject constructor(
     override suspend fun getTransactionsByStorageFlow(
         storageId: String
     ): Flow<List<DomainOperation>> {
-        TODO("Not yet implemented")
+        val generalOperation =  getUserIdUseCase.getIfFLow().flatMapLatest { userId ->
+            operationDao.getOperationsByStorageWithDetailsFlow(userId,storageId).map { operations ->
+                operations.map { it.toDomain() }
+            }
+        }
+
+        val transferOperation =  getUserIdUseCase.getIfFLow().flatMapLatest { userId ->
+            transferDao.getTransfersByStorageWithDetailsFlow(userId,storageId).map { operations ->
+                operations.map { it.toDomain() }
+            }
+        }
+        return generalOperation.combine(transferOperation) { general, transfer ->
+            // Объединяем списки и сортируем
+            (general + transfer).sortedWith(
+                compareByDescending<DomainOperation> { it.date }
+                    .thenByDescending { it.time }
+            )
+        }
+        //TODO("Not yet implemented")
     }
 
     override suspend fun getGeneralOperationById(id: String): GeneralOperation? {
-        TODO("Not yet implemented")
+       return operationDao.getOperationWithDetailsByIdFlow(id).firstOrNull()?.toDomain()
     }
 
     override suspend fun getTransferOperationById(id: String): TransferOperation? {
-        TODO("Not yet implemented")
+        return transferDao.getTransferWithDetailsById(id)?.toDomain()
     }
 
     override suspend fun saveGeneralOperation(operation: NewGeneralOperation) {
@@ -71,15 +90,30 @@ class OperationRoomRepository @Inject constructor(
     }
 
     override suspend fun updateGeneralOperation(operation: GeneralOperation) {
-        TODO("Not yet implemented")
+        operationDao.updateOperation(operation.toRoomEntity())
     }
 
     override suspend fun updateTransfer(transfer: TransferOperation) {
-        TODO("Not yet implemented")
+        transferDao.updateTransfer(transfer.toRoomEntity())
     }
 
     override suspend fun deleteTransaction(operation: DomainOperation): Boolean {
-        TODO("Not yet implemented")
+        return try {
+            when (operation) {
+                is GeneralOperation -> {
+                    operationDao.softDeleteOperation(operation.id)
+                    true
+                }
+
+                is TransferOperation ->{
+                    transferDao.softDeleteTransfer(operation.id)
+                    true
+                }
+            }
+        } catch (e: Exception){
+            false
+        }
+
     }
 
     override suspend fun migrateGuestData(newUserId: String) {

@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainStorage
+import com.example.domain.utils.formatAmount
 import com.example.storage_block.model.UiForStorageBlock
 import com.example.ui.them.*
 import com.example.ui.R
@@ -90,7 +91,7 @@ fun StorageHorizontalCard(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "${storage.balance}",
+                text = storage.balance.formatAmount(),
                 fontSize = (18 * sizeCof).sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

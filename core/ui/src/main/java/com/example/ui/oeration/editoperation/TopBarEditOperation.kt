@@ -1,4 +1,4 @@
-package com.example.ui.oeration.createoperation
+package com.example.ui.oeration.editoperation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,11 +19,11 @@ import androidx.compose.ui.unit.sp
 import com.example.ui.GlobalTopBar
 import com.example.ui.R
 
-
 @Composable
-fun TopBarCreateOperation(
+fun TopBarEditOperation(
     onBack: () -> Unit,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    onDelete: () -> Unit
 ){
     GlobalTopBar {
         Row(
@@ -38,17 +38,22 @@ fun TopBarCreateOperation(
                 Icon(painterResource(R.drawable.close), contentDescription = "Close")
             }
             Text(
-                text = "Создание",
+                text = "Изменение",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp)
             )
+            IconButton(onClick = onDelete) {
+                Icon(painterResource(R.drawable.delete_forever), contentDescription = "Delete")
+            }
             IconButton(onClick = onSave) {
                 Icon(painterResource(R.drawable.done), contentDescription = "Save")
             }
-            IconButton(onClick = {  }) {
+            IconButton(onClick = {
+
+            }) {
                 Icon(painterResource(R.drawable.reorder), contentDescription = "more")
             }
         }
@@ -57,9 +62,10 @@ fun TopBarCreateOperation(
 
 @Preview
 @Composable
-private fun TopBarCreateOperationPreview(){
-    TopBarCreateOperation(
+private fun TopBarEditOperationPreview(){
+    TopBarEditOperation(
         onBack = {},
-        onSave = {}
+        onSave = {},
+        onDelete = {}
     )
 }

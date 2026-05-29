@@ -21,7 +21,7 @@ fun OperationBaseItem(
     modifier: Modifier = Modifier,
     iconBlock: @Composable () -> Unit,
     contentBlock: @Composable ColumnScope.() -> Unit,
-    actionBlock: @Composable (() -> Unit)? = null
+    actionBlock: @Composable (() -> Unit)? = null,
 ) {
     Surface(
         modifier = modifier

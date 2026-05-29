@@ -102,3 +102,20 @@ fun NewGeneralOperation.toRoomEntity(): OperationRoomEntity {
     )
 }
 
+fun GeneralOperation.toRoomEntity(): OperationRoomEntity {
+    val timestamp = dateTimeToEpoch(this.date, this.time)
+
+    return OperationRoomEntity(
+        id = this.id,
+        userId = this.userId,
+        storageId = this.storage.id,   // Берем ID из объекта storage
+        categoryId = this.category.id, // Берем ID из объекта category
+        amount = this.amount,
+        isDebit = if (this is DebitOperation) true else false, // Определяем тип операции по классу
+        dateTime = timestamp,
+        comment = this.comment,
+        updatedAt = System.currentTimeMillis(),
+        syncStatus = SynStatus.LOCAL_ONLY.toString() // По умолчанию для новых/измененных
+    )
+}
+

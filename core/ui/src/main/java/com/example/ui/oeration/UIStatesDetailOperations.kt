@@ -1,8 +1,5 @@
 package com.example.ui.oeration
 
-import com.example.domain.domainmodel.DomainCategory
-import com.example.domain.domainmodel.DomainOperation
-import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.NewDomainOperation
 import com.example.domain.domainmodel.NewGeneralOperation
 import com.example.domain.domainmodel.NewTransferOperation

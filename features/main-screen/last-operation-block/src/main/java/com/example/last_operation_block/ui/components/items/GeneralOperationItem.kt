@@ -1,7 +1,9 @@
 package com.example.last_operation_block.ui.components.items
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -30,7 +32,10 @@ import com.example.domain.utils.formatAmount
 import com.example.ui.them.SecondDark
 
 @Composable
-fun GeneralOperationItem(generalTransaction: GeneralOperation) {
+fun GeneralOperationItem(
+    generalTransaction: GeneralOperation,
+    onClick: (GeneralOperation)-> Unit,
+) {
     val context = LocalContext.current
     val iconResId = remember(generalTransaction.category.icon) {
         val id = context.resources.getIdentifier(
@@ -40,81 +45,86 @@ fun GeneralOperationItem(generalTransaction: GeneralOperation) {
         )
         if (id != 0) id else com.example.ui.R.drawable.block
     }
-
-    OperationBaseItem(
-        iconBlock = {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .background(Color.White, CircleShape), //TODO
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = iconResId),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = Color.Black // Иконки на скрине черные
-                )
-            }
-        },
-        contentBlock = {
-            // Заголовок: Еда и напитки
-            Text(
-                text = generalTransaction.category.name,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = SecondDark
-            )
-
-            // Подзаголовок 1: Счет (Сбер)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.AttachMoney, // Или ваша иконка кошелька
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = SecondDark
-                )
+    Column(
+        modifier = Modifier.clickable{onClick(generalTransaction)}
+    ) {
+        OperationBaseItem(
+            iconBlock = {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .background(Color.White, CircleShape), //TODO
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = iconResId),
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp),
+                        tint = Color.Black // Иконки на скрине черные
+                    )
+                }
+            },
+            contentBlock = {
+                // Заголовок: Еда и напитки
                 Text(
-                    text = generalTransaction.storage.name,
-                    style = MaterialTheme.typography.bodySmall,
+                    text = generalTransaction.category.name,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = SecondDark
                 )
-            }
 
-            // Подзаголовок 2: Заметка (если есть)
-            if (generalTransaction.comment != null) {
+                // Подзаголовок 1: Счет (Сбер)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.Outlined.ChatBubbleOutline,
+                        imageVector = Icons.Default.AttachMoney, // Или ваша иконка кошелька
                         contentDescription = null,
                         modifier = Modifier.size(14.dp),
                         tint = SecondDark
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = generalTransaction.comment!!,
+                        text = generalTransaction.storage.name,
                         style = MaterialTheme.typography.bodySmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
                         color = SecondDark
                     )
                 }
-            }
-        },
-        actionBlock = {
-            // Сумма: -2399р
-            Text(
-                text = when(generalTransaction){
-                    is DebitOperation -> "+${generalTransaction.amount.formatAmount()}"
-                    is CreditOperation -> "-${generalTransaction.amount.formatAmount()}"
-                    else -> ""
-                },
-                style = MaterialTheme.typography.titleLarge,
-                color = when(generalTransaction){
-                    is DebitOperation -> Color(0xFF81C784)
-                    is CreditOperation -> Color(0xFFE57373)
-                    else -> Color(0xFFE57373)
+
+                // Подзаголовок 2: Заметка (если есть)
+                if (generalTransaction.comment != null) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Outlined.ChatBubbleOutline,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp),
+                            tint = SecondDark
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = generalTransaction.comment!!,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = SecondDark
+                        )
+                    }
                 }
-            )
-        }
-    )
+            },
+            actionBlock = {
+                // Сумма: -2399р
+                Text(
+                    text = when(generalTransaction){
+                        is DebitOperation -> "+${generalTransaction.amount.formatAmount()}"
+                        is CreditOperation -> "-${generalTransaction.amount.formatAmount()}"
+                        else -> ""
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    color = when(generalTransaction){
+                        is DebitOperation -> Color(0xFF81C784)
+                        is CreditOperation -> Color(0xFFE57373)
+                        else -> Color(0xFFE57373)
+                    }
+                )
+            }
+
+        )
+    }
+
 }
