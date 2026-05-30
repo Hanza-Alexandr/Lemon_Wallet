@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.auth.ui.AuthorizationScreen
+import com.example.categoryselection_screen.ui.CategorySelectScreen
 import com.example.detailoperation_screen.ui.create.CreateOperationScreen
 import com.example.detailoperation_screen.ui.edit.EditOperationScreen
 import com.example.detailstorage_screen.ui.create.CreateStorageScreen
@@ -19,7 +20,6 @@ import com.example.navigation.NavigationRoute
 import com.example.onbording_screen.ui.OnBoardingScreen
 import com.example.storage_block.ui.StorageBlock
 import com.example.storage_block.ui.components.blocks.components.lastoperations.LastOperationBlock
-import com.example.ui.category.CategorySelectScreen
 
 
 

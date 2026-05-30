@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":features:main-screen:last-operation-block"))
     implementation(project(":features:detailstorage-screen"))
     implementation(project(":features:detailoperation-screen"))
+    implementation(project(":features:categoryselection-screen"))
 
 
 
