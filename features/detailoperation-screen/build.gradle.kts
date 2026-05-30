@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     ksp(libs.hilt.android.compiler)
 
+    implementation(libs.exp4j)//калькулятор
+
+
     // Common Android/UI
     implementation(libs.material)
     implementation(libs.androidx.material3)

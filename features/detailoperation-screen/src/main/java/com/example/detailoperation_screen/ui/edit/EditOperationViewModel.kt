@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.detailoperation_screen.UpdateOperationUseCase
+import com.example.detailoperation_screen.usecase.UpdateOperationUseCase
 import com.example.detailoperation_screen.model.UIStatesDetailGeneralOperations
 import com.example.detailoperation_screen.model.UiStateTypeOperation
 import com.example.domain.domainmodel.CreditOperation
@@ -13,7 +13,7 @@ import com.example.domain.domainmodel.DomainOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.reposytory.IStorageRepository
-import com.example.domain.usecase.CalculateExpressionUseCase
+import com.example.detailoperation_screen.usecase.CalculateExpressionUseCase
 import com.example.domain.usecase.GetTopCategoriesUseCase
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute

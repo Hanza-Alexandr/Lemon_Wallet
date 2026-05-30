@@ -27,7 +27,7 @@ class GetFlowUiForStorageBlockUseCase @Inject constructor(
                 storages.map { storage ->
                     UiForStorageBlock(
                         // Вызываем баланс (UseCase должен возвращать Long или Double)
-                        balance = getStorageBalanceUseCase.invoke(storage),
+                        balance = getStorageBalanceUseCase.balance(storage),
                         storage = storage,
                         isSelected = selectedIds.contains(storage.id)
                     )

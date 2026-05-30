@@ -15,7 +15,7 @@ import com.example.domain.domainmodel.NewTransferOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.reposytory.IStorageRepository
-import com.example.domain.usecase.CalculateExpressionUseCase
+import com.example.detailoperation_screen.usecase.CalculateExpressionUseCase
 import com.example.domain.usecase.GetTopCategoriesUseCase
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute

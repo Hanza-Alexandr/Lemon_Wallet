@@ -1,4 +1,4 @@
-package com.example.detailoperation_screen
+package com.example.detailoperation_screen.usecase
 
 import com.example.detailoperation_screen.model.UIStatesDetailGeneralOperations
 import com.example.detailoperation_screen.model.UiStateTypeOperation
@@ -88,7 +88,7 @@ class UpdateOperationUseCase @Inject constructor(
             }
         }
         else if (operation::class == GeneralOperation::class && uiOpType == GeneralOperation::class ){
-            TODO()
+            TODO("NOT YET IMPLEMENT")
         }
         else{
             val newOp = uiState.toNewDomainOperation()

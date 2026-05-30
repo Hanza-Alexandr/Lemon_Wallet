@@ -3,8 +3,6 @@ package com.example.room.repository
 import com.example.domain.domainmodel.DomainColor
 import com.example.domain.domainmodel.NewDomainColor
 import com.example.domain.reposytory.IColorRepository
-import com.example.domain.state.AuthorizationState
-import com.example.domain.usecase.AccountService
 import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.ColorDao
 import com.example.room.entity.toDomain

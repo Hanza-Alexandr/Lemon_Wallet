@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.detailoperation_screen.usecase
 
 import net.objecthunter.exp4j.ExpressionBuilder
 import javax.inject.Inject

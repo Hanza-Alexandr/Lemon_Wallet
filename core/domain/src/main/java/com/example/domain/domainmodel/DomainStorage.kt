@@ -2,7 +2,6 @@ package com.example.domain.domainmodel
 
 import com.example.domain.Currency
 import com.example.domain.TypeStorage
-import com.example.domain.state.DomainState
 
 data class DomainStorage(
     val id: String,
