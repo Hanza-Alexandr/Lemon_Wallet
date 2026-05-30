@@ -1,11 +1,8 @@
-package com.example.storage_block.model
+package com.example.storage_block.usecases
 
 import com.example.domain.settings.ISettingsRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-import kotlin.collections.remove
-import kotlin.compareTo
-import kotlin.text.clear
 
 class OnSelectStorageInStorageBlockUseCase @Inject constructor(
     val settings: ISettingsRepository,

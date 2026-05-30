@@ -1,8 +1,9 @@
-package com.example.storage_block.model
+package com.example.storage_block.usecases
 
 import com.example.domain.reposytory.IStorageRepository
 import com.example.domain.settings.ISettingsRepository
 import com.example.domain.usecase.GetStorageBalanceUseCase
+import com.example.storage_block.model.UiForStorageBlock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
