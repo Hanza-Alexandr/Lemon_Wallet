@@ -1,4 +1,4 @@
-package com.example.ui.category
+package com.example.categoryselection_screen.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
