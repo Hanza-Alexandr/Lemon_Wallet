@@ -20,6 +20,8 @@ class StorageBlockViewModel @Inject constructor(
     getFlowUiForStorageBlockUseCase: GetFlowUiForStorageBlockUseCase,
     private val onSelectStorageInStorageBlockUseCase: OnSelectStorageInStorageBlockUseCase
 ): ViewModel(){
+
+
     val storageUIList: StateFlow<List<UiForStorageBlock>?> = getFlowUiForStorageBlockUseCase()
         .stateIn(
             scope = viewModelScope,

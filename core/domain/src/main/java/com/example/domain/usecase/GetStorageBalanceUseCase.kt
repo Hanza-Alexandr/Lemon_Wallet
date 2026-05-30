@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.random.Random
 
 class GetStorageBalanceUseCase @Inject constructor(
     private val operationRepo: IOperationRepository
@@ -60,4 +61,30 @@ class GetStorageBalanceUseCase @Inject constructor(
         }
         return res
     }
+
+    fun allBalancesFlow(): Flow<Map<String, Long>> {
+        return operationRepo.getAllTransactionsFlow().map { operations ->
+            val balances = mutableMapOf<String, Long>()
+
+            operations.forEach { op ->
+                when (op) {
+                    is DebitOperation -> {
+                        balances[op.storage.id] = (balances[op.storage.id] ?: 0) + op.amount
+                    }
+                    is CreditOperation -> {
+                        balances[op.storage.id] = (balances[op.storage.id] ?: 0) -op.amount
+                    }
+                    is TransferOperation -> {
+                        // Уменьшаем баланс у того, кто отправил
+                        balances[op.fromStorage.id] = (balances[op.fromStorage.id] ?: 0) - op.amount
+                        // Увеличиваем у того, кто получил
+                        balances[op.toStorage.id] = (balances[op.toStorage.id] ?: 0) + op.amount
+                    }
+                    else -> {}
+                }
+            }
+            balances // Возвращаем Map<ID счета, Баланс>
+        }
+    }
+
 }

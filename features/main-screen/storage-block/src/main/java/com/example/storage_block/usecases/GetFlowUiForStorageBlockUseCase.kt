@@ -6,34 +6,32 @@ import com.example.domain.usecase.GetStorageBalanceUseCase
 import com.example.storage_block.model.UiForStorageBlock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import javax.inject.Inject
 
 class GetFlowUiForStorageBlockUseCase @Inject constructor(
     private val getStorageBalanceUseCase: GetStorageBalanceUseCase,
-    private val repo: IStorageRepository,
-    private val settings: ISettingsRepository,
+    private val storageRepo: IStorageRepository,
+    private val settings: ISettingsRepository
 ) {
-    operator fun invoke(): Flow<List<UiForStorageBlock>> {
-        // 1. Сначала подписываемся на userId, так как он нужен для получения списка стораджей
-        return settings.userIdFlow.flatMapLatest { userId ->
-            if (userId == null) throw NullPointerException("Нет UserID")
 
-            // 2. Комбинируем поток всех стораджей и список выбранных ID
-            combine(
-                repo.getAllStoragesFlow(),
-                settings.idSelectedStorageFlow
-            ) { storages, selectedIds ->
-                // 3. Маппим список стораджей в UI-модели
-                storages.map { storage ->
-                    UiForStorageBlock(
-                        // Вызываем баланс (UseCase должен возвращать Long или Double)
-                        balance = getStorageBalanceUseCase.balance(storage),
-                        storage = storage,
-                        isSelected = selectedIds.contains(storage.id)
-                    )
-                }
+    // 1. Берем поток всех счетов
+    private val storagesFlow = storageRepo.getAllStoragesFlow()
+
+    // 2. Берем ОДИН поток, который считает балансы сразу для всех счетов
+    private val allBalancesFlow = getStorageBalanceUseCase.allBalancesFlow()
+    private val selectIdsFlow = settings.idSelectedStorageFlow
+
+    operator fun invoke(): Flow<List<UiForStorageBlock>> {
+        // 3. Комбинируем их
+        return combine(storagesFlow, allBalancesFlow, selectIdsFlow) { storages, balancesMap, selectIds->
+            storages.map { storage ->
+                UiForStorageBlock(
+                    storage = storage,
+                    balance = balancesMap[storage.id] ?: 0L,
+                    isSelected = if (selectIds.find { it == storage.id } != null) true else false
+                )
             }
-        }
+        }.distinctUntilChanged()
     }
 }
