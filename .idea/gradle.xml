@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/auth" />
+            <option value="$PROJECT_DIR$/features/detailoperation-screen" />
             <option value="$PROJECT_DIR$/features/detailstorage-screen" />
             <option value="$PROJECT_DIR$/features/main-screen" />
             <option value="$PROJECT_DIR$/features/main-screen/chart-block" />

@@ -1,4 +1,4 @@
-package com.example.ui.oeration.createoperation
+package com.example.detailoperation_screen.ui.create
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

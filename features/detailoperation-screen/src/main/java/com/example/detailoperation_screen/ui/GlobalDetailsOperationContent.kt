@@ -1,4 +1,4 @@
-package com.example.ui.oeration
+package com.example.detailoperation_screen.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,14 +8,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.detailoperation_screen.model.UIStatesDetailGeneralOperations
+import com.example.detailoperation_screen.model.UiStateTypeOperation
 import com.example.domain.domainmodel.DomainOperation
-import com.example.ui.oeration.components.StorageSection
-import com.example.ui.oeration.components.AmountSection
-import com.example.ui.oeration.components.CalculatorKeyboard
-import com.example.ui.oeration.components.CategoriesSection
-import com.example.ui.oeration.components.StorageUiModel
-import com.example.ui.oeration.components.TransactionTypeSelector
-import com.example.ui.oeration.components.UiModelCategory
+import com.example.detailoperation_screen.ui.components.StorageSection
+import com.example.detailoperation_screen.ui.components.AmountSection
+import com.example.detailoperation_screen.ui.components.CalculatorKeyboard
+import com.example.detailoperation_screen.ui.components.CategoriesSection
+import com.example.detailoperation_screen.ui.components.StorageUiModel
+import com.example.detailoperation_screen.ui.components.TransactionTypeSelector
+import com.example.detailoperation_screen.ui.components.UiModelCategory
 import kotlin.reflect.KClass
 
 

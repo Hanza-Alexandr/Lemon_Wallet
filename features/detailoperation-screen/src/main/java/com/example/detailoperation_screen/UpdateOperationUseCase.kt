@@ -1,5 +1,8 @@
-package com.example.ui.oeration.editoperation
+package com.example.detailoperation_screen
 
+import com.example.detailoperation_screen.model.UIStatesDetailGeneralOperations
+import com.example.detailoperation_screen.model.UiStateTypeOperation
+import com.example.detailoperation_screen.model.toNewDomainOperation
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainOperation
@@ -8,10 +11,7 @@ import com.example.domain.domainmodel.NewGeneralOperation
 import com.example.domain.domainmodel.NewTransferOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
-import com.example.ui.oeration.UIStatesDetailGeneralOperations
-import com.example.ui.oeration.UiStateTypeOperation
-import com.example.ui.oeration.toNewDomainOperation
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class UpdateOperationUseCase @Inject constructor(
     private val operationRepository: IOperationRepository
@@ -38,8 +38,10 @@ class UpdateOperationUseCase @Inject constructor(
                     val upTrans = TransferOperation(
                         id = operation.id,
                         userId = operation.id,
-                        fromStorage = uiState.uiStateTypeOperation.fromStorageList.find { it.isSelected }?.storage ?: return "Не выбран счет from",
-                        toStorage = uiState.uiStateTypeOperation.toStorageList.find { it.isSelected }?.storage ?: return "Не выбран счет to",
+                        fromStorage = uiState.uiStateTypeOperation.fromStorageList.find { it.isSelected }?.storage
+                            ?: return "Не выбран счет from",
+                        toStorage = uiState.uiStateTypeOperation.toStorageList.find { it.isSelected }?.storage
+                            ?: return "Не выбран счет to",
                         amount = uiState.result,
                         comment = uiState.note,
                         date = uiState.date,
@@ -52,8 +54,10 @@ class UpdateOperationUseCase @Inject constructor(
                     val upDeb = DebitOperation(
                         id = operation.id,
                         userId = operation.userId,
-                        storage = uiState.uiStateTypeOperation.storageList.find { it.isSelected }?.storage ?: return "Не выбран счет",
-                        category = uiState.uiStateTypeOperation.categories.find { it.isSelect }?.category ?: return "Не выбрана категория",
+                        storage = uiState.uiStateTypeOperation.storageList.find { it.isSelected }?.storage
+                            ?: return "Не выбран счет",
+                        category = uiState.uiStateTypeOperation.categories.find { it.isSelect }?.category
+                            ?: return "Не выбрана категория",
                         amount = uiState.result,
                         comment = uiState.note,
                         date = uiState.date,
@@ -66,8 +70,10 @@ class UpdateOperationUseCase @Inject constructor(
                     val upCre = CreditOperation(
                         id = operation.id,
                         userId = operation.userId,
-                        storage = uiState.uiStateTypeOperation.storageList.find { it.isSelected }?.storage ?: return "Не выбран счет",
-                        category = uiState.uiStateTypeOperation.categories.find { it.isSelect }?.category ?: return "Не выбрана категория",
+                        storage = uiState.uiStateTypeOperation.storageList.find { it.isSelected }?.storage
+                            ?: return "Не выбран счет",
+                        category = uiState.uiStateTypeOperation.categories.find { it.isSelect }?.category
+                            ?: return "Не выбрана категория",
                         amount = uiState.result,
                         comment = uiState.note,
                         date = uiState.date,

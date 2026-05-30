@@ -1,4 +1,4 @@
-package com.example.ui.oeration.editoperation
+package com.example.detailoperation_screen.ui.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

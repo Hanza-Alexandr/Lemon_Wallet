@@ -1,4 +1,4 @@
-package com.example.ui.oeration.components
+package com.example.detailoperation_screen.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

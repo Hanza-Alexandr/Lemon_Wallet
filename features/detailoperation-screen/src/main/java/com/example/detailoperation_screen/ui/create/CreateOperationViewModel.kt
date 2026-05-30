@@ -1,12 +1,17 @@
-package com.example.ui.oeration.editoperation
+package com.example.detailoperation_screen.ui.create
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.detailoperation_screen.model.UIStatesDetailGeneralOperations
+import com.example.detailoperation_screen.model.UiStateTypeOperation
+import com.example.detailoperation_screen.model.toNewDomainOperation
 import com.example.domain.domainmodel.CreditOperation
 import com.example.domain.domainmodel.DebitOperation
 import com.example.domain.domainmodel.DomainOperation
+import com.example.domain.domainmodel.NewGeneralOperation
+import com.example.domain.domainmodel.NewTransferOperation
 import com.example.domain.domainmodel.TransferOperation
 import com.example.domain.reposytory.IOperationRepository
 import com.example.domain.reposytory.IStorageRepository
@@ -14,12 +19,10 @@ import com.example.domain.usecase.CalculateExpressionUseCase
 import com.example.domain.usecase.GetTopCategoriesUseCase
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute
-import com.example.ui.oeration.UIStatesDetailGeneralOperations
-import com.example.ui.oeration.UiStateTypeOperation
-import com.example.ui.oeration.components.ConvertDomainCategoryToUiModel
-import com.example.ui.oeration.components.ConvertDomainStorageToUiModel
-import com.example.ui.oeration.components.StorageUiModel
-import com.example.ui.oeration.components.UiModelCategory
+import com.example.detailoperation_screen.ui.components.ConvertDomainCategoryToUiModel
+import com.example.detailoperation_screen.ui.components.ConvertDomainStorageToUiModel
+import com.example.detailoperation_screen.ui.components.StorageUiModel
+import com.example.detailoperation_screen.ui.components.UiModelCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,9 +32,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-
 @HiltViewModel
-class EditOperationViewModel @Inject constructor(
+class CreateOperationViewModel @Inject constructor(
     private val navigator: INavigator,
     private val storageRepo: IStorageRepository,
     private val operationRepo: IOperationRepository,
@@ -39,78 +41,30 @@ class EditOperationViewModel @Inject constructor(
     private val covertDomainCategoryToUiModel: ConvertDomainCategoryToUiModel,
     private val covertDomainStorageToUiModel: ConvertDomainStorageToUiModel,
     private val stateHandle: SavedStateHandle,
-    private val calculateExpressionUseCase: CalculateExpressionUseCase,
-    private val updateOperationUseCase: UpdateOperationUseCase
+    private val calculateExpressionUseCase: CalculateExpressionUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UIStatesDetailGeneralOperations())
     val uiState = _uiState.asStateFlow()
-    init{
-        val operationId = stateHandle.toRoute<NavigationRoute.EditOperation>().operationId
-        val isTransfer = stateHandle.toRoute<NavigationRoute.EditOperation>().isTransfer
 
+    init{
+        val storageId = stateHandle.toRoute<NavigationRoute.CreateOperation>().storageId
         viewModelScope.launch {
             val storages = storageRepo.getAllStoragesFlow().first()
             val categories = getTopCategoriesUseCase.invoke()
-            val operation: DomainOperation = if (isTransfer){
-                operationRepo.getTransferOperationById(operationId) ?: throw IllegalStateException("Операция не найдена")
-            }else{
-                operationRepo.getGeneralOperationById(operationId) ?: throw IllegalStateException("Операция не найдена")
-            }
-
-            val uiStateOperation = when(operation){
-                is TransferOperation -> {
-                    UiStateTypeOperation.TransferUiStateTypeOperation(
-                        fromStorageList = storages.map {
-                            covertDomainStorageToUiModel.invoke(it)
-                        }.map {
-                            if (it.storage.id == operation.fromStorage.id) it.copy(isSelected = true) else it
-                        },
-                        toStorageList = storages.map {
-                            covertDomainStorageToUiModel.invoke(it)
-                        }.map {
-                            if (it.storage.id == operation.toStorage.id) it.copy(isSelected = true) else it
-                        }
-                    )
-                }
-                is DebitOperation -> UiStateTypeOperation.GeneralOperationUiStateTypeOperation(
+            _uiState.update {
+                it.copy(
+                uiStateTypeOperation = UiStateTypeOperation.GeneralOperationUiStateTypeOperation(
                     isDebit = true,
                     categories = categories.map {
                         covertDomainCategoryToUiModel.invoke(it)
-                    }.map {
-                        if (it.category.id == operation.category.id) it.copy(isSelect = true) else it
                     },
                     storageList = storages.map {
                         covertDomainStorageToUiModel.invoke(it)
                     }.map {
-                        if (it.storage.id == operation.storage.id) it.copy(isSelected = true) else it
+                        if (it.storage.id == storageId) it.copy(isSelected = true) else it
                     },
-                )
-                is CreditOperation -> UiStateTypeOperation.GeneralOperationUiStateTypeOperation(
-                    isDebit = false,
-                    categories = categories.map {
-                        covertDomainCategoryToUiModel.invoke(it)
-                    }.map {
-                        if (it.category.id == operation.category.id) it.copy(isSelect = true) else it
-                    },
-                    storageList = storages.map {
-                        covertDomainStorageToUiModel.invoke(it)
-                    }.map {
-                        if (it.storage.id == operation.storage.id) it.copy(isSelected = true) else it
-                    },
-                )
-                else -> throw IllegalStateException("Неизвестный тип операции")
-                }
-
-            _uiState.update {
-                it.copy(
-                    result = operation.amount,
-                    expression = operation.amount.toString(),
-                    uiStateTypeOperation = uiStateOperation,
-                    date = operation.date,
-                    time = operation.time,
-                    note = operation.comment,
-                )
-            }
+                ),
+            ) }
         }
     }
 
@@ -128,32 +82,22 @@ class EditOperationViewModel @Inject constructor(
         navigator.navigateTo(NavigationRoute.CreateStorage)
     }
 
-    fun onUpdate(){
+    fun onSave(){
         viewModelScope.launch {
-            val operationId = stateHandle.toRoute<NavigationRoute.EditOperation>().operationId
-            val isTransfer = stateHandle.toRoute<NavigationRoute.EditOperation>().isTransfer
-            val operation: DomainOperation = if (isTransfer){
-                operationRepo.getTransferOperationById(operationId) ?: throw IllegalStateException("Операция не найдена")
-            }else{
-                operationRepo.getGeneralOperationById(operationId) ?: throw IllegalStateException("Операция не найдена")
+            try {
+                val newOp = _uiState.value.toNewDomainOperation()
+                when(newOp){
+                    is NewGeneralOperation -> operationRepo.saveGeneralOperation(newOp)
+                    is NewTransferOperation -> operationRepo.saveTransfer(newOp)
+                    else -> throw IllegalStateException("Неизвестный тип операции")
+                }
+                // Закрыть экран или очистить поля
+            } catch (e: IllegalStateException) {
+                // Показать ошибку пользователю
+                _uiState.update { it.copy(error = e.message) }
             }
-            updateOperationUseCase.invoke(uiState.value,operation)
-            navigator.goBack()
         }
-    }
-
-    fun onDelete(){
-        viewModelScope.launch {
-            val operationId = stateHandle.toRoute<NavigationRoute.EditOperation>().operationId
-            val isTransfer = stateHandle.toRoute<NavigationRoute.EditOperation>().isTransfer
-            val operation: DomainOperation = if (isTransfer){
-                operationRepo.getTransferOperationById(operationId) ?: throw IllegalStateException("Операция не найдена")
-            }else{
-                operationRepo.getGeneralOperationById(operationId) ?: throw IllegalStateException("Операция не найдена")
-            }
-            operationRepo.deleteTransaction(operation)
-            navigator.goBack()
-        }
+        onBack()
     }
 
     fun onChangeTypeOperation (type: KClass<out DomainOperation>){

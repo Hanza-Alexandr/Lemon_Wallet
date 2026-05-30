@@ -1,10 +1,10 @@
-package com.example.ui.oeration
+package com.example.detailoperation_screen.model
 
 import com.example.domain.domainmodel.NewDomainOperation
 import com.example.domain.domainmodel.NewGeneralOperation
 import com.example.domain.domainmodel.NewTransferOperation
-import com.example.ui.oeration.components.StorageUiModel
-import com.example.ui.oeration.components.UiModelCategory
+import com.example.detailoperation_screen.ui.components.StorageUiModel
+import com.example.detailoperation_screen.ui.components.UiModelCategory
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone

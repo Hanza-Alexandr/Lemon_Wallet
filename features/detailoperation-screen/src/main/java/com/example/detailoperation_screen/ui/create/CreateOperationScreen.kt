@@ -1,4 +1,4 @@
-package com.example.ui.oeration.createoperation
+package com.example.detailoperation_screen.ui.create
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -9,7 +9,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.ui.oeration.GlobalDetailsOperationContent
+import com.example.detailoperation_screen.ui.GlobalDetailsOperationContent
 import com.example.ui.them.MainDark
 
 @Composable

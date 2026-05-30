@@ -1,4 +1,4 @@
-package com.example.ui.oeration.editoperation
+package com.example.detailoperation_screen.ui.edit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.ui.oeration.GlobalDetailsOperationContent
+import com.example.detailoperation_screen.ui.GlobalDetailsOperationContent
 import com.example.ui.them.MainDark
 
 @Composable
