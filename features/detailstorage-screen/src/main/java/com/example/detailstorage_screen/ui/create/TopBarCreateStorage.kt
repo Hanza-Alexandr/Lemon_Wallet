@@ -1,4 +1,4 @@
-package com.example.ui.storage.editstorage
+package com.example.detailstorage_screen.ui.create
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,18 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.GlobalTopBar
 import com.example.ui.R
 
 @Composable
-fun TopBarEditStorage(
+fun TopBarCreateStorage(
     onBack: () -> Unit,
-    onDelete: () -> Unit,
     onSave: () -> Unit
 ){
     GlobalTopBar {
@@ -38,16 +37,13 @@ fun TopBarEditStorage(
                 Icon(painterResource(R.drawable.close), contentDescription = "Close")
             }
             Text(
-                text = "Редактирование",
+                text = "Создание",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp)
             )
-            IconButton(onClick = onDelete) {
-                Icon(painterResource(R.drawable.delete), contentDescription = "Delete")
-            }
             IconButton(onClick = onSave) {
                 Icon(painterResource(R.drawable.done), contentDescription = "Save")
             }
@@ -57,10 +53,9 @@ fun TopBarEditStorage(
 
 @Preview
 @Composable
-fun TopBarEditingStoragePreview(){
-    TopBarEditStorage(
+fun TopBarCreateStoragePreview(){
+    TopBarCreateStorage(
         onBack = {},
-        onDelete = {},
         onSave = {}
     )
 }

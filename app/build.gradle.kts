@@ -58,6 +58,8 @@ dependencies {
     implementation(project(":features:main-screen:chart-block"))
     implementation(project(":features:main-screen:storage-block"))
     implementation(project(":features:main-screen:last-operation-block"))
+    implementation(project(":features:detailstorage-screen"))
+
 
     // Hilt
     implementation(libs.androidx.hilt.navigation.compose)

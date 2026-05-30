@@ -1,20 +1,13 @@
-package com.example.ui.storage.createstorage
+package com.example.detailstorage_screen.ui.create
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.domain.Currency
-import com.example.domain.TypeStorage
-import com.example.ui.storage.GlobalDetailStorageContent
+import com.example.detailstorage_screen.ui.GlobalDetailStorageContent
 import com.example.ui.them.MainDark
 
 @Composable

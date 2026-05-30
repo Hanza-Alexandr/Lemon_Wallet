@@ -1,19 +1,17 @@
-package com.example.ui.storage.createstorage
+package com.example.detailstorage_screen.ui.create
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.detailstorage_screen.model.UIStatesDetailStorage
 import com.example.domain.Currency
 import com.example.domain.domainmodel.DomainColor
 import com.example.domain.IEditStorage
 import com.example.domain.TypeStorage
-import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.domainmodel.NewDomainStorage
 import com.example.domain.reposytory.IColorRepository
 import com.example.domain.reposytory.IStorageRepository
 import com.example.domain.settings.ISettingsRepository
 import com.example.navigation.INavigator
-import com.example.ui.storage.UIStatesDetailStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,7 +49,7 @@ class CreateStorageViewModel @Inject constructor(
                 storageRepo.saveStorage(
                     NewDomainStorage(
                         name = _uiState.value.name!!,
-                        userId = settings.userIdFlow.first()!!,
+                        userId = settings.userIdFlow.first(),
                         currency = _uiState.value.currency!!,
                         typeStorage = _uiState.value.typeStorage!!,
                         note = _uiState.value.note,

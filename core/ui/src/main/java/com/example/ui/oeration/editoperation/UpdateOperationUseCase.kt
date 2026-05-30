@@ -11,7 +11,6 @@ import com.example.domain.reposytory.IOperationRepository
 import com.example.ui.oeration.UIStatesDetailGeneralOperations
 import com.example.ui.oeration.UiStateTypeOperation
 import com.example.ui.oeration.toNewDomainOperation
-import com.example.ui.storage.UIStatesDetailStorage
 import javax.inject.Inject
 
 class UpdateOperationUseCase @Inject constructor(

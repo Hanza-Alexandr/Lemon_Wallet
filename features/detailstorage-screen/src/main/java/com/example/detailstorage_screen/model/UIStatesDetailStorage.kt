@@ -1,9 +1,8 @@
-package com.example.ui.storage
+package com.example.detailstorage_screen.model
 
 import com.example.domain.Currency
 import com.example.domain.TypeStorage
 import com.example.domain.domainmodel.DomainColor
-import com.example.domain.domainmodel.DomainStorage
 
 data class UIStatesDetailStorage(
     val name: String?= null,
