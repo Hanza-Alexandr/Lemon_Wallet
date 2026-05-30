@@ -29,15 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.domainmodel.DomainStorage
-import com.example.domain.utils.formatAmount
+import com.example.domain.utils.toFormatAmount
 import com.example.storage_block.model.UiForStorageBlock
 import com.example.ui.them.*
 import com.example.ui.R
-import com.example.ui.toComposeColor
+import com.example.ui.utils.toComposeColor
 
 @Composable
 fun StorageHorizontalCard(
@@ -91,7 +89,7 @@ fun StorageHorizontalCard(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = storage.balance.formatAmount(),
+                text = storage.balance.toFormatAmount(),
                 fontSize = (18 * sizeCof).sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

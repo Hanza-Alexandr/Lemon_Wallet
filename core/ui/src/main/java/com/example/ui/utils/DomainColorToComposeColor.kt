@@ -1,4 +1,4 @@
-package com.example.ui
+package com.example.ui.utils
 
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt

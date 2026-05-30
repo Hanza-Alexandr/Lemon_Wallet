@@ -3,7 +3,7 @@ package com.example.domain.utils
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-fun Long.formatAmount(): String {
+fun Long.toFormatAmount(): String {
     val symbols = DecimalFormatSymbols().apply {
         groupingSeparator = ' ' // Разделитель тысяч
         decimalSeparator = ','  // Разделитель копеек

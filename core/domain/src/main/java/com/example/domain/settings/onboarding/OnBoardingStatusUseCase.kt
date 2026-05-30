@@ -4,7 +4,7 @@ import com.example.domain.settings.ISettingsRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class OnBoardingStatusInteractor @Inject constructor(private val settings: ISettingsRepository) {
+class OnBoardingStatusUseCase @Inject constructor(private val settings: ISettingsRepository) {
     suspend fun getStatus(): Boolean{
 
         return when(settings.isFirstOpeningApp.first()){

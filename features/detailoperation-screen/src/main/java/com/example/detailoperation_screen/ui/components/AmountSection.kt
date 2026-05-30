@@ -10,11 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.utils.formatAmount
+import com.example.domain.utils.toFormatAmount
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -37,7 +36,7 @@ fun AmountSection(
     ) {
         // Главный результат с символом "="
         Text(
-            text = "=${result.formatAmount()}",
+            text = "=${result.toFormatAmount()}",
             style = MaterialTheme.typography.displayMedium.copy(
                 fontSize = 48.sp,
                 fontWeight = FontWeight.W500,

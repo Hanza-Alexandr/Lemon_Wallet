@@ -2,7 +2,7 @@ package com.example.onbording_screen.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.settings.onboarding.OnBoardingStatusInteractor
+import com.example.domain.settings.onboarding.OnBoardingStatusUseCase
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val navigator: INavigator,
-    private val onBoardingStatusInteractor: OnBoardingStatusInteractor,
+    private val onBoardingStatusUseCase: OnBoardingStatusUseCase,
 ): ViewModel(){
 
     fun onFinished(){
@@ -24,7 +24,7 @@ class OnBoardingViewModel @Inject constructor(
     }
     private fun setFalseStatus(){
         viewModelScope.launch {
-            onBoardingStatusInteractor.setFalseStatus()
+            onBoardingStatusUseCase.setFalseStatus()
         }
     }
 }

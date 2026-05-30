@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.domainmodel.DomainStorage
 import com.example.domain.usecase.GetStorageBalanceUseCase
-import com.example.domain.utils.formatAmount
+import com.example.domain.utils.toFormatAmount
 import javax.inject.Inject
 
 // Модель данных для счета
@@ -115,7 +115,7 @@ fun StorageItem(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = storage.balance.formatAmount(),
+                text = storage.balance.toFormatAmount(),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color(0xFF7F8A99),
                     fontSize = 12.sp
