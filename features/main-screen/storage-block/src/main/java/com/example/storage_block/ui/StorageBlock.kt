@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.storage_block.StorageBlockViewModel
+import com.example.storage_block.ui.StorageBlockViewModel
 import com.example.storage_block.model.UiForStorageBlock
 import com.example.storage_block.ui.components.StorageList
 import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
