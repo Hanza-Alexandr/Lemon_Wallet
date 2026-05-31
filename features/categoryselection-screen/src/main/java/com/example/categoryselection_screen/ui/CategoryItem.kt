@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.domain.domainmodel.DomainCategory
+import com.example.domain.domainmodel.DomainColor
 
 // Предполагаемая модель данных
 data class UiCategory(
@@ -114,7 +115,6 @@ fun CategoryItem(
     }
 }
 
-/**
 
 @Preview(showBackground = true, name = "Light Mode")
 @Composable
@@ -124,42 +124,68 @@ fun CategoryItemPreview() {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
                 // Состояние: Выбрано, есть подкатегории
                 CategoryItem(
-                    category = UiCategory(
-                        id = 1,
-                        name = "Еда и напитки",
-                        iconRes = android.R.drawable.ic_menu_gallery, // Временная иконка
+                    UiCategory(
+                        DomainCategory(
+                            id = "1",
+                            userId ="1",
+                            name = "Еда",
+                            color = DomainColor(
+                                id = "1",
+                                userId = "1",
+                                hex = "#FFFFFF"
+                            ),
+                            icon = "ASDASD",
+                            parenId = null
+                        ),
+                        isSelected = false,
+                        hasSubcategories = true
+                    ),
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
+                )
+                CategoryItem(
+                    UiCategory(
+                        DomainCategory(
+                            id = "1",
+                            userId ="1",
+                            name = "Еда",
+                            color = DomainColor(
+                                id = "1",
+                                userId = "1",
+                                hex = "#FFFFFF"
+                            ),
+                            icon = "ASDASD",
+                            parenId = null
+                        ),
+                        isSelected = false,
+                        hasSubcategories = true
+                    ),
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
+                )
+                CategoryItem(
+                    UiCategory(
+                        DomainCategory(
+                            id = "1",
+                            userId ="1",
+                            name = "Еда",
+                            color = DomainColor(
+                                id = "1",
+                                userId = "1",
+                                hex = "#FFFFFF"
+                            ),
+                            icon = "ASDASD",
+                            parenId = null
+                        ),
                         isSelected = true,
                         hasSubcategories = true
                     ),
-                    onClick = {}
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                // Состояние: Не выбрано, нет подкатегорий
-                CategoryItem(
-                    category = UiCategory(
-                        id = 2,
-                        name = "Транспорт",
-                        iconRes = android.R.drawable.ic_menu_directions,
-                        isSelected = false,
-                        hasSubcategories = false
-                    ),
-                    onClick = {}
-                )
-
-                // Состояние: Длинное название
-                CategoryItem(
-                    category = UiCategory(
-                        id = 3,
-                        name = "Очень длинное название категории для проверки текста",
-                        iconRes = android.R.drawable.ic_menu_agenda,
-                        isSelected = false,
-                        hasSubcategories = true
-                    ),
-                    onClick = {}
-                )
             }
         }
     }
 }
-
- */
+ 
