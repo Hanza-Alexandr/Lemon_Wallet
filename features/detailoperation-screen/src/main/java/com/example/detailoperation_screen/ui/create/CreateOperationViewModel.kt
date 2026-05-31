@@ -54,7 +54,7 @@ class CreateOperationViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                 uiStateTypeOperation = UiStateTypeOperation.GeneralOperationUiStateTypeOperation(
-                    isDebit = true,
+                    isDebit = false,
                     categories = categories.mapIndexed { index, category ->
                         covertDomainCategoryToUiModel(category).copy(isSelect = index == 0)
                     },
