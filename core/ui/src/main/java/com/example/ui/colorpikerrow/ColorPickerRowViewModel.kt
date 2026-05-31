@@ -9,9 +9,11 @@ import com.example.domain.domainmodel.NewDomainColor
 import com.example.domain.reposytory.IColorRepository
 import com.example.navigation.INavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +25,7 @@ class ColorPickerRowViewModel @Inject constructor(
     val availableColors = colorRepository.getAllColorsFlow().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
+        initialValue = null
     )
     private val _isDeleteMode = MutableStateFlow(false)
     val isDeleteMode = _isDeleteMode.asStateFlow()

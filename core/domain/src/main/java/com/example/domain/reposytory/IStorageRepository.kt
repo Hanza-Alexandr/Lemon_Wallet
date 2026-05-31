@@ -16,6 +16,7 @@ interface IStorageRepository {
      * Используем String, если перешли на UUID, или Long, если оставили автоинкремент Room.
      */
     suspend fun getStorageById(id: String): DomainStorage?
+    fun getStorageByIdFlow(id: String): Flow<DomainStorage?>
 
     /**
      * Сохранить новый счет.

@@ -12,5 +12,5 @@ data class UIStatesDetailStorage(
     val color: DomainColor? = null,
     val availableColors: List<DomainColor> = emptyList(),
     val error: String? = null,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
 )

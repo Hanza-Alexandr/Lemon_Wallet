@@ -21,6 +21,7 @@ import com.example.domain.domainmodel.DomainColor
 
 @Composable
 fun ColorPickerRow(
+    modifier: Modifier = Modifier,
     viewModel: ColorPickerRowViewModel = hiltViewModel(),
     selectedColor: DomainColor?,
     isDeleteMode: Boolean = false,
@@ -29,7 +30,7 @@ fun ColorPickerRow(
     onDeleteColor: (DomainColor) -> Unit = viewModel::onDeleteColor,
     onToggleDeleteMode: (Boolean) -> Unit = viewModel::onToggleDeleteMode
 ) {
-    val availableColors: List<DomainColor> by viewModel.availableColors.collectAsStateWithLifecycle()
+    val availableColors by viewModel.availableColors.collectAsStateWithLifecycle(emptyList())
     val showAddDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     Box(
         modifier = Modifier
@@ -42,7 +43,7 @@ fun ColorPickerRow(
             }
     ) {
         LazyRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -58,7 +59,7 @@ fun ColorPickerRow(
             }
 
             // 2. Цвета из БД
-            items(availableColors) { domainColor ->
+            items(availableColors?: emptyList()) { domainColor ->
 
                 ColorCircle(
                     color = domainColor.toColor(),
@@ -81,7 +82,7 @@ fun ColorPickerRow(
         }
         if (showAddDialog) {
             AddColorDialog(
-                availableColors = availableColors,
+                availableColors = availableColors?: emptyList(),
                 onDismiss = viewModel::hideAddDialog,
                 onColorConfirmed = viewModel::createNewColor
             )

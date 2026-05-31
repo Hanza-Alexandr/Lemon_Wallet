@@ -30,6 +30,10 @@ class StorageRoomRepository @Inject constructor(
         return storageDao.getStorageWithColorByIdFlow(id).firstOrNull()?.toDomain()
     }
 
+    override fun getStorageByIdFlow(id: String): Flow<DomainStorage?> {
+        return storageDao.getStorageWithColorByIdFlow(id).map { it?.toDomain() }
+    }
+
     override suspend fun saveStorage(storage: NewDomainStorage) {
         storageDao.insertStorage(storage.toRoomEntity())
     }
