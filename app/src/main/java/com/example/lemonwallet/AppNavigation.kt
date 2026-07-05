@@ -1,11 +1,6 @@
 package com.example.lemonwallet
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -22,7 +17,7 @@ import com.example.navigation.NavigationRoute
 import com.example.onbording_screen.ui.OnBoardingScreen
 import com.example.storage_block.ui.StorageBlock
 import com.example.storage_block.ui.components.blocks.components.lastoperations.LastOperationBlock
-
+import com.example.ui.camera.CameraPreviewScreen
 
 
 @Composable
@@ -74,5 +69,8 @@ fun NavGraphBuilder.navigationManager (){
     }
     composable<NavigationRoute.CategorySelectScreen>{
         CategorySelectScreen()
+    }
+    composable<NavigationRoute.CameraPreviewScreen>{
+        CameraPreviewScreen()
     }
 }

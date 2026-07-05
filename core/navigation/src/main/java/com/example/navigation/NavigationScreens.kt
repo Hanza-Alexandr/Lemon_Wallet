@@ -19,4 +19,6 @@ sealed class NavigationRoute {
     data class EditOperation(val operationId: String, val isTransfer: Boolean): NavigationRoute()
     @Serializable
     object CategorySelectScreen: NavigationRoute()
+    @Serializable
+    object CameraPreviewScreen: NavigationRoute()
 }

@@ -51,7 +51,7 @@ fun MainScreenContent(
     ) {
         TopBarMainScreen(
             onMore = {
-                TODO("Not Implement")
+                viewModel.onMore()
             }
         )
 

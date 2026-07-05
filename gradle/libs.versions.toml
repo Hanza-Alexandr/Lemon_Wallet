@@ -1,5 +1,7 @@
 [versions]
+accompanistPermissions = "0.34.0"
 agp = "9.1.1"
+cameraViewfinderCompose = "1.4.0-alpha13"
 coreKtx = "1.18.0"
 coreSplashscreen = "1.2.0"
 datastorePreferences = "1.2.1"
@@ -9,6 +11,7 @@ hiltAndroidCompiler = "2.59.2"
 hiltNavigationCompose = "1.3.0"
 hiltNavigationComposeVersion = "1.2.0"
 javaxInject = "1"
+jetpackCameraxAndroid = "1.0.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
@@ -36,7 +39,24 @@ uiTooling = "1.11.0"
 foundation = "1.11.0"
 runtimeVersion = "1.11.1"
 
+camerax = "1.6.1"
+accompanist = "0.37.2" # or whatever matches with your Compose version
+
 [libraries]
+# Contains the basic camera functionality such as SurfaceRequest
+accompanist-permissions-v0340 = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+# Contains the CameraXViewfinder composable
+androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
+# Allows us to bind the camera preview to our UI lifecycle
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+# The specific camera implementation that renders the preview
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+# The helper library to grant the camera permission
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+
+
+androidx-camera-viewfinder-compose = { module = "androidx.camera:camera-viewfinder-compose", version.ref = "cameraViewfinderCompose" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -52,6 +72,7 @@ exp4j = { module = "net.objecthunter:exp4j", version.ref = "exp4j" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
+jetpack-camerax-android = { module = "com.github.SaeculumSolutions:Jetpack-CameraX-Android", version.ref = "jetpackCameraxAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

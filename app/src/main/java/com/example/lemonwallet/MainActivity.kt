@@ -18,6 +18,7 @@ import com.example.navigation.INavigator
 import com.example.navigation.NavigationAction
 import com.example.navigation.NavigationRoute
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
 
         setContent {
             val navController = rememberNavController()

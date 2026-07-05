@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+
     // Core modules
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
@@ -61,7 +62,6 @@ dependencies {
     implementation(project(":features:detailstorage-screen"))
     implementation(project(":features:detailoperation-screen"))
     implementation(project(":features:categoryselection-screen"))
-
 
 
     // Hilt

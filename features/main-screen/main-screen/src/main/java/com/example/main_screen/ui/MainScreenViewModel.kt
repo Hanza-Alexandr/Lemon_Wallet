@@ -23,4 +23,8 @@ class MainScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun onMore(){
+        navigator.navigateTo(NavigationRoute.CameraPreviewScreen)
+    }
 }
