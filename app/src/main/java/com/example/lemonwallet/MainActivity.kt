@@ -90,6 +90,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
+
+
         }
     }
 }
@@ -102,6 +104,7 @@ fun getStartScreen(onBoardingStatus: Boolean, authStatus: Boolean): NavigationRo
         else NavigationRoute.AuthorizationScreen
     }
 }
+
 
 
 class MyWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params){
