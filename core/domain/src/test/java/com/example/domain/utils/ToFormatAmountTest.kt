@@ -10,6 +10,8 @@ class ToFormatAmountTest {
     // inp 112 out 1.12
     // inp 10 out 0.1
     // inp 1 out 0.01
+
+
     @Test
     fun `toFormatAmount inp 10000 out 100`() {
         val amount: Long = 10000

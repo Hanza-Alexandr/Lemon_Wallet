@@ -41,6 +41,27 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
 
+    //Testing
+    testImplementation(libs.kotlinx.coroutines.test)
+    implementation(libs.androidx.work.runtime.ktx)
+    testImplementation(libs.mockk.v1146)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    androidTestImplementation(libs.kaspresso.core)
+    androidTestImplementation(libs.kaspresso.compose)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
+
+    //UI Testing
+    androidTestImplementation(libs.kaspresso)
+    androidTestUtil(libs.androidx.orchestrator)
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

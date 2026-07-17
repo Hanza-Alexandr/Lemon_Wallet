@@ -14,9 +14,15 @@ javaxInject = "1"
 jetpackCameraxAndroid = "1.0.0"
 junit = "4.13.2"
 junitJupiter = "6.1.1"
+junitJupiterApi = "6.1.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
+kasperskyKaspresso = "1.5.1"
+kaspresso = "1.6.1"
+kaspressoVersion = "1.5.2"
 kotlinxCoroutinesCore = "1.11.0"
+kotlinxCoroutinesTest = "1.11.0"
+kotlinxCoroutinesTestVersion = "1.7.3"
 kotlinxDatetime = "0.8.0"
 kotlinxDatetimeVersion = "0.6.0"
 kotlinxSerializationJson = "1.11.0"
@@ -26,14 +32,19 @@ activityCompose = "1.13.0"
 kotlin = "2.3.21"
 composeBom = "2026.05.00"
 material = "1.13.0"
+mockk = "1.14.11"
+mockkVersion = "1.14.6"
 navigationCompose = "2.9.8"
 foundationLayout = "1.10.6"
 navigationComposeVersion = "2.8.0"
+orchestrator = "1.6.1"
+orchestratorVersion = "1.4.2"
 roomRuntime = "2.8.4"
 material3 = "1.4.0"
 appcompat = "1.6.1"
 jetbrainsKotlinJvm = "2.2.10"
 runtime = "1.11.0"
+turbine = "1.2.1"
 uiGraphics = "1.11.0"
 uiToolingPreview = "1.11.0"
 uiTooling = "1.11.0"
@@ -43,6 +54,7 @@ runtimeVersion = "1.11.1"
 camerax = "1.6.1"
 accompanist = "0.37.2"
 junitJunit = "4.12" # or whatever matches with your Compose version
+workRuntimeKtx = "2.11.2"
 
 [libraries]
 # Contains the basic camera functionality such as SurfaceRequest
@@ -57,6 +69,11 @@ androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.r
 # The helper library to grant the camera permission
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
+kaspresso-core = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
+kaspresso-compose = { group = "com.kaspersky.android-components", name = "kaspresso-compose-support", version.ref = "kaspresso" }
+# Необходимые зависимости Compose для тестов
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 androidx-camera-viewfinder-compose = { module = "androidx.camera:camera-viewfinder-compose", version.ref = "cameraViewfinderCompose" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -67,9 +84,12 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-hilt-navigation-compose-v120 = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-compose-v280 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+androidx-orchestrator = { module = "androidx.test:orchestrator", version.ref = "orchestrator" }
+androidx-orchestrator-v142 = { module = "androidx.test:orchestrator", version.ref = "orchestratorVersion" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 exp4j = { module = "net.objecthunter:exp4j", version.ref = "exp4j" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
@@ -89,8 +109,14 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+kaspresso = { module = "com.kaspersky.android-components:kaspresso", version.ref = "kaspresso" }
+kaspresso-v151 = { module = "com.kaspersky.android-components:kaspresso", version.ref = "kasperskyKaspresso" }
+kaspresso-v152 = { module = "com.kaspersky.android-components:kaspresso", version.ref = "kaspressoVersion" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+kotlinx-coroutines-test-v173 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-datetime-v060 = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -107,6 +133,9 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", vers
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtimeVersion" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-v1146 = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

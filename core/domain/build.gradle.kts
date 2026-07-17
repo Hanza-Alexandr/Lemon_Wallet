@@ -18,6 +18,12 @@ kotlin {
 }
 
 dependencies {
+    //testing
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.mockk.v1146)
+    testImplementation(libs.junit.jupiter.api)
+
     implementation(libs.kotlinx.datetime) // Use the latest version
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
@@ -26,7 +32,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
 
     //JUnit
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
 }

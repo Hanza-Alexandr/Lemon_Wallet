@@ -1,5 +1,6 @@
 package com.example.detailstorage_screen
 
+import androidx.compose.ui.input.key.Key.Companion.Calculator
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -15,3 +16,4 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 }
+

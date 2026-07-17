@@ -14,6 +14,13 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.useJUnitPlatform() // ОБЯЗАТЕЛЬНО для JUnit 5
+        }
+    }
+
     defaultConfig {
         minSdk = 24
 
@@ -31,12 +38,25 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
+    //Testing
+    // 1. Для подмены зависимостей
+    testImplementation(libs.mockk)
+    // 2. Для работы с корутинами в тестах
+    testImplementation(libs.kotlinx.coroutines.test)
+    // 3. Для удобного тестирования Flow (библиотека от Cash App)
+    testImplementation(libs.turbine)
+    //JUnit
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
+
+
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
