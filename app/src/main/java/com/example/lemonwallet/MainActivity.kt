@@ -106,6 +106,7 @@ fun getStartScreen(onBoardingStatus: Boolean, authStatus: Boolean): NavigationRo
 }
 
 
+
 class MyWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params){
     override suspend fun doWork(): Result {
         Log.d("WorkManagerTest", "🚀 Воркер запущен! Имитируем загрузку данных...")
