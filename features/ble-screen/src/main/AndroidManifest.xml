@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Разрешение на сканирование BLE устройств -->
+    <!-- Флаг neverForLocation говорит системе, что вы НЕ вычисляете координаты пользователя по Bluetooth-маякам -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+
+    <!-- Разрешение на подключение к найденным устройствам (чтение/запись данных) -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Для совместимости с устройствами на Android 11 (API 30) и ниже (им требовалась локация) -->
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+</manifest>
