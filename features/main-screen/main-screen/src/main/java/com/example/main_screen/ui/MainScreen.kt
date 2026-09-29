@@ -1,5 +1,9 @@
 package com.example.main_screen.ui
 
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,15 +13,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.them.MainDark
 
 @Composable
@@ -36,10 +49,26 @@ fun MainScreen(blockList: List<@Composable () -> Unit> = emptyList()){
 @Composable
 fun MainScreenContent(
     viewModel: MainScreenViewModel  = hiltViewModel(),
+    titleClick: ()-> Unit = viewModel::onTitleClick,
     onEditStorageClick: (storageId: Long)-> Unit,
     onCreateStorageClick: ()-> Unit,
     blockList: List<@Composable ()-> Unit>
 ){
+    val randomInt by viewModel.serviceData.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Разрешение дано, уведомление появится
+        }
+    }
+// Запрашиваем разрешение при старте (или при нажатии на кнопку)
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     var sizeMainButton by remember { mutableStateOf(0.dp) } //Размеры главной кнопки для нижнего отсупа
     val density = LocalDensity.current
@@ -47,13 +76,16 @@ fun MainScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MainDark),
+            .background(MainDark)
+            .testTag("main_screen_container"),
     ) {
         TopBarMainScreen(
+            titleClick = titleClick,
             onMore = {
                 viewModel.onMore()
             }
         )
+        Text(text = randomInt ?: "")
 
         Box{
             Column(

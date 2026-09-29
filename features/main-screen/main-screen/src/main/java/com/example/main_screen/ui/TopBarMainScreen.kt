@@ -1,5 +1,6 @@
 package com.example.main_screen.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +23,7 @@ import com.example.ui.R
 
 @Composable
 fun TopBarMainScreen(
+    titleClick: ()->Unit,
     onMore: () -> Unit
 ){
     GlobalTopBar {
@@ -37,7 +39,10 @@ fun TopBarMainScreen(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp).clickable(
+                        onClick = titleClick
+                    ),
+
             )
             IconButton(
                 modifier = Modifier.padding(end = 6.dp),
@@ -56,5 +61,5 @@ fun TopBarMainScreen(
 @Preview
 @Composable
 fun TopBarMainScreenPreview(){
-    TopBarMainScreen(onMore =  {})
+    TopBarMainScreen(titleClick = {},onMore =  {})
 }

@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.lemonwallet"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -76,6 +76,7 @@ dependencies {
     implementation(project(":features:detailstorage-screen"))
     implementation(project(":features:detailoperation-screen"))
     implementation(project(":features:categoryselection-screen"))
+    implementation(project(":features:api-screen"))
 
 
     // Hilt

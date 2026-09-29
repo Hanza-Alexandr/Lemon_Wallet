@@ -3,10 +3,13 @@ package com.example.room.repository
 import com.example.domain.domainmodel.DomainCategory
 import com.example.domain.reposytory.ICategoryRepository
 import com.example.domain.domainmodel.NewDomainCategory
+import com.example.domain.settings.ISettingsRepository
 import com.example.domain.usecase.GetUserIdUseCase
 import com.example.room.dao.CategoryDao
 import com.example.room.entity.toRoomEntity
 import com.example.room.model.toDomain
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map

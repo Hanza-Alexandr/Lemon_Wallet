@@ -16,9 +16,12 @@
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/navigation" />
+            <option value="$PROJECT_DIR$/core/service" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/api-screen" />
             <option value="$PROJECT_DIR$/features/auth" />
+            <option value="$PROJECT_DIR$/features/ble-screen" />
             <option value="$PROJECT_DIR$/features/categoryselection-screen" />
             <option value="$PROJECT_DIR$/features/detailoperation-screen" />
             <option value="$PROJECT_DIR$/features/detailstorage-screen" />

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <service
+            android:name="com.example.service.TestForegroundService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+
+            <!-- Для типа specialUse начиная с Android 14 обязательно нужно краткое описание -->
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Приложение отслеживает время таймера для пользователя" />
+        </service>
+    </application>
+
+</manifest>
