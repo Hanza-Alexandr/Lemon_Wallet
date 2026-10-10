@@ -1,69 +1,118 @@
 package com.example.ble_screen
 
 import android.annotation.SuppressLint
-import android.bluetooth.le.ScanResult
-import android.os.Build
+import android.util.Log
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.example.ble_screen.ui.BleDevice
+import com.example.ble_screen.model.BleDevice
+import com.example.ble_screen.useCase.BLeConnectRepository
 import com.example.ble_screen.useCase.BleScanUseCase
+import com.example.ble_screen.useCase.BleState
 import com.example.navigation.INavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.sortedBy
+
+@Immutable
+data class BleScreenState(
+    val bleDeviceList: List<BleDevice> = emptyList(),
+    val connectState: BleState = BleState.Disconnected,
+    val currentDevice: BleDevice? = null,
+    val readValues: Map<java.util.UUID, ByteArray> = emptyMap()
+)
 
 @HiltViewModel
 class BleScreenViewModel @Inject constructor (
     private val navigator: INavigator,
     private val bleScanUseCase: BleScanUseCase,
+    private val bleConnectRepo: BLeConnectRepository
     ): ViewModel() {
 
-    private val _bleDeviceList = MutableStateFlow(emptyList<BleDevice>())
-    val bleDeviceList = _bleDeviceList.asStateFlow()
+    private val _state = MutableStateFlow(BleScreenState())
+    val state = _state.asStateFlow()
+
+
+    private var scanJob : Job? = null
 
     init {
         startScan()
+        //observeReadCharacteristicValues()
     }
+
+    //Подписка на чтение при подключении хаарктеристик
+    private fun observeReadCharacteristicValues() {
+        viewModelScope.launch {
+            bleConnectRepo.readCharacteristicValue.collect { (uuid, value) ->
+                _state.update { currentState ->
+                    currentState.copy(
+                        readValues = currentState.readValues + (uuid to value)
+                    )
+                }
+            }
+        }
+    }
+
     @SuppressLint("MissingPermission")
-    private fun startScan(){
-        viewModelScope.launch(Dispatchers.Default){
+    fun startScan(){
+        scanJob?.cancel()
 
-            bleScanUseCase.invoke().collect { scanResult ->
-               val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                   BleDevice(
-                       name = scanResult.device.name,
-                       rssi = scanResult.rssi.toDouble(),
-                       address = scanResult.device.address,
-                       txPower = scanResult.txPower.toDouble()
-                   )
-               } else {
-                   TODO("VERSION.SDK_INT < O")
-               }
-                _bleDeviceList.update { currentList ->
+        scanJob = viewModelScope.launch(Dispatchers.IO){
+            bleScanUseCase.invoke().collect { listDevice ->
 
-                   val index = currentList.indexOfFirst { it.address == device.address }
-                   if (index != -1) {
-                       // Если есть, обновляем ему RSSI (сигнал)
-                       currentList.toMutableList().apply { this[index] = device }
-                   } else {
-                       // Если нет, добавляем в конец
-                       currentList + device
-                   }
-               }
-                _bleDeviceList.update { currentList -> currentList.sortedByDescending { it.rssi } }
-           }
+                _state.update { currentState ->
+                    Log.d("TAG", "startScan: ${listDevice.size}")
+                    currentState.copy(bleDeviceList = listDevice.sortedBy { it.rssi }.reversed())
+                }
+            }
+        }
+    }
+    fun stopScan(){
+        scanJob?.cancel()
+    }
+
+    fun startConnect( macAddress: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            bleConnectRepo.connect(macAddress).collect{ state ->
+                _state.update { currentState ->
+                    currentState.copy(connectState = state)
+                }
+            }
+        }
+        observeReadCharacteristicValues()
+    }
+    fun disconnectGatt() {
+        bleConnectRepo.disconnect()
+        _state.update { currentState ->
+            currentState.copy(connectState = BleState.Disconnected, readValues = emptyMap())
+        }
+    }
+
+    fun readCharacteristic(characteristic: android.bluetooth.BluetoothGattCharacteristic) {
+        viewModelScope.launch(Dispatchers.IO) {
+            bleConnectRepo.readCharacteristic(characteristic)
         }
     }
 
     fun goBack(){
         navigator.goBack()
+    }
+
+    fun onClickItemScanList(item: BleDevice){
+        stopScan()
+        _state.update {currentState ->
+            currentState.copy(currentDevice = item)
+        }
+    }
+
+    fun onDismissDetailDialog(){
+        _state.update { it.copy(currentDevice = null) }
     }
 }
 

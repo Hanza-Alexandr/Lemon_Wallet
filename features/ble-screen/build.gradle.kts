@@ -27,6 +27,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.bluetooth)
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
