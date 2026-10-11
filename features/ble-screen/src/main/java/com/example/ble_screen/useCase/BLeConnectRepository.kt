@@ -44,10 +44,10 @@ class BLeConnectRepository @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun connect(macAddress: String): Flow<BleState> = callbackFlow {
+        //2. Получаем из адреса девайс
         val device = bluetoothAdapter?.getRemoteDevice(macAddress)
-
+        //3. Настраиваем поведение подключения(коллбек)
         val gattCallback = object : BluetoothGattCallback() {
-
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
                 if (status != BluetoothGatt.GATT_SUCCESS) {
                     trySend(BleState.Error(status))
@@ -55,7 +55,6 @@ class BLeConnectRepository @Inject constructor(
                     bluetoothGatt = null
                     return
                 }
-
                 when (newState) {
                     BluetoothProfile.STATE_CONNECTED -> {
                         trySend(BleState.DiscoveringServices)
@@ -87,6 +86,7 @@ class BLeConnectRepository @Inject constructor(
                 status: Int
             ) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
+                    trySend(BleState.Connected(gatt, characteristic.uuid to value))
                     _readCharacteristicValue.tryEmit(characteristic.uuid to value)
                 }
             }
@@ -101,6 +101,7 @@ class BLeConnectRepository @Inject constructor(
             ) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     characteristic.value?.let { value ->
+                        trySend(BleState.Connected(gatt, characteristic.uuid to value))
                         _readCharacteristicValue.tryEmit(characteristic.uuid to value)
                     }
                 }
@@ -115,17 +116,14 @@ class BLeConnectRepository @Inject constructor(
                 _incomingData.tryEmit(value)
             }
         }
-
-        trySend(BleState.Connecting)
-
-        // Запуск подключения
+        //4. Инициализируем подключение к устройству
         bluetoothGatt = device?.connectGatt(
             context,
             false,
             gattCallback,
             BluetoothDevice.TRANSPORT_LE
         )
-
+        //Повдение при закрытии
         awaitClose {
             bluetoothGatt?.disconnect()
             bluetoothGatt?.close()
@@ -168,6 +166,6 @@ sealed interface BleState {
     data object Disconnected : BleState
     data object Connecting : BleState
     data object DiscoveringServices : BleState
-    data class Connected(val gatt: BluetoothGatt) : BleState
-    data class Error(val status: Int) : BleState
+    data class Connected(val gatt: BluetoothGatt, val characteristic: Pair<UUID, ByteArray>? = null) : BleState
+    data class Error(val status: Int, val message: String? = null) : BleState
 }

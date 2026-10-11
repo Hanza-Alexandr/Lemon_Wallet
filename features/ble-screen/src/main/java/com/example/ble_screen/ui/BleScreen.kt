@@ -2,6 +2,7 @@ package com.example.ble_screen.ui
 
 import android.Manifest
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,10 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlin.collections.toList
 import kotlin.math.pow
+import kotlin.time.Duration.Companion.milliseconds
 
 val bleRequiredPermissionsList: Array<String> =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -58,46 +62,39 @@ fun BleScreen(modifier: Modifier = Modifier, vm: BleScreenViewModel = hiltViewMo
 
     val uiState: BleScreenState by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
-    val permissionsLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissionsMap ->
+    val permissionsLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) { permissionsMap ->
         // Проверяем, что ВСЕ запрашиваемые разрешения были одобрены пользователем
         val allGranted = permissionsMap.values.all { it }
 
         if (!allGranted) {
             vm.goBack()
             Toast.makeText(context, "Без разрешений сканирование невозможно", Toast.LENGTH_LONG).show()
+        }else{
+            vm.startScan()
         }
     }
     uiState.currentDevice?.let { device ->
         BleDeviceDetailDialog(
             device = device,
             onDismiss = vm::onDismissDetailDialog,
-            onConnect = {
-                vm.stopScan()
-                vm.startConnect(device.address)
-            }
+            onConnect = {vm.onConnect(device.address)}
         )
+        if(uiState.connectState !is BleState.Disconnected){
+            BleConnectionStatusDialog(
+                deviceName = uiState.currentDevice?.name,
+                connectionState = uiState.connectState,
+                readValues = uiState.readValues,
+                onReadCharacteristic = { characteristic ->
+                    vm.readCharacteristic(characteristic)
+                },
+                onDismiss = vm::onDismissConnectingDialog,
+                onDisconnect = vm::onDisconnectConnectingDialog,
+                onRetry = {vm.onConnect(device.address)}
+            )
+        }
     }
-
-    if(uiState.connectState is BleState.Connected && uiState.currentDevice != null){
-        BleConnectionStatusDialog(
-            deviceName = uiState.currentDevice?.name,
-            connectionState = uiState.connectState,
-            readValues = uiState.readValues,
-            onReadCharacteristic = { characteristic ->
-                vm.readCharacteristic(characteristic)
-            },
-            onDismiss = vm::onDismissDetailDialog,
-            onDisconnect = {
-                vm.disconnectGatt()
-                vm.onDismissDetailDialog()
-            },
-            onRetry = {
-                vm.startConnect(uiState.currentDevice!!.address)
-            }
-        )
+    LaunchedEffect(Unit) {
+        permissionsLauncher.launch(bleRequiredPermissionsList)
     }
 
     Column(modifier = modifier
@@ -105,15 +102,11 @@ fun BleScreen(modifier: Modifier = Modifier, vm: BleScreenViewModel = hiltViewMo
         .background(Color.Cyan)
         .safeDrawingPadding()
     ) {
-        LaunchedEffect(Unit) {
-            permissionsLauncher.launch(bleRequiredPermissionsList)
-        }
-        PerformanceTestAnimation()
-        Row() {
-            RestartableStopwatch(resetKey = uiState.bleDeviceList.toList())
-        }
         LazyColumn(modifier.fillMaxWidth().padding()) {
-            items(uiState.bleDeviceList){ item ->
+            items(
+                items = uiState.bleDeviceList,
+                key = {it.address}
+            ){ item ->
                 BleListItem(item, onClick = {vm.onClickItemScanList(item)})
             }
         }

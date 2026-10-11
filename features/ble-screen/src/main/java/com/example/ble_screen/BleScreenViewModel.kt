@@ -16,6 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.collections.sortedBy
@@ -41,33 +42,12 @@ class BleScreenViewModel @Inject constructor (
 
     private var scanJob : Job? = null
 
-    init {
-        startScan()
-        //observeReadCharacteristicValues()
-    }
-
-    //Подписка на чтение при подключении хаарктеристик
-    private fun observeReadCharacteristicValues() {
-        viewModelScope.launch {
-            bleConnectRepo.readCharacteristicValue.collect { (uuid, value) ->
-                _state.update { currentState ->
-                    currentState.copy(
-                        readValues = currentState.readValues + (uuid to value)
-                    )
-                }
-            }
-        }
-    }
-
     @SuppressLint("MissingPermission")
     fun startScan(){
         scanJob?.cancel()
-
         scanJob = viewModelScope.launch(Dispatchers.IO){
             bleScanUseCase.invoke().collect { listDevice ->
-
                 _state.update { currentState ->
-                    Log.d("TAG", "startScan: ${listDevice.size}")
                     currentState.copy(bleDeviceList = listDevice.sortedBy { it.rssi }.reversed())
                 }
             }
@@ -77,7 +57,11 @@ class BleScreenViewModel @Inject constructor (
         scanJob?.cancel()
     }
 
-    fun startConnect( macAddress: String){
+    private fun startConnect( macAddress: String){
+        _state.update { currentState ->
+            currentState.copy(connectState = BleState.Connecting)
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             bleConnectRepo.connect(macAddress).collect{ state ->
                 _state.update { currentState ->
@@ -85,7 +69,16 @@ class BleScreenViewModel @Inject constructor (
                 }
             }
         }
-        observeReadCharacteristicValues()
+        viewModelScope.launch(Dispatchers.IO) {
+            bleConnectRepo.readCharacteristicValue.collect { (uuid, value) ->
+                _state.update { currentState ->
+                    currentState.copy(
+                        readValues = currentState.readValues + (uuid to value)
+                    )
+                }
+            }
+        }
+
     }
     fun disconnectGatt() {
         bleConnectRepo.disconnect()
@@ -113,6 +106,24 @@ class BleScreenViewModel @Inject constructor (
 
     fun onDismissDetailDialog(){
         _state.update { it.copy(currentDevice = null) }
+        startScan()
     }
+    fun onConnect(address: String){
+        stopScan()
+        startConnect(address)
+    }
+
+    fun onDismissConnectingDialog(){
+        _state.update { it.copy(currentDevice = null) }
+        bleConnectRepo.disconnect()
+        startScan()
+    }
+
+    fun onDisconnectConnectingDialog(){
+        _state.update { it.copy(currentDevice = null) }
+        disconnectGatt()
+    }
+
+
 }
 
