@@ -1,6 +1,7 @@
 package com.example.ble_screen
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothGattCharacteristic
 import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.example.ble_screen.model.BleDevice
 import com.example.ble_screen.useCase.BLeConnectRepository
 import com.example.ble_screen.useCase.BleScanUseCase
 import com.example.ble_screen.useCase.BleState
+import com.example.ble_screen.useCase.ReadCharacteristicState
 import com.example.navigation.INavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.sortedBy
 
@@ -26,7 +29,10 @@ data class BleScreenState(
     val bleDeviceList: List<BleDevice> = emptyList(),
     val connectState: BleState = BleState.Disconnected,
     val currentDevice: BleDevice? = null,
-    val readValues: Map<java.util.UUID, ByteArray> = emptyMap()
+    val connectedDevices: List<BleDevice> = emptyList(),
+    val isReading: Pair<Boolean, UUID?> = Pair(false, null),
+    val readValues: Map<UUID, ByteArray> = emptyMap(),
+    val err: String? = null
 )
 
 @HiltViewModel
@@ -38,7 +44,6 @@ class BleScreenViewModel @Inject constructor (
 
     private val _state = MutableStateFlow(BleScreenState())
     val state = _state.asStateFlow()
-
 
     private var scanJob : Job? = null
 
@@ -69,28 +74,36 @@ class BleScreenViewModel @Inject constructor (
                 }
             }
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            bleConnectRepo.readCharacteristicValue.collect { (uuid, value) ->
-                _state.update { currentState ->
-                    currentState.copy(
-                        readValues = currentState.readValues + (uuid to value)
-                    )
-                }
-            }
-        }
 
     }
     fun disconnectGatt() {
         bleConnectRepo.disconnect()
         _state.update { currentState ->
-            currentState.copy(connectState = BleState.Disconnected, readValues = emptyMap())
+            currentState.copy(connectState = BleState.Disconnected)
         }
     }
 
-    fun readCharacteristic(characteristic: android.bluetooth.BluetoothGattCharacteristic) {
-        viewModelScope.launch(Dispatchers.IO) {
-            bleConnectRepo.readCharacteristic(characteristic)
+    fun onReadCharacteristic(characteristic: BluetoothGattCharacteristic){
+
+        viewModelScope.launch {
+            _state.update { it.copy(isReading = Pair(true, characteristic.uuid)) }
+            when(val state = bleConnectRepo.readCharacteristic(characteristic)){
+                is ReadCharacteristicState.Completed -> {
+                    val newMap = _state.value.readValues.toMutableMap()
+                    newMap[state.uuid] = state.value
+                    _state.update {
+                        it.copy(readValues = newMap)
+                    }
+                }
+                is ReadCharacteristicState.Error -> {
+                    _state.update {
+                        it.copy(err = "Ошибка чтения характеристик ${state.status} | ${state.message}")
+                    }
+                }
+            }
+            _state.update { it.copy(isReading = Pair(false,null)) }
         }
+
     }
 
     fun goBack(){
@@ -123,7 +136,6 @@ class BleScreenViewModel @Inject constructor (
         _state.update { it.copy(currentDevice = null) }
         disconnectGatt()
     }
-
 
 }
 

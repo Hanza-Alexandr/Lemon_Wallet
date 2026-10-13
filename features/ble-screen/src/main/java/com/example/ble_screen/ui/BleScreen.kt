@@ -7,14 +7,18 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -27,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -81,11 +86,12 @@ fun BleScreen(modifier: Modifier = Modifier, vm: BleScreenViewModel = hiltViewMo
         )
         if(uiState.connectState !is BleState.Disconnected){
             BleConnectionStatusDialog(
-                deviceName = uiState.currentDevice?.name,
+                device = uiState.currentDevice?: throw IllegalStateException("Device is null"),
                 connectionState = uiState.connectState,
+                isReading = uiState.isReading,
                 readValues = uiState.readValues,
                 onReadCharacteristic = { characteristic ->
-                    vm.readCharacteristic(characteristic)
+                    vm.onReadCharacteristic(characteristic)
                 },
                 onDismiss = vm::onDismissConnectingDialog,
                 onDisconnect = vm::onDisconnectConnectingDialog,
@@ -97,11 +103,28 @@ fun BleScreen(modifier: Modifier = Modifier, vm: BleScreenViewModel = hiltViewMo
         permissionsLauncher.launch(bleRequiredPermissionsList)
     }
 
+    if (uiState.bleDeviceList.isEmpty()){
+        Box(
+            modifier= modifier.fillMaxSize(),
+            contentAlignment = androidx.compose.ui.Alignment.Center,
+
+        ){
+            Column(horizontalAlignment= Alignment.CenterHorizontally) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(text ="Сканирование...")
+            }
+
+
+        }
+    }
+
     Column(modifier = modifier
         .fillMaxSize()
-        .background(Color.Cyan)
         .safeDrawingPadding()
     ) {
+
         LazyColumn(modifier.fillMaxWidth().padding()) {
             items(
                 items = uiState.bleDeviceList,

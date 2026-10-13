@@ -5,22 +5,17 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.bluetooth.BluetoothDevice
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jakarta.inject.Inject
-import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
-import java.util.UUID
 
-private val CCCD_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+import java.util.UUID
 
 class BLeConnectRepository @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -28,19 +23,12 @@ class BLeConnectRepository @Inject constructor(
 ) {
     private var bluetoothGatt: BluetoothGatt? = null
 
-    // Поток прочитанных значений характеристик (UUID -> ByteArray)
-    private val _readCharacteristicValue = MutableSharedFlow<Pair<UUID, ByteArray>>(
-        extraBufferCapacity = 64,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val readCharacteristicValue: SharedFlow<Pair<UUID, ByteArray>> = _readCharacteristicValue.asSharedFlow()
+    /**
+     * Когда поступает запрос на чтение характеристик сервиса прочтенные данные попадают сюда.
+     * Указывается UUID сервиса для отображения только тех характеристик, которые были запрошены и сами данные
+     */
 
-    // Поток входящих данных от характеристик (Notifications/Indications)
-    private val _incomingData = MutableSharedFlow<ByteArray>(
-        extraBufferCapacity = 64,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val incomingData: SharedFlow<ByteArray> = _incomingData.asSharedFlow()
+    private var characteristicResult: CompletableDeferred<Pair<UUID, ByteArray>>? = null
 
     @SuppressLint("MissingPermission")
     fun connect(macAddress: String): Flow<BleState> = callbackFlow {
@@ -58,7 +46,6 @@ class BLeConnectRepository @Inject constructor(
                 when (newState) {
                     BluetoothProfile.STATE_CONNECTED -> {
                         trySend(BleState.DiscoveringServices)
-                        // Сразу запрашиваем поиск сервисов
                         gatt.discoverServices()
                     }
 
@@ -86,9 +73,12 @@ class BLeConnectRepository @Inject constructor(
                 status: Int
             ) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
-                    trySend(BleState.Connected(gatt, characteristic.uuid to value))
-                    _readCharacteristicValue.tryEmit(characteristic.uuid to value)
+                    characteristicResult?.complete(characteristic.uuid to value)
+                } else {
+                    //  пробрасываем ошибку
+                    characteristicResult?.completeExceptionally(Exception("GATT Error"))
                 }
+
             }
 
             // Обработка чтения характеристики (Android < 13 / API < 33)
@@ -101,9 +91,11 @@ class BLeConnectRepository @Inject constructor(
             ) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     characteristic.value?.let { value ->
-                        trySend(BleState.Connected(gatt, characteristic.uuid to value))
-                        _readCharacteristicValue.tryEmit(characteristic.uuid to value)
+                        characteristicResult?.complete(characteristic.uuid to value)
                     }
+                }
+                else{
+                    characteristicResult?.completeExceptionally(Exception("GATT Error"))
                 }
             }
 
@@ -113,7 +105,7 @@ class BLeConnectRepository @Inject constructor(
                 characteristic: BluetoothGattCharacteristic,
                 value: ByteArray
             ) {
-                _incomingData.tryEmit(value)
+               TODO()
             }
         }
         //4. Инициализируем подключение к устройству
@@ -123,7 +115,7 @@ class BLeConnectRepository @Inject constructor(
             gattCallback,
             BluetoothDevice.TRANSPORT_LE
         )
-        //Повдение при закрытии
+        //Поведение при закрытии
         awaitClose {
             bluetoothGatt?.disconnect()
             bluetoothGatt?.close()
@@ -131,27 +123,22 @@ class BLeConnectRepository @Inject constructor(
         }
     }
 
-    // Чтение характеристики
     @SuppressLint("MissingPermission")
-    fun readCharacteristic(characteristic: BluetoothGattCharacteristic): Boolean {
-        val gatt = bluetoothGatt ?: return false
-        return gatt.readCharacteristic(characteristic)
-    }
+    suspend fun readCharacteristic(characteristic: BluetoothGattCharacteristic):  ReadCharacteristicState{
+        characteristicResult = CompletableDeferred()
 
-    // Включение уведомлений (Notifications) для конкретной характеристики
-    @SuppressLint("MissingPermission")
-    fun enableNotifications(serviceUuid: UUID, charUuid: UUID): Boolean {
-        val gatt = bluetoothGatt ?: return false
-        val service = gatt.getService(serviceUuid) ?: return false
-        val characteristic = service.getCharacteristic(charUuid) ?: return false
+        val gatt = bluetoothGatt ?: return ReadCharacteristicState.Error(message = "Connect Err")
+        if(!gatt.readCharacteristic(characteristic)) return ReadCharacteristicState.Error(message = "Read Err")
 
-        // 1. Включаем локально
-        gatt.setCharacteristicNotification(characteristic, true)
+        try {
+            val res = characteristicResult?.await() ?: return ReadCharacteristicState.Error(message = "Read Err2")
+            return ReadCharacteristicState.Completed(res.first, res.second)
 
-        // 2. Включаем на стороне устройства через CCCD
-        val descriptor = characteristic.getDescriptor(CCCD_UUID) ?: return false
-        descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-        return gatt.writeDescriptor(descriptor)
+        }
+        catch (e: Exception){
+            characteristicResult = null
+            return ReadCharacteristicState.Error(message = e.message)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -160,7 +147,10 @@ class BLeConnectRepository @Inject constructor(
     }
 }
 
-
+sealed interface ReadCharacteristicState {
+    data class Completed(val uuid: UUID, val value: ByteArray) : ReadCharacteristicState
+    data class Error(val status: Int? = null, val message: String?) : ReadCharacteristicState
+}
 
 sealed interface BleState {
     data object Disconnected : BleState

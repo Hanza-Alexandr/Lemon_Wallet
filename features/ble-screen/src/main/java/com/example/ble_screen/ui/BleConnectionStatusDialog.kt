@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.ExpandLess
@@ -46,19 +47,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ble_screen.model.BleDevice
 import com.example.ble_screen.useCase.BleState
 import java.util.UUID
 
 @Composable
 fun BleConnectionStatusDialog(
-    deviceName: String?,
+    device: BleDevice,
     connectionState: BleState,
+    isReading: Pair<Boolean, UUID?>,
     readValues: Map<UUID, ByteArray> = emptyMap(),
     onReadCharacteristic: (BluetoothGattCharacteristic) -> Unit = {},
     onDismiss: () -> Unit,
     onDisconnect: () -> Unit,
     onRetry: () -> Unit = {}
 ) {
+    val title = when (connectionState) {
+        is BleState.Connected -> "Подключение к ${device.name ?: "BLE устройству"} "
+        is BleState.Connecting -> "Подключение ${device.name ?: "BLE устройству"}"
+        is BleState.DiscoveringServices -> "Поиск сервисов"
+        is BleState.Error -> "Ошибка подключения"
+        is BleState.Disconnected -> ""
+    }
     AlertDialog(
         onDismissRequest = {
             if (connectionState is BleState.Connecting || connectionState is BleState.DiscoveringServices) {
@@ -69,7 +79,7 @@ fun BleConnectionStatusDialog(
         shape = RoundedCornerShape(24.dp),
         title = {
             Text(
-                text = deviceName ?: "Устройство BLE",
+                text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier.fillMaxWidth(),
@@ -124,7 +134,6 @@ fun BleConnectionStatusDialog(
 
                     is BleState.Connected -> {
                         var expandedServiceUuid by remember { mutableStateOf<UUID?>(null) }
-
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = "Успешно",
@@ -160,6 +169,7 @@ fun BleConnectionStatusDialog(
                                     service = service,
                                     isExpanded = expandedServiceUuid == service.uuid,
                                     readValues = readValues,
+                                    isReading = isReading,
                                     onReadCharacteristic = onReadCharacteristic,
                                     onClick = {
                                         expandedServiceUuid = if (expandedServiceUuid == service.uuid) null else service.uuid
@@ -248,6 +258,7 @@ fun BleConnectionStatusDialog(
 private fun GattServiceItem(
     service: BluetoothGattService,
     isExpanded: Boolean,
+    isReading: Pair<Boolean, UUID?>,
     readValues: Map<UUID, ByteArray>,
     onReadCharacteristic: (BluetoothGattCharacteristic) -> Unit,
     onClick: () -> Unit
@@ -311,6 +322,7 @@ private fun GattServiceItem(
                     GattCharacteristicItem(
                         characteristic = characteristic,
                         readValues = readValues,
+                        isReading = isReading,
                         onReadCharacteristic = onReadCharacteristic
                     )
                 }
@@ -322,6 +334,7 @@ private fun GattServiceItem(
 @Composable
 private fun GattCharacteristicItem(
     characteristic: BluetoothGattCharacteristic,
+    isReading: Pair<Boolean, UUID?>,
     readValues: Map<UUID, ByteArray>,
     onReadCharacteristic: (BluetoothGattCharacteristic) -> Unit
 ) {
@@ -357,19 +370,37 @@ private fun GattCharacteristicItem(
                 )
             }
 
-            if (isReadable) {
-                Text(
-                    text = "Считать",
-                    fontSize = 10.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colorScheme.primaryContainer,
-                            shape = RoundedCornerShape(4.dp)
+            if (isReadable && value == null) {
+                if (isReading.first){
+                    if (isReading.second == characteristic.uuid){
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            color = MaterialTheme.colorScheme.primary
                         )
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                )
+                    }
+                    else{
+                        Icon(
+                            imageVector = Icons.Default.Block,
+                            contentDescription = "Приостановка",
+                            tint = Color(0xFFC62828),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                } else{
+                    Text(
+                        text = "Считать",
+                        fontSize = 10.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.primaryContainer,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                }
+
             }
         }
 
