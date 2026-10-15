@@ -23,4 +23,6 @@ sealed class NavigationRoute {
     object CameraPreviewScreen: NavigationRoute()
     @Serializable
     object ApiScreen: NavigationRoute()
+    @Serializable
+    object BleScreen: NavigationRoute()
 }

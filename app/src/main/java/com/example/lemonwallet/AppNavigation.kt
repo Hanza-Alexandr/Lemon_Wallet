@@ -81,4 +81,7 @@ fun NavGraphBuilder.navigationManager (){
     composable<NavigationRoute.ApiScreen> {
         ApiScreen()
     }
+    composable<NavigationRoute.BleScreen> {
+        BleScreen()
+    }
 }

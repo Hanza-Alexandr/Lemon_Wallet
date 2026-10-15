@@ -65,6 +65,7 @@ accompanist = "0.37.2"
 junitJunit = "4.12" # or whatever matches with your Compose version
 workRuntimeKtx = "2.11.2"
 foundationVersion = "1.11.4"
+bluetooth = "1.0.0-alpha02"
 
 [libraries]
 # Contains the basic camera functionality such as SurfaceRequest
@@ -157,6 +158,7 @@ androidx-foundation = { group = "androidx.compose.foundation", name = "foundatio
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 retrofit-kotlinx-serialization-json = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
+androidx-bluetooth = { group = "androidx.bluetooth", name = "bluetooth", version.ref = "bluetooth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
