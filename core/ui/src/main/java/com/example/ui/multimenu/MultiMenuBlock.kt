@@ -22,6 +22,10 @@ fun MultiMenuBlock(
                 Button(viewModel::toBleScreen) {
                     Text("ble screen")
                 }
+                Button(viewModel::toPlayerScreen) {
+                    Text("Player")
+                }
+
             }
         }
 

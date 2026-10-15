@@ -78,6 +78,7 @@ dependencies {
     implementation(project(":features:categoryselection-screen"))
     implementation(project(":features:api-screen"))
     implementation(project(":features:ble-screen"))
+    implementation(project(":features:player-screen"))
 
 
 
