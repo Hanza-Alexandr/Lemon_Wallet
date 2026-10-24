@@ -30,6 +30,12 @@ dependencies {
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    //Сеть
+    //Сеть
+    implementation(libs.okhttp)
+    implementation(libs.retrofit.v300)
+    implementation(libs.converter.kotlinx.serialization)
+
 
     //Testing
     // 1. Для подмены зависимостей
