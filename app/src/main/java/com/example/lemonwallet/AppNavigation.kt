@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import com.example.api_screen.ApiScreen
 import com.example.auth.ui.AuthorizationScreen
 import com.example.ble_screen.ui.BleScreen
+import com.example.cach_screen.CachScreen
 import com.example.categoryselection_screen.ui.CategorySelectScreen
 import com.example.detailoperation_screen.ui.create.CreateOperationScreen
 import com.example.detailoperation_screen.ui.edit.EditOperationScreen
@@ -104,5 +105,8 @@ fun NavGraphBuilder.navigationManager (){
     }
     composable<NavigationRoute.PlayerScreen> {
         PlayerScreen()
+    }
+    composable<NavigationRoute.CachScreen> {
+        CachScreen()
     }
 }

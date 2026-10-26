@@ -25,6 +25,9 @@ fun MultiMenuBlock(
                 Button(viewModel::toPlayerScreen) {
                     Text("Player")
                 }
+                Button(viewModel::toCachScreen) {
+                    Text("Cach")
+                }
 
             }
         }

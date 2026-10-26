@@ -18,4 +18,8 @@ class MultiMenuViewModel @Inject constructor(private val navigator: INavigator):
     fun toPlayerScreen(){
         navigator.navigateTo(NavigationRoute.PlayerScreen)
     }
+
+    fun toCachScreen(){
+        navigator.navigateTo(NavigationRoute.CachScreen)
+    }
 }

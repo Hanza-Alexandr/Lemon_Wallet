@@ -79,7 +79,7 @@ dependencies {
     implementation(project(":features:api-screen"))
     implementation(project(":features:ble-screen"))
     implementation(project(":features:player-screen"))
-
+    implementation(project(":features:cach-screen"))
 
 
     // Hilt

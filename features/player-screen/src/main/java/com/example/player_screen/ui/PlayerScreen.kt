@@ -36,30 +36,6 @@ fun PlayerScreen(){
 
 
 
-@HiltViewModel
-class VM(): ViewModel(){
-
-    private val _state = MutableStateFlow(ShortPlayerScreenState())
-    //
-    val isLoadingListVideo: Boolean = false
-    val isLoadingCurrentVideo: Boolean = false
-
-    init{
-        //Если VM очищать от мусора то тут нужно запускать корутину которая крутится постоянно и обновляет данные т.к если тут при вызове nextvideo будет постоянно запускатсья кортуина и запускатся вычисления будут фризы
-
-    }
-    fun onNextVideo(){
-        viewModelScope.launch {
-
-        }
-    }
-    fun onBackVideo(){
-
-    }
-    fun onLikeVideo(){
-
-    }
-}
 
 data class ShortPlayerScreenState(
     val currentVideo: VideoUiState = VideoUiState.Loading,

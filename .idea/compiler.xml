@@ -5,7 +5,6 @@
       <module name=":database" target="21" />
       <module name="Lemon_Wallet.app.features" target="21" />
       <module name="Lemon_Wallet.core.db.room" target="21" />
-      <module name="Lemon_Wallet.features.cach-screen" target="21" />
       <module name="Lemon_Wallet.features.chart-block" target="21" />
       <module name="Lemon_Wallet.features.createstorage-screen" target="21" />
       <module name="Lemon_Wallet.features.editstorage-screen" target="21" />
