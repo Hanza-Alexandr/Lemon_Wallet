@@ -30,6 +30,7 @@ import com.example.cach_screen.domain.PurchaseHistoryCardItem
 fun CachScreen(viewModel: CachScreenViewModel = hiltViewModel()){
 
     val list by viewModel.list.collectAsStateWithLifecycle()
+    val uiState by viewModel.syncStatus.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.refresh()
@@ -39,7 +40,7 @@ fun CachScreen(viewModel: CachScreenViewModel = hiltViewModel()){
 
     Column(modifier = Modifier.fillMaxSize().systemBarsPadding().background(if(isSystemInDarkTheme()) Color.Black else Color.White)) {
         Column(Modifier.fillMaxWidth()) {
-            Button(onClick = viewModel::refresh) {
+            Button(onClick = viewModel::refresh, enabled = if(uiState is UiSate.Loading) false else true ) {
                 Text("Sync")
             }
         }
