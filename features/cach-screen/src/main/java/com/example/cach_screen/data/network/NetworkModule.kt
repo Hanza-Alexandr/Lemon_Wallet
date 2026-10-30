@@ -1,7 +1,5 @@
-package com.example.cach_screen.ui
+package com.example.cach_screen.data.network
 
-import com.example.cach_screen.domain.IHistoryCardRepository
-import com.example.cach_screen.network.NetworkMock
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,11 +8,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CachScreenModule {
+object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHistoryCardRepository(): IHistoryCardRepository {
+    fun provideNetworkCardHistoryDataSource(): INetWorkCardHistoryDataSource {
         return NetworkMock()
     }
 }
