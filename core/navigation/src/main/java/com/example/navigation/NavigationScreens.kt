@@ -25,4 +25,8 @@ sealed class NavigationRoute {
     object ApiScreen: NavigationRoute()
     @Serializable
     object BleScreen: NavigationRoute()
+    @Serializable
+    object PlayerScreen: NavigationRoute()
+    @Serializable
+    object CachScreen: NavigationRoute()
 }
