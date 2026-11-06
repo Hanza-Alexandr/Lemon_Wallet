@@ -10,6 +10,8 @@ import com.example.navigation.INavigator
 import com.example.navigation.NavigationRoute
 import com.example.storage_block.model.UiForStorageBlock
 import com.example.storage_block.usecases.OnSelectStorageInStorageBlockUseCase
+import com.example.domain.analytics.IAnalytics
+import com.example.domain.analytics.IAnalyticsEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,9 +28,8 @@ class StorageBlockViewModel @Inject constructor(
     private val onSelectStorageInStorageBlockUseCase: OnSelectStorageInStorageBlockUseCase,
     private val storageRepo: IStorageRepository,
     private val getStorageBalanceUseCase: GetStorageBalanceUseCase,
-    private val setting: ISettingsRepository
-
-
+    private val setting: ISettingsRepository,
+    private val analytics: IAnalytics
     ): ViewModel(){
 
     private val storagesFlow = storageRepo.getAllStoragesFlow().stateIn(
@@ -53,6 +54,9 @@ class StorageBlockViewModel @Inject constructor(
         allBalancesFlow.onEach { Log.i("LOOOOOOOOGG","⚡ баланс счтетов 1 ДЕРНУЛСЯ (новое значение): $it") },
         selectIdsFlow.onEach { Log.i("LOOOOOOOOGG","⚡ селект счтетов 1 ДЕРНУЛСЯ (новое значение): $it") },
     ) { storages, balancesMap, selectIds->
+        
+        analytics.setCustomKey("storage_items_count", storages.size)
+        
         storages.map { storage ->
             UiForStorageBlock(
                 storage = storage,

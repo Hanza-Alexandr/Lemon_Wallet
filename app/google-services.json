@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "830557003681",
+    "project_id": "lemonwallet",
+    "storage_bucket": "lemonwallet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830557003681:android:72fa53d631839e1c9eb5e0",
+        "android_client_info": {
+          "package_name": "com.example.lemonwallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_gCEZy8t2Zrlbu84Gl144ZBbtZc84nxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,10 @@
 package com.example.storage_block.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +19,8 @@ import com.example.storage_block.ui.components.StorageList
 import com.example.storage_block.ui.components.blocks.common.TemplateMainsBlock
 import com.example.storage_block.ui.components.blocks.common.TopBarStorageBlock
 import com.example.ui.BottomBarStorageBlock
+import java.io.IOException
+
 
 @Composable
 fun StorageBlock(storageBlockViewModel: StorageBlockViewModel = hiltViewModel()){
@@ -48,6 +53,11 @@ fun StorageBlockContent(
     val pagerState = rememberPagerState(pageCount = { pageCount })
 
     Column(modifier = Modifier.testTag("storage_block")) {
+        // --- ВРЕМЕННАЯ КНОПКА ДЛЯ ТЕСТА CRASHLYTICS ---
+        Button(onClick = { throw RuntimeException("Тестовый краш Crashlytics!") }) {
+            Text("Скрашить приложение")
+        }
+        // ----------------------------------------------
         TemplateMainsBlock(
             topBar = ::TopBarStorageBlock,
             bottomBar = ::BottomBarStorageBlock
@@ -61,6 +71,21 @@ fun StorageBlockContent(
                 onAddStorageClick = onAddStorageClick,
                 onStorageLongClick = onStorageLongClick,
             )
+        }
+        Column() {
+            Button({throw NullPointerException()}) {
+                Text("Fatal")
+            }
+            Button({
+                try {
+                    throw IOException()
+                }
+                catch (e: Exception){
+
+                }
+            }) {
+                Text("NonFatal")
+            }
         }
     }
 

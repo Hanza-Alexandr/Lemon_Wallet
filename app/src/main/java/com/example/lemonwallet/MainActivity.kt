@@ -25,6 +25,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.domain.analytics.IAnalytics
 import com.example.lemonwallet.ui.theme.LemonWalletTheme
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationAction
@@ -41,12 +42,14 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     @Inject lateinit var navigator: INavigator
+    @Inject lateinit var analytics: IAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-
+        
+        analytics.setCustomKey("app_started", true)
+        
         enableEdgeToEdge()
 
         lifecycleScope.launch {
@@ -129,3 +132,4 @@ class MyWorker(context: Context, params: WorkerParameters) : CoroutineWorker(con
         return 2
     }
 }
+
