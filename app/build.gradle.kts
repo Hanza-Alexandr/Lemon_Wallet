@@ -45,10 +45,11 @@ android {
 }
 
 dependencies {
-    //FireBase
+    //FireBase & AppMetrica
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+    implementation(libs.analytics)
 
     //workmanager
     implementation(libs.androidx.work.runtime.ktx)

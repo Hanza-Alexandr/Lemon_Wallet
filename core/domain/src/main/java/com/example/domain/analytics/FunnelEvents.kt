@@ -1,0 +1,46 @@
+package com.example.domain.analytics
+
+class FunnelEvents {
+}
+// 1. Старт онбординга
+object OnboardingStartedEvent : IAnalyticsEvent {
+    override val eventName = "funnel_onboarding_started"
+}
+
+// 2. Успешное завершение онбординга
+object OnboardingCompletedEvent : IAnalyticsEvent {
+    override val eventName = "funnel_onboarding_completed"
+}
+
+// 3. Создание первого счета
+class FirstStorageCreatedEvent(val currency: String) : IAnalyticsEvent {
+    override val eventName = "funnel_first_storage_created"
+    override val params = mapOf(
+        "currency" to currency
+    )
+}
+// 4. Первая транзакция (пополнение/списание)
+class FirstTransactionEvent(val amount: Double, val type: String) : IAnalyticsEvent {
+    override val eventName = "funnel_first_transaction"
+    override val params = mapOf(
+        "amount" to amount,
+        "type" to type // "income" или "expense"
+    )
+}
+
+
+object OpenAppEvent: IAnalyticsEvent{
+    override val eventName = "funnel_open_app"
+}
+
+object StorageCreateEvent: IAnalyticsEvent{
+    override val eventName = "funnel_storage_create"
+}
+object OperationCreateEvent: IAnalyticsEvent{
+    override val eventName = "funnel_operation_create"
+}
+
+object OpenBleScanner: IAnalyticsEvent{
+    override val eventName = "funnel_open_ble_scanner"
+}
+

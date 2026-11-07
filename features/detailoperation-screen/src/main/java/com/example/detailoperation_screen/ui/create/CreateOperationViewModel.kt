@@ -23,6 +23,8 @@ import com.example.detailoperation_screen.ui.components.ConvertDomainCategoryToU
 import com.example.detailoperation_screen.ui.components.ConvertDomainStorageToUiModel
 import com.example.detailoperation_screen.ui.components.StorageUiModel
 import com.example.detailoperation_screen.ui.components.UiModelCategory
+import com.example.domain.analytics.IAnalytics
+import com.example.domain.analytics.OperationCreateEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,7 +43,8 @@ class CreateOperationViewModel @Inject constructor(
     private val covertDomainCategoryToUiModel: ConvertDomainCategoryToUiModel,
     private val covertDomainStorageToUiModel: ConvertDomainStorageToUiModel,
     private val stateHandle: SavedStateHandle,
-    private val calculateExpressionUseCase: CalculateExpressionUseCase
+    private val calculateExpressionUseCase: CalculateExpressionUseCase,
+    private val analytics: IAnalytics,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UIStatesDetailGeneralOperations())
     val uiState = _uiState.asStateFlow()
@@ -97,6 +100,7 @@ class CreateOperationViewModel @Inject constructor(
                 _uiState.update { it.copy(error = e.message) }
             }
         }
+        analytics.trackEvent(OperationCreateEvent)
         onBack()
     }
 

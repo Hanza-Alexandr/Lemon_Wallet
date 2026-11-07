@@ -1,13 +1,15 @@
 package com.example.lemonwallet.analytics
 
 import android.os.Bundle
+import android.util.Log
 import com.example.domain.analytics.IAnalytics
 import com.example.domain.analytics.IAnalyticsEvent
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.appmetrica.analytics.AppMetrica
 import javax.inject.Inject
 
-class FirebaseAnalyticsImpl @Inject constructor(
+class AppAnalyticsImpl @Inject constructor(
     private val analytics: FirebaseAnalytics,
     private val crashlytics: FirebaseCrashlytics
 ) : IAnalytics {
@@ -27,6 +29,14 @@ class FirebaseAnalyticsImpl @Inject constructor(
             }
         }
         analytics.logEvent(event.eventName, bundle)
+
+        if(event.params.isEmpty()){
+            AppMetrica.reportEvent(event.eventName)
+        }
+        else{
+            AppMetrica.reportEvent(event.eventName, event.params.toMap())
+        }
+        Log.i("ANALYTICS",event.eventName )
     }
 
     override fun log(message: String) {

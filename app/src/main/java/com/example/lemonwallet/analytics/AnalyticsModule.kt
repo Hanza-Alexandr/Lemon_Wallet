@@ -18,7 +18,7 @@ abstract class AnalyticsModule {
 
     @Binds
     @Singleton
-    abstract fun bindAnalytics(impl: FirebaseAnalyticsImpl): IAnalytics
+    abstract fun bindAnalytics(impl: AppAnalyticsImpl): IAnalytics
 
     companion object {
         @Provides
