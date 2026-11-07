@@ -1,13 +1,8 @@
 package com.example.lemonwallet
 
-import android.annotation.SuppressLint
-import android.bluetooth.le.ScanCallback
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -23,15 +18,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.domain.analytics.IAnalytics
+import com.example.domain.analytics.OpenAppEvent
 import com.example.lemonwallet.ui.theme.LemonWalletTheme
 import com.example.navigation.INavigator
 import com.example.navigation.NavigationAction
 import com.example.navigation.NavigationRoute
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -98,8 +92,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-
-
+            analytics.trackEvent(OpenAppEvent)
         }
     }
 }

@@ -7,6 +7,8 @@ import com.example.domain.Currency
 import com.example.domain.domainmodel.DomainColor
 import com.example.domain.IEditStorage
 import com.example.domain.TypeStorage
+import com.example.domain.analytics.IAnalytics
+import com.example.domain.analytics.StorageCreateEvent
 import com.example.domain.domainmodel.NewDomainStorage
 import com.example.domain.reposytory.IColorRepository
 import com.example.domain.reposytory.IStorageRepository
@@ -26,6 +28,7 @@ class CreateStorageViewModel @Inject constructor(
     private val colorRepo: IColorRepository,
     private val storageRepo: IStorageRepository,
     private val settings: ISettingsRepository,
+    private val analytics: IAnalytics
 ) : ViewModel(), IEditStorage {
 
     private val _uiState = MutableStateFlow(UIStatesDetailStorage())
@@ -58,6 +61,7 @@ class CreateStorageViewModel @Inject constructor(
                 )
             }
         }
+        analytics.trackEvent(StorageCreateEvent)
         onBack()
     }
 
