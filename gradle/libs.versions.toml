@@ -67,7 +67,10 @@ workRuntimeKtx = "2.11.2"
 foundationVersion = "1.11.4"
 bluetooth = "1.0.0-alpha02"
 
+hawk = "1.1.2" # Проверьте актуальную версию на hawk.so
+
 [libraries]
+hawk-catcher = { module = "so.hawk:catcher", version.ref = "hawk" }
 # Contains the basic camera functionality such as SurfaceRequest
 accompanist-permissions-v0340 = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
@@ -43,7 +45,14 @@ android {
 }
 
 dependencies {
-    //workmanager
+    //FireBase & AppMetrica
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.analytics)
+
+    // Hawk.so Error Tracker
+    implementation(libs.hawk.catcher)
     implementation(libs.androidx.work.runtime.ktx)
 
     //Testing
@@ -121,6 +130,4 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.foundation.layout)
-
-
 }
