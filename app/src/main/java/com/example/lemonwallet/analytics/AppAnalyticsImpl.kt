@@ -3,34 +3,34 @@ package com.example.lemonwallet.analytics
 import android.os.Bundle
 import com.example.domain.analytics.IAnalytics
 import com.example.domain.analytics.IAnalyticsEvent
-import so.hawk.Hawk
+import android.content.Context
+import com.example.lemonwallet.LemonWalletApp
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class AppAnalyticsImpl @Inject constructor(
+    @ApplicationContext private val context: Context
 ) : IAnalytics {
 
     override fun trackEvent(event: IAnalyticsEvent) {
-        // Hawk - это трекер ошибок, он не собирает продуктовую аналитику
         // Сюда в будущем можно будет добавить AppMetrica или Firebase Analytics
     }
 
     override fun log(message: String) {
         // Логирование простых сообщений
-        Hawk.catch(Exception(message))
     }
 
     override fun setCustomKey(key: String, value: Any) {
-        // В базовой версии Hawk нет прямых кастомных тегов, как в Crashlytics,
-        // но можно расширять контекст. Оставляем пустым или реализовываем через контекст.
+        // Оставляем пустым или реализовываем через контекст.
     }
 
     override fun setUserId(id: String) {
-        // Привязка пользователя к ошибке
-        Hawk.setUser(id)
+        // Привязка пользователя
     }
 
     override fun recordException(throwable: Throwable) {
-        // Отправка перехваченной ошибки в Hawk.so
-        Hawk.catch(throwable)
+        // Обработка перехваченной ошибки
+        val app = context.applicationContext as LemonWalletApp
+        app.exceptionCatcher.caught(throwable)
     }
 }

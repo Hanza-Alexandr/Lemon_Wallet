@@ -66,7 +66,6 @@ class MainActivity : ComponentActivity() {
                     .build()
                 WorkManager.getInstance(applicationContext).enqueue(workRequest)
             }
-
             val navController = rememberNavController()
 
             LaunchedEffect(navController) {

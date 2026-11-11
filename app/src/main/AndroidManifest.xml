@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LemonWallet">
-
+        <meta-data android:name="HAWK_TOKEN" android:value="eyJpbnRlZ3JhdGlvbklkIjoiOTU5ZmEzOWUtYzBkNC00MGE5LWI0MWEtNmFlNDQzYTExZWYzIiwic2VjcmV0IjoiZTY1ODFmZGQtZTRlYS00MDIwLThhOWQtZTk2Y2UyZDdhZDEwIn0="/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

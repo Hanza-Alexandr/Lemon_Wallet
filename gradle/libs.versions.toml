@@ -7,6 +7,7 @@ coreKtx = "1.18.0"
 coreSplashscreen = "1.2.0"
 datastorePreferences = "1.2.1"
 exp4j = "0.4.8"
+hawkAndroidCatcher = "v3.0"
 hiltAndroid = "2.59.2"
 hiltAndroidCompiler = "2.59.2"
 hiltAndroidCompilerVersion = "2.60.1"
@@ -67,10 +68,11 @@ workRuntimeKtx = "2.11.2"
 foundationVersion = "1.11.4"
 bluetooth = "1.0.0-alpha02"
 
-hawk = "1.1.2" # Проверьте актуальную версию на hawk.so
+googleServices = "4.4.2"
+firebaseCrashlyticsPlugin = "3.0.2"
+firebaseBom = "33.7.0"
 
 [libraries]
-hawk-catcher = { module = "so.hawk:catcher", version.ref = "hawk" }
 # Contains the basic camera functionality such as SurfaceRequest
 accompanist-permissions-v0340 = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
@@ -84,6 +86,7 @@ androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.r
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
+hawk-android-catcher = { module = "com.github.codex-team:hawk.android.catcher", version.ref = "hawkAndroidCatcher" }
 hilt-android-compiler-v2601 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidTesting" }
 kaspresso-core = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
@@ -163,8 +166,15 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 retrofit-kotlinx-serialization-json = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 androidx-bluetooth = { group = "androidx.bluetooth", name = "bluetooth", version.ref = "bluetooth" }
 
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+analytics = { module = "com.google.firebase:firebase-analytics" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }

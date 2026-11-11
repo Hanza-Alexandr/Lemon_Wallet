@@ -1,16 +1,18 @@
 package com.example.lemonwallet
 
 import android.app.Application
+import com.hawkcatcher.android.HawkExceptionCatcher
 import dagger.hilt.android.HiltAndroidApp
-import so.hawk.Hawk
-
 @HiltAndroidApp
 class LemonWalletApp : Application() {
+    lateinit var exceptionCatcher: HawkExceptionCatcher
     override fun onCreate() {
         super.onCreate()
-
-        // Инициализация Hawk.so для отлова крашей
-        // ЗАМЕНИТЕ НА ВАШ ТОКЕН ИЗ ПРОЕКТА HAWK.SO
-        Hawk.init(this, "ВАШ_HAWK_INTEGRATION_TOKEN")
+        defineExceptionCatcher()
+    }
+    private fun defineExceptionCatcher() {
+        // Передаем контекст (this) и вызываем start()
+        exceptionCatcher = HawkExceptionCatcher(this)
+        exceptionCatcher.start()
     }
 }

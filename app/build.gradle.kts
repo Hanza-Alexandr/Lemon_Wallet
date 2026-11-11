@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.firebase.crashlytics)
+    //alias(libs.plugins.google.services)
+    //alias(libs.plugins.firebase.crashlytics)
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
@@ -51,8 +51,10 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.analytics)
 
-    // Hawk.so Error Tracker
-    implementation(libs.hawk.catcher)
+    //Hawk
+    implementation(libs.hawk.android.catcher)
+
+    // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 
     //Testing
