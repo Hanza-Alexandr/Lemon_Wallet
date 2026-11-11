@@ -91,6 +91,7 @@ dependencies {
     implementation(project(":features:ble-screen"))
     implementation(project(":features:player-screen"))
     implementation(project(":features:cach-screen"))
+    implementation(project(":features:bdui-screen"))
 
 
     // Hilt

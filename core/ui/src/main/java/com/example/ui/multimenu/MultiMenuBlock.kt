@@ -1,5 +1,6 @@
 package com.example.ui.multimenu
 
+import android.widget.Button
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -27,6 +28,9 @@ fun MultiMenuBlock(
                 }
                 Button(viewModel::toCachScreen) {
                     Text("Cach")
+                }
+                Button(viewModel::toBDUIScreen){
+                    Text("BDUI")
                 }
 
             }
