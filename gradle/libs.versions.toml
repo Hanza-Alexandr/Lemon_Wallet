@@ -49,6 +49,7 @@ retrofitVersion = "3.0.0"
 roomRuntime = "2.8.4"
 material3 = "1.4.0"
 appcompat = "1.6.1"
+coilCompose = "2.5.0"
 jetbrainsKotlinJvm = "2.2.10"
 runtime = "1.11.0"
 turbine = "1.2.1"
@@ -71,6 +72,7 @@ bluetooth = "1.0.0-alpha02"
 googleServices = "4.4.2"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebaseBom = "33.7.0"
+datastoreCore = "1.3.0"
 
 [libraries]
 # Contains the basic camera functionality such as SurfaceRequest
@@ -110,6 +112,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 exp4j = { module = "net.objecthunter:exp4j", version.ref = "exp4j" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
@@ -170,6 +173,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 analytics = { module = "com.google.firebase:firebase-analytics" }
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

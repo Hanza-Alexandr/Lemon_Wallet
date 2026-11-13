@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.api_screen.ApiScreen
 import com.example.auth.ui.AuthorizationScreen
-import com.example.bdui_screen.BDUIScreen
+import com.example.bdui_screen.present.ui.BDUIScreen
 import com.example.ble_screen.ui.BleScreen
 import com.example.cach_screen.ui.CachScreen
 import com.example.categoryselection_screen.ui.CategorySelectScreen

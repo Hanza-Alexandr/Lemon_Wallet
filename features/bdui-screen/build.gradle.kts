@@ -4,6 +4,7 @@ plugins {
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -27,6 +28,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.datastore.core)
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
@@ -51,6 +53,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.kotlinx.datetime) // Use the latest version
 
@@ -72,6 +75,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.compose.foundation.layout)
 
